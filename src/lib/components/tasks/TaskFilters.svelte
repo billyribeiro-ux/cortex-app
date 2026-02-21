@@ -209,12 +209,15 @@
     color: var(--pill-color, var(--color-accent-primary));
   }
 
+  /* Hide labels on very narrow viewports; show icon + label from 768px up */
   .pill-label {
     display: none;
   }
 
-  @media (min-width: 1200px) {
-    .pill-label { display: inline; }
+  @media (min-width: 768px) {
+    .pill-label {
+      display: inline;
+    }
   }
 
   .mini-select {

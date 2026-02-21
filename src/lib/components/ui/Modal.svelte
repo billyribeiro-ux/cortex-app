@@ -2,6 +2,8 @@
   import type { Snippet } from 'svelte';
   import Icon from '@iconify/svelte';
 
+  const FOCUS_SELECTOR = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
   interface Props {
     open: boolean;
     onclose: () => void;
@@ -12,12 +14,27 @@
   }
 
   let { open, onclose, title, maxWidth = '600px', children, footer }: Props = $props();
+  let modalRef = $state<HTMLDivElement | null>(null);
+  let previousActiveElement = $state<Element | null>(null);
+  const titleId = 'modal-title-' + crypto.randomUUID().slice(0, 8);
 
   $effect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
+      previousActiveElement = document.activeElement;
+      queueMicrotask(() => {
+        const el = modalRef;
+        if (!el) return;
+        const focusables = Array.from(el.querySelectorAll<HTMLElement>(FOCUS_SELECTOR));
+        const first = focusables[0];
+        if (first) first.focus();
+        else el.focus();
+      });
     } else {
       document.body.style.overflow = '';
+      if (previousActiveElement && typeof (previousActiveElement as HTMLElement).focus === 'function') {
+        (previousActiveElement as HTMLElement).focus();
+      }
     }
     return () => {
       document.body.style.overflow = '';
@@ -28,6 +45,27 @@
     if (e.key === 'Escape') onclose();
   }
 
+  function handleModalKeydown(e: KeyboardEvent): void {
+    if (e.key !== 'Tab') return;
+    const el = modalRef;
+    if (!el) return;
+    const focusables = Array.from(el.querySelectorAll<HTMLElement>(FOCUS_SELECTOR));
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
   function handleBackdropClick(e: MouseEvent): void {
     if (e.target === e.currentTarget) onclose();
   }
@@ -36,10 +74,23 @@
 <svelte:window onkeydown={handleKeydown} />
 
 {#if open}
-  <div class="backdrop" onclick={handleBackdropClick} onkeydown={(e) => e.key === 'Escape' && onclose()} role="dialog" aria-modal="true" aria-label={title} tabindex="-1">
-    <div class="modal-card" style:max-width={maxWidth}>
+  <div
+    class="backdrop"
+    onclick={handleBackdropClick}
+    onkeydown={(e) => e.key === 'Escape' && onclose()}
+  >
+    <div
+      bind:this={modalRef}
+      class="modal-card"
+      style:max-width={maxWidth}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={titleId}
+      tabindex="-1"
+      onkeydown={handleModalKeydown}
+    >
       <div class="modal-header">
-        <h2 class="modal-title">{title}</h2>
+        <h2 id={titleId} class="modal-title">{title}</h2>
         <button class="close-btn" onclick={onclose} aria-label="Close modal">
           <Icon icon="ph:x" width={18} height={18} />
         </button>

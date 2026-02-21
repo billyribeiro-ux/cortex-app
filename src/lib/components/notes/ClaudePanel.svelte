@@ -3,7 +3,8 @@
   import type { ClaudeMessage } from '$lib/types/index.js';
   import Icon from '@iconify/svelte';
 
-  const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY as string;
+  const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined;
+  const hasApiKey = $derived(!!API_KEY && API_KEY !== 'undefined');
 
   let inputValue = $state('');
   let isLoading = $state(false);
@@ -19,6 +20,11 @@
   async function sendMessage(): Promise<void> {
     const content = inputValue.trim();
     if (!content || isLoading) return;
+
+    if (!hasApiKey) {
+      errorMsg = 'API key not configured. Add VITE_ANTHROPIC_API_KEY to your .env file and rebuild.';
+      return;
+    }
 
     errorMsg = '';
 
@@ -113,7 +119,13 @@
   {/if}
 
   <div class="messages" bind:this={messagesEl}>
-    {#if notesStore.claudeMessages.length === 0}
+    {#if !hasApiKey}
+      <div class="empty-messages api-key-setup">
+        <Icon icon="ph:key" width={32} height={32} />
+        <p>Claude API key not configured.</p>
+        <p class="setup-hint">Add <code>VITE_ANTHROPIC_API_KEY=your-key</code> to a <code>.env</code> file in the project root, then rebuild the app.</p>
+      </div>
+    {:else if notesStore.claudeMessages.length === 0}
       <div class="empty-messages">
         <Icon icon="ph:chat-dots" width={32} height={32} />
         <p>Ask Claude anything about your note. Responses will appear here.</p>
@@ -138,15 +150,16 @@
   <div class="input-area">
     <textarea
       class="claude-input selectable"
-      placeholder="Ask a question..."
+      placeholder={hasApiKey ? 'Ask a question...' : 'Configure API key to enable'}
       bind:value={inputValue}
       onkeydown={handleKeydown}
       rows={3}
+      disabled={!hasApiKey}
     ></textarea>
     <button
       class="send-btn"
       onclick={() => void sendMessage()}
-      disabled={!inputValue.trim() || isLoading}
+      disabled={!hasApiKey || !inputValue.trim() || isLoading}
       aria-label="Send message"
     >
       {#if isLoading}
@@ -239,6 +252,19 @@
   .empty-messages p {
     font-size: var(--text-xs);
     line-height: 1.5;
+  }
+
+  .empty-messages.api-key-setup .setup-hint {
+    font-size: 0.65rem;
+    max-width: 240px;
+  }
+
+  .empty-messages code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--color-bg-tertiary);
+    padding: 2px 4px;
+    border-radius: var(--radius-sm);
   }
 
   .message {

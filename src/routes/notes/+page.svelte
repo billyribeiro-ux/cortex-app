@@ -115,7 +115,6 @@
     flex-direction: column;
     height: 100%;
     overflow: hidden;
-    margin: calc(-1 * var(--space-6));
   }
 
   .notes-body {

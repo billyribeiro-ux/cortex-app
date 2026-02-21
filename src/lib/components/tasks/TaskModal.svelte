@@ -276,8 +276,9 @@
           class="delete-btn"
           class:confirm={deleteConfirm}
           onclick={handleDelete}
+          aria-label={deleteConfirm ? 'Click again to confirm delete' : 'Delete task'}
         >
-          {deleteConfirm ? 'Confirm delete?' : 'Delete Task'}
+          {deleteConfirm ? 'Click again to confirm' : 'Delete Task'}
         </button>
       {/if}
     </div>

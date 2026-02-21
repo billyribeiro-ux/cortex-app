@@ -108,7 +108,12 @@
       setTimeout(() => { deleteConfirm = false; }, 3000);
       return;
     }
-    if (goal) appStore.deleteGoal(goal.id);
+    if (goal) {
+      appStore.deleteGoal(goal.id);
+      if (goalsStore.activeGoalId === goal.id) {
+        goalsStore.setActiveGoal(null);
+      }
+    }
     goalsStore.closeModal();
   }
 
@@ -288,8 +293,13 @@
   {#snippet footer()}
     <div class="footer-left">
       {#if isEditing}
-        <button class="delete-btn" class:confirm={deleteConfirm} onclick={handleDelete}>
-          {deleteConfirm ? 'Confirm delete?' : 'Delete Goal'}
+        <button
+          class="delete-btn"
+          class:confirm={deleteConfirm}
+          onclick={handleDelete}
+          aria-label={deleteConfirm ? 'Click again to confirm delete' : 'Delete goal'}
+        >
+          {deleteConfirm ? 'Click again to confirm' : 'Delete Goal'}
         </button>
       {/if}
     </div>

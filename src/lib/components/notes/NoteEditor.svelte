@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
   import type { Note } from '$lib/types/index.js';
   import { appStore } from '$lib/stores/app.svelte.js';
   import { notesStore } from '$lib/stores/notes.svelte.js';
@@ -18,8 +19,14 @@
   let savedFlash = $state(false);
 
   let debounceTimer = $state<ReturnType<typeof setTimeout> | null>(null);
+  let textareaRef = $state<HTMLTextAreaElement | null>(null);
+  let titleInputRef = $state<HTMLInputElement | null>(null);
 
   const renderedContent = $derived(renderMarkdown(note.content));
+
+  onDestroy(() => {
+    if (debounceTimer !== null) clearTimeout(debounceTimer);
+  });
 
   function handleTitleInput(e: Event): void {
     const value = (e.currentTarget as HTMLInputElement).value;
@@ -87,7 +94,14 @@
       clearTimeout(debounceTimer);
       debounceTimer = null;
     }
-    appStore.updateNote(note.id, {});
+    const updates: Partial<Note> = {};
+    if (textareaRef) {
+      updates.content = textareaRef.value;
+    }
+    if (titleInputRef) {
+      updates.title = titleInputRef.value;
+    }
+    appStore.updateNote(note.id, Object.keys(updates).length > 0 ? updates : {});
     savedFlash = true;
     setTimeout(() => { savedFlash = false; }, 1500);
   }
@@ -101,6 +115,7 @@
   <div class="editor-header">
     <div class="editor-meta">
       <input
+        bind:this={titleInputRef}
         class="title-input selectable"
         type="text"
         placeholder="Untitled Note"
@@ -124,6 +139,14 @@
     </div>
 
     <div class="editor-actions">
+      <button
+        class="action-btn save-btn"
+        onclick={handleForceSave}
+        aria-label="Save"
+        title="Save (⌘S)"
+      >
+        <Icon icon="ph:floppy-disk" width={16} height={16} />
+      </button>
       {#if savedFlash}
         <span class="saved-indicator">Saved</span>
       {/if}
@@ -184,6 +207,7 @@
   <div class="editor-body" class:split={viewMode === 'split'}>
     {#if viewMode === 'edit' || viewMode === 'split'}
       <textarea
+        bind:this={textareaRef}
         class="markdown-textarea selectable"
         class:full={viewMode === 'edit'}
         placeholder="Start writing in Markdown..."
@@ -344,6 +368,14 @@
   .action-btn.danger {
     color: var(--color-accent-danger);
     background: rgba(225, 112, 85, 0.1);
+  }
+
+  .action-btn.save-btn {
+    color: var(--color-accent-success);
+  }
+
+  .action-btn.save-btn:hover {
+    color: var(--color-accent-primary);
   }
 
   .action-btn.claude-btn.active {

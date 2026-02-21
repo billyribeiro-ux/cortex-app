@@ -92,7 +92,7 @@ function createNotesStore() {
       activeNoteId = id;
       isEditing = id !== null;
       claudeMessages = [];
-      showClaudePanel = false;
+      // Keep showClaudePanel as-is so the panel stays open when switching notes
     },
 
     toggleClaudePanel(): void {
