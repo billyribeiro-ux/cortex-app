@@ -3,12 +3,22 @@
   import Sidebar from '$lib/components/layout/Sidebar.svelte';
   import TopBar from '$lib/components/layout/TopBar.svelte';
   import { appStore } from '$lib/stores/app.svelte.js';
+  import { onMount } from 'svelte';
 
   let { children } = $props();
 
   const sidebarWidth = $derived(
     appStore.sidebarCollapsed ? 'var(--sidebar-collapsed-width)' : 'var(--sidebar-width)'
   );
+
+  onMount(() => {
+    // Show the window once the UI is ready (prevents white flash in Tauri)
+    if (typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window) {
+      import('@tauri-apps/api/window').then(({ getCurrentWindow }) => {
+        void getCurrentWindow().show();
+      }).catch(() => {});
+    }
+  });
 </script>
 
 <div class="app-shell">

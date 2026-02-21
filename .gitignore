@@ -6,5 +6,9 @@ node_modules
 .env
 .env.*
 !.env.example
+api_key.md
+*.key
+*.secret
+secrets.*
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*

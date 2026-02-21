@@ -3,19 +3,24 @@
   import type { ClaudeMessage } from '$lib/types/index.js';
   import Icon from '@iconify/svelte';
 
+  const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY as string;
+
   let inputValue = $state('');
+  let isLoading = $state(false);
+  let errorMsg = $state('');
   let messagesEl = $state<HTMLDivElement | null>(null);
 
   $effect(() => {
-    // Auto-scroll to bottom when messages change
     if (notesStore.claudeMessages.length > 0 && messagesEl) {
       messagesEl.scrollTop = messagesEl.scrollHeight;
     }
   });
 
-  function sendMessage(): void {
+  async function sendMessage(): Promise<void> {
     const content = inputValue.trim();
-    if (!content) return;
+    if (!content || isLoading) return;
+
+    errorMsg = '';
 
     const userMsg: ClaudeMessage = {
       id: crypto.randomUUID(),
@@ -25,24 +30,62 @@
     };
     notesStore.addClaudeMessage(userMsg);
     inputValue = '';
+    isLoading = true;
 
-    // Mock response after 500ms
-    setTimeout(() => {
+    const systemPrompt = notesStore.activeNote
+      ? `You are a helpful assistant. The user is working on a note titled "${notesStore.activeNote.title}". Here is the note content:\n\n${notesStore.activeNote.content}\n\nHelp the user with questions about this note or related topics.`
+      : 'You are a helpful assistant for a personal knowledge management app called Cortex.';
+
+    const history = notesStore.claudeMessages.slice(-20).map((m) => ({
+      role: m.role as 'user' | 'assistant',
+      content: m.content,
+    }));
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': API_KEY,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-request-proxy': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-3-5-haiku-20241022',
+          max_tokens: 1024,
+          system: systemPrompt,
+          messages: history,
+        }),
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error((err as { error?: { message?: string } }).error?.message ?? `HTTP ${response.status}`);
+      }
+
+      const data = await response.json() as {
+        content: Array<{ type: string; text: string }>;
+      };
+      const text = data.content.find((c) => c.type === 'text')?.text ?? '';
+
       const assistantMsg: ClaudeMessage = {
         id: crypto.randomUUID(),
         role: 'assistant',
-        content:
-          'Claude integration will be connected when the Rust backend is ready. For now, this is a placeholder.',
+        content: text,
         timestamp: new Date().toISOString(),
       };
       notesStore.addClaudeMessage(assistantMsg);
-    }, 500);
+    } catch (err) {
+      errorMsg = err instanceof Error ? err.message : 'Failed to reach Claude.';
+    } finally {
+      isLoading = false;
+    }
   }
 
   function handleKeydown(e: KeyboardEvent): void {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      sendMessage();
+      void sendMessage();
     }
   }
 </script>
@@ -85,6 +128,13 @@
     {/if}
   </div>
 
+  {#if errorMsg}
+    <div class="error-msg">
+      <Icon icon="ph:warning" width={12} height={12} />
+      {errorMsg}
+    </div>
+  {/if}
+
   <div class="input-area">
     <textarea
       class="claude-input selectable"
@@ -95,11 +145,15 @@
     ></textarea>
     <button
       class="send-btn"
-      onclick={sendMessage}
-      disabled={!inputValue.trim()}
+      onclick={() => void sendMessage()}
+      disabled={!inputValue.trim() || isLoading}
       aria-label="Send message"
     >
-      <Icon icon="ph:paper-plane-right" width={16} height={16} />
+      {#if isLoading}
+        <Icon icon="ph:circle-notch" width={16} height={16} class="spin" />
+      {:else}
+        <Icon icon="ph:paper-plane-right" width={16} height={16} />
+      {/if}
     </button>
   </div>
 </div>
@@ -282,5 +336,26 @@
   .send-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
+  }
+
+  .error-msg {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--color-accent-danger);
+    background: color-mix(in srgb, var(--color-accent-danger) 10%, transparent);
+    border-top: 1px solid var(--color-border-subtle);
+    flex-shrink: 0;
+  }
+
+  :global(.spin) {
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 </style>
