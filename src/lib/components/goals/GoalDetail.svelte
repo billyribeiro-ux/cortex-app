@@ -24,7 +24,7 @@
   const categoryColor = $derived(notesStore.categories.find((c) => c.id === goal.category)?.color ?? '#6c5ce7');
   const categoryName = $derived(notesStore.categories.find((c) => c.id === goal.category)?.name ?? goal.category);
   const renderedDesc = $derived(goal.description ? renderMarkdown(goal.description) : '');
-  const sortedMilestones = $derived([...goal.milestones].sort((a, b) => a.order - b.order));
+  const sortedMilestones = $derived([...(goal.milestones ?? [])].sort((a, b) => a.order - b.order));
 
   let newMilestoneTitle = $state('');
   let manualProgress = $state(0);
@@ -38,8 +38,9 @@
 
   function handleAddMilestone(): void {
     const title = newMilestoneTitle.trim();
-    if (!title) return;
-    goalsStore.addMilestone(goal.id, title);
+    const goalId = goalsStore.activeGoalId;
+    if (!title || !goalId) return;
+    goalsStore.addMilestone(goalId, title);
     newMilestoneTitle = '';
   }
 
@@ -48,14 +49,18 @@
   }
 
   function handleProgressModeToggle(mode: 'auto' | 'manual'): void {
-    appStore.updateGoal(goal.id, { progressMode: mode });
+    const goalId = goalsStore.activeGoalId;
+    if (!goalId) return;
+    appStore.updateGoal(goalId, { progressMode: mode });
     if (mode === 'auto') goalsStore.syncAutoProgress();
   }
 
   function handleManualProgressChange(e: Event): void {
+    const goalId = goalsStore.activeGoalId;
+    if (!goalId) return;
     const val = parseInt((e.currentTarget as HTMLInputElement).value, 10);
     manualProgress = val;
-    appStore.updateGoal(goal.id, { progress: val, progressMode: 'manual' });
+    appStore.updateGoal(goalId, { progress: val, progressMode: 'manual' });
   }
 
   function handleDragStartMilestone(e: DragEvent, id: string): void {
@@ -83,7 +88,8 @@
     const reordered = [...ids];
     reordered.splice(fromIdx, 1);
     reordered.splice(toIdx, 0, sourceId);
-    goalsStore.reorderMilestones(goal.id, reordered);
+    const goalId = goalsStore.activeGoalId;
+    if (goalId) goalsStore.reorderMilestones(goalId, reordered);
     dragOverMilestoneId = null;
     draggingMilestoneId = null;
   }
@@ -106,7 +112,7 @@
       Back to Goals
     </button>
     <div class="header-actions">
-      <button class="action-btn" onclick={() => goalsStore.openEditModal(goal.id)} title="Edit goal">
+      <button class="action-btn" onclick={() => { const id = goalsStore.activeGoalId ?? goal.id; if (id) goalsStore.openEditModal(id); }} title="Edit goal">
         <Icon icon="ph:pencil" width={16} height={16} />
         Edit
       </button>
@@ -199,7 +205,7 @@
             <input
               type="checkbox"
               checked={ms.isCompleted}
-              onchange={() => goalsStore.toggleMilestone(goal.id, ms.id)}
+              onchange={() => { const id = goalsStore.activeGoalId ?? goal.id; if (id) goalsStore.toggleMilestone(id, ms.id); }}
               aria-label="Toggle milestone"
             />
             <span class="ms-title" class:done={ms.isCompleted}>{ms.title}</span>
@@ -211,7 +217,7 @@
             {/if}
             <button
               class="ms-delete"
-              onclick={() => goalsStore.removeMilestone(goal.id, ms.id)}
+              onclick={() => { const id = goalsStore.activeGoalId ?? goal.id; if (id) goalsStore.removeMilestone(id, ms.id); }}
               aria-label="Remove milestone"
             >
               <Icon icon="ph:x" width={12} height={12} />

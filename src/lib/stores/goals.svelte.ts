@@ -33,9 +33,10 @@ function createGoalsStore() {
   function calculateProgress(goal: Goal): number {
     if (goal.progressMode === 'manual') return goal.progress;
     const linkedTasks = getLinkedTasks(goal.id);
-    const totalItems = goal.milestones.length + linkedTasks.length;
+    const milestones = goal.milestones ?? [];
+    const totalItems = milestones.length + linkedTasks.length;
     if (totalItems === 0) return 0;
-    const completedMilestones = goal.milestones.filter((m) => m.isCompleted).length;
+    const completedMilestones = milestones.filter((m) => m.isCompleted).length;
     const completedTasks = linkedTasks.filter((t) => t.status === 'done').length;
     return Math.round(((completedMilestones + completedTasks) / totalItems) * 100);
   }
@@ -98,7 +99,8 @@ function createGoalsStore() {
   });
 
   function syncAutoProgress(): void {
-    for (const goal of appStore.goals) {
+    const goalsSnapshot = [...appStore.goals];
+    for (const goal of goalsSnapshot) {
       if (goal.progressMode === 'auto') {
         const newProgress = calculateProgress(goal);
         if (goal.progress !== newProgress) {
@@ -150,6 +152,7 @@ function createGoalsStore() {
     addMilestone(goalId: string, title: string, description: string = '', targetDate: string | null = null): void {
       const goal = appStore.goals.find((g) => g.id === goalId);
       if (!goal) return;
+      const milestones = goal.milestones ?? [];
       const milestone: Milestone = {
         id: crypto.randomUUID(),
         title,
@@ -157,15 +160,16 @@ function createGoalsStore() {
         isCompleted: false,
         completedAt: null,
         targetDate,
-        order: goal.milestones.length,
+        order: milestones.length,
       };
-      appStore.updateGoal(goalId, { milestones: [...goal.milestones, milestone] });
+      appStore.updateGoal(goalId, { milestones: [...milestones, milestone] });
     },
 
     toggleMilestone(goalId: string, milestoneId: string): void {
       const goal = appStore.goals.find((g) => g.id === goalId);
       if (!goal) return;
-      const updated = goal.milestones.map((m) =>
+      const milestones = goal.milestones ?? [];
+      const updated = milestones.map((m) =>
         m.id === milestoneId
           ? { ...m, isCompleted: !m.isCompleted, completedAt: !m.isCompleted ? new Date().toISOString() : null }
           : m
@@ -177,7 +181,8 @@ function createGoalsStore() {
     updateMilestone(goalId: string, milestoneId: string, updates: Partial<Milestone>): void {
       const goal = appStore.goals.find((g) => g.id === goalId);
       if (!goal) return;
-      const updated = goal.milestones.map((m) =>
+      const milestones = goal.milestones ?? [];
+      const updated = milestones.map((m) =>
         m.id === milestoneId ? { ...m, ...updates } : m
       );
       appStore.updateGoal(goalId, { milestones: updated });
@@ -186,15 +191,17 @@ function createGoalsStore() {
     removeMilestone(goalId: string, milestoneId: string): void {
       const goal = appStore.goals.find((g) => g.id === goalId);
       if (!goal) return;
-      appStore.updateGoal(goalId, { milestones: goal.milestones.filter((m) => m.id !== milestoneId) });
+      const milestones = goal.milestones ?? [];
+      appStore.updateGoal(goalId, { milestones: milestones.filter((m) => m.id !== milestoneId) });
     },
 
     reorderMilestones(goalId: string, milestoneIds: string[]): void {
       const goal = appStore.goals.find((g) => g.id === goalId);
       if (!goal) return;
+      const milestones = goal.milestones ?? [];
       const reordered = milestoneIds
         .map((id, index) => {
-          const ms = goal.milestones.find((m) => m.id === id);
+          const ms = milestones.find((m) => m.id === id);
           return ms ? { ...ms, order: index } : null;
         })
         .filter((m): m is Milestone => m !== null);

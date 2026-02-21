@@ -37,7 +37,7 @@
         targetDate = formatDateForInput(goal.targetDate);
         progressMode = goal.progressMode;
         manualProgress = goal.progress;
-        milestones = goal.milestones.map((m) => ({ ...m }));
+        milestones = (goal.milestones ?? []).map((m) => ({ ...m }));
       } else {
         title = '';
         description = '';
@@ -94,8 +94,9 @@
       milestones,
     };
 
-    if (isEditing && goal) {
-      appStore.updateGoal(goal.id, data);
+    const editingId = goalsStore.editingGoalId;
+    if (isEditing && editingId) {
+      appStore.updateGoal(editingId, data);
     } else {
       goalsStore.createGoal(data);
     }
@@ -108,9 +109,10 @@
       setTimeout(() => { deleteConfirm = false; }, 3000);
       return;
     }
-    if (goal) {
-      appStore.deleteGoal(goal.id);
-      if (goalsStore.activeGoalId === goal.id) {
+    const editingId = goalsStore.editingGoalId;
+    if (editingId) {
+      appStore.deleteGoal(editingId);
+      if (goalsStore.activeGoalId === editingId) {
         goalsStore.setActiveGoal(null);
       }
     }

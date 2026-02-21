@@ -38,8 +38,9 @@
     inputValue = '';
     isLoading = true;
 
-    const systemPrompt = notesStore.activeNote
-      ? `You are a helpful assistant. The user is working on a note titled "${notesStore.activeNote.title}". Here is the note content:\n\n${notesStore.activeNote.content}\n\nHelp the user with questions about this note or related topics.`
+    const activeNote = notesStore.activeNote;
+    const systemPrompt = activeNote
+      ? `You are a helpful assistant. The user is working on a note titled "${activeNote.title}". Here is the note content:\n\n${activeNote.content}\n\nHelp the user with questions about this note or related topics.`
       : 'You are a helpful assistant for a personal knowledge management app called Cortex.';
 
     const history = notesStore.claudeMessages.slice(-20).map((m) => ({
@@ -65,14 +66,22 @@
       });
 
       if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        throw new Error((err as { error?: { message?: string } }).error?.message ?? `HTTP ${response.status}`);
+        let err: { error?: { message?: string } } = {};
+        try {
+          err = (await response.json()) as { error?: { message?: string } };
+        } catch {
+          /* ignore parse error */
+        }
+        throw new Error(err.error?.message ?? `HTTP ${response.status}`);
       }
 
-      const data = await response.json() as {
-        content: Array<{ type: string; text: string }>;
-      };
-      const text = data.content.find((c) => c.type === 'text')?.text ?? '';
+      let data: { content?: Array<{ type: string; text: string }> };
+      try {
+        data = (await response.json()) as { content?: Array<{ type: string; text: string }> };
+      } catch {
+        throw new Error('Invalid response from Claude API');
+      }
+      const text = (data.content ?? []).find((c) => c.type === 'text')?.text ?? '';
 
       const assistantMsg: ClaudeMessage = {
         id: crypto.randomUUID(),

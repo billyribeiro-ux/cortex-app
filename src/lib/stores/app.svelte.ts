@@ -38,7 +38,7 @@ function createAppStore() {
 
     // Note mutations
     addNote(note: Note): void {
-      notes.push(note);
+      notes = [...notes, note];
       saveToStorage('cortex:notes', notes);
     },
     updateNote(id: string, updates: Partial<Note>): void {
@@ -57,7 +57,7 @@ function createAppStore() {
 
     // Task mutations
     addTask(task: Task): void {
-      tasks.push(task);
+      tasks = [...tasks, task];
       saveToStorage('cortex:tasks', tasks);
     },
     updateTask(id: string, updates: Partial<Task>): void {
@@ -76,7 +76,7 @@ function createAppStore() {
 
     // Goal mutations
     addGoal(goal: Goal): void {
-      goals.push(goal);
+      goals = [...goals, goal];
       saveToStorage('cortex:goals', goals);
     },
     updateGoal(id: string, updates: Partial<Goal>): void {

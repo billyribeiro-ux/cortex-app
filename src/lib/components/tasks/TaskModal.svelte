@@ -39,8 +39,8 @@
         priority = task.priority;
         dueDate = formatDateForInput(task.dueDate);
         goalId = task.goalId;
-        tags = [...task.tags];
-        subtasks = task.subtasks.map((s) => ({ ...s }));
+        tags = [...(task.tags ?? [])];
+        subtasks = (task.subtasks ?? []).map((s) => ({ ...s }));
       } else {
         title = '';
         description = '';
@@ -69,8 +69,9 @@
       subtasks,
     };
 
-    if (isEditing && task) {
-      appStore.updateTask(task.id, data);
+    const editingId = tasksStore.editingTaskId;
+    if (isEditing && editingId) {
+      appStore.updateTask(editingId, data);
     } else {
       tasksStore.createTask(data);
     }
@@ -83,8 +84,9 @@
       setTimeout(() => { deleteConfirm = false; }, 3000);
       return;
     }
-    if (task) {
-      appStore.deleteTask(task.id);
+    const editingId = tasksStore.editingTaskId;
+    if (editingId) {
+      appStore.deleteTask(editingId);
     }
     tasksStore.closeModal();
   }

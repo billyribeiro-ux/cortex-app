@@ -33,6 +33,8 @@
   $effect(() => {
     if (saveTrigger <= lastProcessedSave) return;
     lastProcessedSave = saveTrigger;
+    const noteId = notesStore.activeNoteId;
+    if (!noteId) return;
     if (debounceTimer !== null) {
       clearTimeout(debounceTimer);
       debounceTimer = null;
@@ -40,32 +42,38 @@
     const updates: Partial<Note> = {};
     if (textareaRef) updates.content = textareaRef.value;
     if (titleInputRef) updates.title = titleInputRef.value;
-    appStore.updateNote(note.id, Object.keys(updates).length > 0 ? updates : {});
+    appStore.updateNote(noteId, Object.keys(updates).length > 0 ? updates : {});
     savedFlash = true;
     setTimeout(() => { savedFlash = false; }, 1500);
   });
 
   function handleTitleInput(e: Event): void {
+    const noteId = notesStore.activeNoteId;
+    if (!noteId) return;
     const value = (e.currentTarget as HTMLInputElement).value;
-    appStore.updateNote(note.id, { title: value });
+    appStore.updateNote(noteId, { title: value });
   }
 
   function handleContentInput(e: Event): void {
+    const noteId = notesStore.activeNoteId;
+    if (!noteId) return;
     const value = (e.currentTarget as HTMLTextAreaElement).value;
     if (debounceTimer !== null) clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
-      appStore.updateNote(note.id, { content: value });
+      appStore.updateNote(noteId, { content: value });
     }, 300);
   }
 
   function handleTextareaKeydown(e: KeyboardEvent): void {
     if (e.key === 'Tab') {
       e.preventDefault();
+      const noteId = notesStore.activeNoteId;
+      if (!noteId) return;
       const ta = e.currentTarget as HTMLTextAreaElement;
       const start = ta.selectionStart;
       const end = ta.selectionEnd;
       const newValue = ta.value.slice(0, start) + '  ' + ta.value.slice(end);
-      appStore.updateNote(note.id, { content: newValue });
+      appStore.updateNote(noteId, { content: newValue });
       // Restore cursor position after reactive update
       requestAnimationFrame(() => {
         ta.selectionStart = start + 2;
@@ -75,31 +83,42 @@
   }
 
   function handleCategorySelect(categoryId: string): void {
-    appStore.updateNote(note.id, { category: categoryId });
+    const noteId = notesStore.activeNoteId;
+    if (!noteId) return;
+    appStore.updateNote(noteId, { category: categoryId });
   }
 
   function handleAddTag(tag: string): void {
-    const current = appStore.notes.find((n) => n.id === note.id);
-    if (current) appStore.updateNote(note.id, { tags: [...current.tags, tag] });
+    const noteId = notesStore.activeNoteId;
+    if (!noteId) return;
+    const current = appStore.notes.find((n) => n.id === noteId);
+    if (current) appStore.updateNote(noteId, { tags: [...(current.tags ?? []), tag] });
   }
 
   function handleRemoveTag(tag: string): void {
-    const current = appStore.notes.find((n) => n.id === note.id);
-    if (current) appStore.updateNote(note.id, { tags: current.tags.filter((t) => t !== tag) });
+    const noteId = notesStore.activeNoteId;
+    if (!noteId) return;
+    const current = appStore.notes.find((n) => n.id === noteId);
+    if (current) appStore.updateNote(noteId, { tags: (current.tags ?? []).filter((t) => t !== tag) });
   }
 
   function handleToggleFavorite(): void {
-    notesStore.toggleFavorite(note.id);
+    const noteId = notesStore.activeNoteId;
+    if (noteId) notesStore.toggleFavorite(noteId);
   }
 
   function handleDuplicate(): void {
-    const newId = notesStore.duplicateNote(note.id);
+    const noteId = notesStore.activeNoteId;
+    if (!noteId) return;
+    const newId = notesStore.duplicateNote(noteId);
     if (newId) notesStore.setActiveNote(newId);
   }
 
   function handleDeleteClick(): void {
+    const noteId = notesStore.activeNoteId;
+    if (!noteId) return;
     if (deleteConfirm) {
-      appStore.deleteNote(note.id);
+      appStore.deleteNote(noteId);
       notesStore.setActiveNote(null);
       deleteConfirm = false;
     } else {

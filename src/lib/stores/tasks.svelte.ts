@@ -183,19 +183,21 @@ function createTasksStore() {
     addSubtask(taskId: string, title: string): void {
       const task = appStore.tasks.find((t) => t.id === taskId);
       if (!task) return;
+      const subtasks = task.subtasks ?? [];
       const subtask: Subtask = {
         id: crypto.randomUUID(),
         title,
         isCompleted: false,
         completedAt: null,
       };
-      appStore.updateTask(taskId, { subtasks: [...task.subtasks, subtask] });
+      appStore.updateTask(taskId, { subtasks: [...subtasks, subtask] });
     },
 
     toggleSubtask(taskId: string, subtaskId: string): void {
       const task = appStore.tasks.find((t) => t.id === taskId);
       if (!task) return;
-      const updatedSubtasks = task.subtasks.map((s) =>
+      const subtasks = task.subtasks ?? [];
+      const updatedSubtasks = subtasks.map((s) =>
         s.id === subtaskId
           ? { ...s, isCompleted: !s.isCompleted, completedAt: !s.isCompleted ? new Date().toISOString() : null }
           : s
@@ -206,7 +208,8 @@ function createTasksStore() {
     removeSubtask(taskId: string, subtaskId: string): void {
       const task = appStore.tasks.find((t) => t.id === taskId);
       if (!task) return;
-      appStore.updateTask(taskId, { subtasks: task.subtasks.filter((s) => s.id !== subtaskId) });
+      const subtasks = task.subtasks ?? [];
+      appStore.updateTask(taskId, { subtasks: subtasks.filter((s) => s.id !== subtaskId) });
     },
 
     moveToStatus(id: string, status: TaskStatus): void {

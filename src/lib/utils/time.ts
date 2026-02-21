@@ -50,12 +50,23 @@ export function getDueDateLabel(dueDate: string | null): { text: string; isOverd
 export function formatDateForInput(dateString: string | null): string {
   if (!dateString) return '';
   const date = new Date(dateString);
-  return date.toISOString().split('T')[0] ?? '';
+  if (Number.isNaN(date.getTime())) return '';
+  try {
+    return date.toISOString().split('T')[0] ?? '';
+  } catch {
+    return '';
+  }
 }
 
 export function parseDateInput(value: string): string | null {
-  if (!value) return null;
-  return new Date(value + 'T00:00:00').toISOString();
+  if (!value.trim()) return null;
+  try {
+    const date = new Date(value.trim() + 'T00:00:00');
+    if (Number.isNaN(date.getTime())) return null;
+    return date.toISOString();
+  } catch {
+    return null;
+  }
 }
 
 export function stripMarkdown(content: string): string {
