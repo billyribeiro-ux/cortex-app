@@ -9,11 +9,12 @@
     onclose: () => void;
     title: string;
     maxWidth?: string;
+    footerAlign?: 'end' | 'between';
     children: Snippet;
     footer?: Snippet;
   }
 
-  let { open, onclose, title, maxWidth = '600px', children, footer }: Props = $props();
+  let { open, onclose, title, maxWidth = '600px', footerAlign = 'end', children, footer }: Props = $props();
   let modalRef = $state<HTMLDivElement | null>(null);
   let previousActiveElement = $state<Element | null>(null);
   const titleId = 'modal-title-' + crypto.randomUUID().slice(0, 8);
@@ -51,8 +52,8 @@
     if (!el) return;
     const focusables = Array.from(el.querySelectorAll<HTMLElement>(FOCUS_SELECTOR));
     if (focusables.length === 0) return;
-    const first = focusables[0];
-    const last = focusables[focusables.length - 1];
+    const first = focusables[0]!;
+    const last = focusables[focusables.length - 1]!;
     if (e.shiftKey) {
       if (document.activeElement === first) {
         e.preventDefault();
@@ -76,9 +77,8 @@
 {#if open}
   <div
     class="backdrop"
-    role="button"
+    role="presentation"
     tabindex="-1"
-    aria-label="Close dialog"
     onclick={handleBackdropClick}
     onkeydown={(e) => e.key === 'Escape' && onclose()}
   >
@@ -102,7 +102,7 @@
         {@render children()}
       </div>
       {#if footer}
-        <div class="modal-footer">
+        <div class="modal-footer" class:footer-between={footerAlign === 'between'}>
           {@render footer()}
         </div>
       {/if}
@@ -190,5 +190,9 @@
     padding: var(--space-4) var(--space-6);
     border-top: 1px solid var(--color-border-subtle);
     flex-shrink: 0;
+  }
+
+  .modal-footer.footer-between {
+    justify-content: space-between;
   }
 </style>

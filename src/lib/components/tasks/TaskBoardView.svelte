@@ -11,7 +11,7 @@
     <KanbanColumn
       {status}
       tasks={tasksStore.tasksByStatus[status]}
-      onAddTask={() => tasksStore.openCreateModal(status)}
+      onAddTask={() => tasksStore.openCreateModal({ defaultStatus: status })}
     />
   {/each}
 </div>

@@ -19,8 +19,9 @@
   const linkedTasks = $derived(goalsStore.getLinkedTasks(goal.id));
   const completedTasks = $derived(linkedTasks.filter((t) => t.status === 'done').length);
   const completedMilestones = $derived(goal.milestones.filter((m) => m.isCompleted).length);
-  const categoryColor = $derived(notesStore.categories.find((c) => c.id === goal.category)?.color ?? '#6c5ce7');
-  const categoryName = $derived(notesStore.categories.find((c) => c.id === goal.category)?.name ?? goal.category);
+  const category = $derived(notesStore.categories.find((c) => c.id === goal.category));
+  const categoryColor = $derived(category?.color ?? '#6c5ce7');
+  const categoryName = $derived(category?.name ?? goal.category);
   const relTime = $derived(getRelativeTime(goal.updatedAt));
 </script>
 
@@ -30,6 +31,7 @@
   class:abandoned={goal.status === 'abandoned'}
   role="button"
   tabindex="0"
+  aria-label="Goal: {goal.title}"
   {onclick}
   onkeydown={(e) => e.key === 'Enter' && onclick()}
 >

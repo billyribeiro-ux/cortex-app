@@ -276,4 +276,24 @@
   }
 
   .tag-pill.muted { opacity: 0.7; }
+
+  @media (max-width: 768px) {
+    .list-header {
+      grid-template-columns: 40px 36px 1fr 110px;
+    }
+
+    .list-row {
+      grid-template-columns: 40px 36px 1fr 110px;
+    }
+
+    .col-subtasks,
+    .col-tags {
+      display: none;
+    }
+
+    .list-header .col-subtasks,
+    .list-header .col-tags {
+      display: none;
+    }
+  }
 </style>

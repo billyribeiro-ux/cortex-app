@@ -100,7 +100,7 @@
   }
 
   function openTaskForGoal(): void {
-    tasksStore.openCreateModal();
+    tasksStore.openCreateModal({ defaultGoalId: goal.id });
   }
 </script>
 

@@ -10,9 +10,7 @@
 
   // Sync TopBar search → goals filter
   $effect(() => {
-    if (appStore.searchQuery) {
-      goalsStore.setSearchQuery(appStore.searchQuery);
-    }
+    goalsStore.setSearchQuery(appStore.searchQuery);
   });
 
   function handleKeydown(e: KeyboardEvent): void {
@@ -147,8 +145,8 @@
   }
 
   .empty-sub {
-    font-size: var(--text-sm) !important;
-    color: var(--color-text-tertiary) !important;
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
   }
 
   .cta-btn {

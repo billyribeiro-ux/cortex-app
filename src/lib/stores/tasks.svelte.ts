@@ -7,6 +7,8 @@ function createTasksStore() {
   let viewMode = $state<'list' | 'board'>('board');
   let showCreateModal = $state<boolean>(false);
   let editingTaskId = $state<string | null>(null);
+  let defaultNewTaskStatus = $state<TaskStatus | null>(null);
+  let defaultNewTaskGoalId = $state<string | null>(null);
 
   let filter = $state<TaskFilter>({
     searchQuery: '',
@@ -134,6 +136,8 @@ function createTasksStore() {
     get showCreateModal() { return showCreateModal; },
     get editingTaskId() { return editingTaskId; },
     get editingTask() { return editingTask; },
+    get defaultNewTaskStatus() { return defaultNewTaskStatus; },
+    get defaultNewTaskGoalId() { return defaultNewTaskGoalId; },
     get filter() { return filter; },
     get filteredTasks() { return filteredTasks; },
     get tasksByStatus() { return tasksByStatus; },
@@ -145,12 +149,11 @@ function createTasksStore() {
 
     setActiveTask(id: string | null): void { activeTaskId = id; },
 
-    openCreateModal(defaultStatus?: TaskStatus): void {
+    openCreateModal(options?: { defaultStatus?: TaskStatus; defaultGoalId?: string }): void {
       editingTaskId = null;
+      defaultNewTaskStatus = options?.defaultStatus ?? null;
+      defaultNewTaskGoalId = options?.defaultGoalId ?? null;
       showCreateModal = true;
-      if (defaultStatus) {
-        filter.status = null;
-      }
     },
 
     openEditModal(id: string): void {
@@ -162,6 +165,8 @@ function createTasksStore() {
       showCreateModal = false;
       editingTaskId = null;
       activeTaskId = null;
+      defaultNewTaskStatus = null;
+      defaultNewTaskGoalId = null;
     },
 
     createTask(data: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>): string {
