@@ -21,8 +21,9 @@
   const statusCfg = $derived(GOAL_STATUS_CONFIG[goal.status]);
   const progress = $derived(goalsStore.calculateProgress(goal));
   const linkedTasks = $derived(goalsStore.getLinkedTasks(goal.id));
-  const categoryColor = $derived(notesStore.categories.find((c) => c.id === goal.category)?.color ?? '#6c5ce7');
-  const categoryName = $derived(notesStore.categories.find((c) => c.id === goal.category)?.name ?? goal.category);
+  const category = $derived(notesStore.categories.find((c) => c.id === goal.category));
+  const categoryColor = $derived(category?.color ?? '#6c5ce7');
+  const categoryName = $derived(category?.name ?? goal.category);
   const renderedDesc = $derived(goal.description ? renderMarkdown(goal.description) : '');
   const sortedMilestones = $derived([...(goal.milestones ?? [])].sort((a, b) => a.order - b.order));
 

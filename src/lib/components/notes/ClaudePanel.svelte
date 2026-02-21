@@ -39,6 +39,7 @@
   async function sendMessage(): Promise<void> {
     const content = inputValue.trim();
     if (!content || isLoading) return;
+    if (Date.now() - lastSentAt < COOLDOWN_MS) return;
 
     if (!hasApiKey) {
       errorMsg = 'API key not configured. Add VITE_ANTHROPIC_API_KEY to your .env file and rebuild.';
@@ -216,7 +217,7 @@
       <button
         class="send-btn"
         onclick={() => void sendMessage()}
-        disabled={!hasApiKey || !inputValue.trim() || isLoading}
+        disabled={!hasApiKey || !inputValue.trim() || isLoading || isCoolingDown}
         aria-label="Send message"
       >
         {#if isLoading}
