@@ -4,7 +4,7 @@ node_modules
 /.svelte-kit
 /package
 .env
-.env.*
+.env.*monor
 !.env.example
 api_key.md
 *.key

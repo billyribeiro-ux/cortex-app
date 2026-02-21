@@ -7,14 +7,7 @@
   let { children } = $props();
 
   let mounted = $state(false);
-  onMount(async () => {
-    mounted = true;
-    // Show Tauri window after app is ready (starts hidden to prevent flash/flicker)
-    if (typeof window !== 'undefined' && ('__TAURI__' in window || '__TAURI_INTERNALS__' in window)) {
-      const { getCurrentWindow } = await import('@tauri-apps/api/window');
-      getCurrentWindow().show();
-    }
-  });
+  onMount(() => { mounted = true; });
 
   const sidebarWidth = $derived(
     appStore.sidebarCollapsed ? 'var(--sidebar-collapsed-width)' : 'var(--sidebar-width)'

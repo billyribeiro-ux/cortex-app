@@ -18,12 +18,11 @@
         "minWidth": 900,
         "minHeight": 600,
         "decorations": true,
-        "backgroundColor": "#0a0a0b",
-        "visible": false
+        "backgroundColor": "#0a0a0b"
       }
     ],
     "security": {
-      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.anthropic.com https://api.iconify.design; img-src 'self' data: blob:; font-src 'self' data:"
+      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.anthropic.com https://api.iconify.design https://api.simplesvg.com https://api.unisvg.com; img-src 'self' data: blob:; font-src 'self' data:"
     }
   },
   "bundle": {

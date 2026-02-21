@@ -44,7 +44,9 @@ function createAppStore() {
     updateNote(id: string, updates: Partial<Note>): void {
       const index = notes.findIndex((n) => n.id === id);
       if (index !== -1) {
-        notes[index] = { ...notes[index]!, ...updates, updatedAt: new Date().toISOString() };
+        notes = notes.map((n, i) =>
+          i === index ? { ...n, ...updates, updatedAt: new Date().toISOString() } : n
+        );
         saveToStorage('cortex:notes', notes);
       }
     },
@@ -61,7 +63,9 @@ function createAppStore() {
     updateTask(id: string, updates: Partial<Task>): void {
       const index = tasks.findIndex((t) => t.id === id);
       if (index !== -1) {
-        tasks[index] = { ...tasks[index]!, ...updates, updatedAt: new Date().toISOString() };
+        tasks = tasks.map((t, i) =>
+          i === index ? { ...t, ...updates, updatedAt: new Date().toISOString() } : t
+        );
         saveToStorage('cortex:tasks', tasks);
       }
     },
@@ -78,7 +82,9 @@ function createAppStore() {
     updateGoal(id: string, updates: Partial<Goal>): void {
       const index = goals.findIndex((g) => g.id === id);
       if (index !== -1) {
-        goals[index] = { ...goals[index]!, ...updates, updatedAt: new Date().toISOString() };
+        goals = goals.map((g, i) =>
+          i === index ? { ...g, ...updates, updatedAt: new Date().toISOString() } : g
+        );
         saveToStorage('cortex:goals', goals);
       }
     },
