@@ -79,11 +79,13 @@
   }
 
   function handleAddTag(tag: string): void {
-    appStore.updateNote(note.id, { tags: [...note.tags, tag] });
+    const current = appStore.notes.find((n) => n.id === note.id);
+    if (current) appStore.updateNote(note.id, { tags: [...current.tags, tag] });
   }
 
   function handleRemoveTag(tag: string): void {
-    appStore.updateNote(note.id, { tags: note.tags.filter((t) => t !== tag) });
+    const current = appStore.notes.find((n) => n.id === note.id);
+    if (current) appStore.updateNote(note.id, { tags: current.tags.filter((t) => t !== tag) });
   }
 
   function handleToggleFavorite(): void {

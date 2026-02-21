@@ -51,7 +51,7 @@
     placeholder={tags.length === 0 ? 'Add tags...' : ''}
     bind:value={inputValue}
     onkeydown={handleKeydown}
-    onblur={addTag}
+    onblur={() => { if (inputValue.trim()) addTag(); }}
   />
 </div>
 
