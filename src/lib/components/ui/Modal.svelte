@@ -76,6 +76,9 @@
 {#if open}
   <div
     class="backdrop"
+    role="button"
+    tabindex="-1"
+    aria-label="Close dialog"
     onclick={handleBackdropClick}
     onkeydown={(e) => e.key === 'Escape' && onclose()}
   >

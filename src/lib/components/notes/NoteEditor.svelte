@@ -21,11 +21,28 @@
   let debounceTimer = $state<ReturnType<typeof setTimeout> | null>(null);
   let textareaRef = $state<HTMLTextAreaElement | null>(null);
   let titleInputRef = $state<HTMLInputElement | null>(null);
+  let saveTrigger = $state(0);
+  let lastProcessedSave = $state(0);
 
   const renderedContent = $derived(renderMarkdown(note.content));
 
   onDestroy(() => {
     if (debounceTimer !== null) clearTimeout(debounceTimer);
+  });
+
+  $effect(() => {
+    if (saveTrigger <= lastProcessedSave) return;
+    lastProcessedSave = saveTrigger;
+    if (debounceTimer !== null) {
+      clearTimeout(debounceTimer);
+      debounceTimer = null;
+    }
+    const updates: Partial<Note> = {};
+    if (textareaRef) updates.content = textareaRef.value;
+    if (titleInputRef) updates.title = titleInputRef.value;
+    appStore.updateNote(note.id, Object.keys(updates).length > 0 ? updates : {});
+    savedFlash = true;
+    setTimeout(() => { savedFlash = false; }, 1500);
   });
 
   function handleTitleInput(e: Event): void {
@@ -89,24 +106,11 @@
     }
   }
 
+  // svelte-ignore non_reactive_update — saveTrigger is $state; this is correct
   function handleForceSave(): void {
-    if (debounceTimer !== null) {
-      clearTimeout(debounceTimer);
-      debounceTimer = null;
-    }
-    const updates: Partial<Note> = {};
-    if (textareaRef) {
-      updates.content = textareaRef.value;
-    }
-    if (titleInputRef) {
-      updates.title = titleInputRef.value;
-    }
-    appStore.updateNote(note.id, Object.keys(updates).length > 0 ? updates : {});
-    savedFlash = true;
-    setTimeout(() => { savedFlash = false; }, 1500);
+    saveTrigger++;
   }
 
-  // Expose force save for keyboard shortcut
   export { handleForceSave };
 </script>
 
