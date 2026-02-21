@@ -14,23 +14,6 @@ function createAppStore() {
   const openTaskCount = $derived(tasks.filter((t) => t.status !== 'done').length);
   const activeGoalCount = $derived(goals.filter((g) => g.progress < 100).length);
 
-  // Persistence effects — save to localStorage on change
-  $effect(() => {
-    saveToStorage('cortex:notes', notes);
-  });
-
-  $effect(() => {
-    saveToStorage('cortex:tasks', tasks);
-  });
-
-  $effect(() => {
-    saveToStorage('cortex:goals', goals);
-  });
-
-  $effect(() => {
-    saveToStorage('cortex:sidebar-collapsed', sidebarCollapsed);
-  });
-
   return {
     // State (getters for reading, since we can't export reassigned $state)
     get notes() { return notes; },
@@ -47,43 +30,61 @@ function createAppStore() {
 
     // Setters
     set activeView(view: AppState['activeView']) { activeView = view; },
-    set sidebarCollapsed(value: boolean) { sidebarCollapsed = value; },
+    set sidebarCollapsed(value: boolean) {
+      sidebarCollapsed = value;
+      saveToStorage('cortex:sidebar-collapsed', sidebarCollapsed);
+    },
     set searchQuery(value: string) { searchQuery = value; },
 
     // Note mutations
-    addNote(note: Note): void { notes.push(note); },
+    addNote(note: Note): void {
+      notes.push(note);
+      saveToStorage('cortex:notes', notes);
+    },
     updateNote(id: string, updates: Partial<Note>): void {
       const index = notes.findIndex((n) => n.id === id);
       if (index !== -1) {
         notes[index] = { ...notes[index]!, ...updates, updatedAt: new Date().toISOString() };
+        saveToStorage('cortex:notes', notes);
       }
     },
     deleteNote(id: string): void {
       notes = notes.filter((n) => n.id !== id);
+      saveToStorage('cortex:notes', notes);
     },
 
     // Task mutations
-    addTask(task: Task): void { tasks.push(task); },
+    addTask(task: Task): void {
+      tasks.push(task);
+      saveToStorage('cortex:tasks', tasks);
+    },
     updateTask(id: string, updates: Partial<Task>): void {
       const index = tasks.findIndex((t) => t.id === id);
       if (index !== -1) {
         tasks[index] = { ...tasks[index]!, ...updates, updatedAt: new Date().toISOString() };
+        saveToStorage('cortex:tasks', tasks);
       }
     },
     deleteTask(id: string): void {
       tasks = tasks.filter((t) => t.id !== id);
+      saveToStorage('cortex:tasks', tasks);
     },
 
     // Goal mutations
-    addGoal(goal: Goal): void { goals.push(goal); },
+    addGoal(goal: Goal): void {
+      goals.push(goal);
+      saveToStorage('cortex:goals', goals);
+    },
     updateGoal(id: string, updates: Partial<Goal>): void {
       const index = goals.findIndex((g) => g.id === id);
       if (index !== -1) {
         goals[index] = { ...goals[index]!, ...updates, updatedAt: new Date().toISOString() };
+        saveToStorage('cortex:goals', goals);
       }
     },
     deleteGoal(id: string): void {
       goals = goals.filter((g) => g.id !== id);
+      saveToStorage('cortex:goals', goals);
     }
   };
 }

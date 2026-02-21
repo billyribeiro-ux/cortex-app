@@ -150,8 +150,6 @@ function createTasksStore() {
       showCreateModal = true;
       if (defaultStatus) {
         filter.status = null;
-        // Store default status for the modal to pick up
-        activeTaskId = defaultStatus as unknown as string;
       }
     },
 

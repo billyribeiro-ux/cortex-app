@@ -4,6 +4,7 @@
   import { goalsStore } from '$lib/stores/goals.svelte.js';
   import { tasksStore } from '$lib/stores/tasks.svelte.js';
   import { notesStore } from '$lib/stores/notes.svelte.js';
+  import { appStore } from '$lib/stores/app.svelte.js';
   import { renderMarkdown } from '$lib/utils/markdown.js';
   import { formatDateForInput, parseDateInput, getRelativeTime } from '$lib/utils/time.js';
   import ProgressRing from '$lib/components/ui/ProgressRing.svelte';
@@ -47,20 +48,14 @@
   }
 
   function handleProgressModeToggle(mode: 'auto' | 'manual'): void {
-    if (mode === 'manual') {
-      goalsStore.updateMilestone(goal.id, '', {});
-    }
-    import('$lib/stores/app.svelte.js').then(({ appStore }) => {
-      appStore.updateGoal(goal.id, { progressMode: mode });
-    });
+    appStore.updateGoal(goal.id, { progressMode: mode });
+    if (mode === 'auto') goalsStore.syncAutoProgress();
   }
 
   function handleManualProgressChange(e: Event): void {
     const val = parseInt((e.currentTarget as HTMLInputElement).value, 10);
     manualProgress = val;
-    import('$lib/stores/app.svelte.js').then(({ appStore }) => {
-      appStore.updateGoal(goal.id, { progress: val, progressMode: 'manual' });
-    });
+    appStore.updateGoal(goal.id, { progress: val, progressMode: 'manual' });
   }
 
   function handleDragStartMilestone(e: DragEvent, id: string): void {
@@ -100,12 +95,6 @@
 
   function openTaskForGoal(): void {
     tasksStore.openCreateModal();
-    // Pre-set goalId after modal opens via a small delay
-    setTimeout(() => {
-      import('$lib/stores/app.svelte.js').then(({ appStore }) => {
-        void appStore;
-      });
-    }, 0);
   }
 </script>
 

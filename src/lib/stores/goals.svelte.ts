@@ -97,13 +97,8 @@ function createGoalsStore() {
     return counts;
   });
 
-  // Auto-progress sync
-  $effect(() => {
-    const _tasks = appStore.tasks;
-    const _goals = appStore.goals;
-    void _tasks;
-
-    for (const goal of _goals) {
+  function syncAutoProgress(): void {
+    for (const goal of appStore.goals) {
       if (goal.progressMode === 'auto') {
         const newProgress = calculateProgress(goal);
         if (goal.progress !== newProgress) {
@@ -111,7 +106,7 @@ function createGoalsStore() {
         }
       }
     }
-  });
+  }
 
   return {
     get activeGoalId() { return activeGoalId; },
@@ -176,6 +171,7 @@ function createGoalsStore() {
           : m
       );
       appStore.updateGoal(goalId, { milestones: updated });
+      syncAutoProgress();
     },
 
     updateMilestone(goalId: string, milestoneId: string, updates: Partial<Milestone>): void {
@@ -207,7 +203,10 @@ function createGoalsStore() {
 
     updateStatus(id: string, status: GoalStatus): void {
       appStore.updateGoal(id, { status });
+      syncAutoProgress();
     },
+
+    syncAutoProgress,
 
     setSearchQuery(query: string): void { filter.searchQuery = query; },
     setStatusFilter(status: GoalStatus | null): void { filter.status = status; },

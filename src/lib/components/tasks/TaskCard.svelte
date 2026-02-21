@@ -142,10 +142,12 @@
     color: var(--color-text-tertiary);
   }
 
-  :global(.goal-icon) {
+  .goal-icon-wrap {
     color: var(--color-accent-secondary);
     flex-shrink: 0;
     margin-top: 2px;
+    display: flex;
+    align-items: center;
   }
 
   .due-badge {

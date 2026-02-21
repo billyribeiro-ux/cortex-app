@@ -22,10 +22,6 @@ function createNotesStore() {
     sortDirection: 'desc',
   });
 
-  $effect(() => {
-    saveToStorage('cortex:note-categories', categories);
-  });
-
   const activeNote = $derived<Note | null>(
     activeNoteId ? (appStore.notes.find((n) => n.id === activeNoteId) ?? null) : null
   );
@@ -194,10 +190,12 @@ function createNotesStore() {
 
     addCategory(category: NoteCategory): void {
       categories.push(category);
+      saveToStorage('cortex:note-categories', categories);
     },
 
     removeCategory(id: string): void {
       categories = categories.filter((c) => c.id !== id);
+      saveToStorage('cortex:note-categories', categories);
     },
   };
 }
