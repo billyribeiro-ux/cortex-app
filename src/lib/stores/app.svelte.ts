@@ -12,7 +12,7 @@ function createAppStore() {
   // Derived counts
   const noteCount = $derived(notes.length);
   const openTaskCount = $derived(tasks.filter((t) => t.status !== 'done').length);
-  const activeGoalCount = $derived(goals.filter((g) => g.progress < 100).length);
+  const activeGoalCount = $derived(goals.filter((g) => g.status === 'active').length);
 
   return {
     // State (getters for reading, since we can't export reassigned $state)

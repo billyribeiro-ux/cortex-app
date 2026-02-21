@@ -8,6 +8,9 @@ function createNotesStore() {
   let isEditing = $state<boolean>(false);
   let showClaudePanel = $state<boolean>(false);
   let claudeMessages = $state<ClaudeMessage[]>([]);
+  let claudeMessagesByNote = $state<Record<string, ClaudeMessage[]>>(
+    loadFromStorage('cortex:claude-messages', {})
+  );
 
   let categories = $state<NoteCategory[]>(
     loadFromStorage('cortex:note-categories', DEFAULT_CATEGORIES)
@@ -89,9 +92,15 @@ function createNotesStore() {
     get allTags() { return allTags; },
 
     setActiveNote(id: string | null): void {
+      // Save current note's messages before switching
+      if (activeNoteId && claudeMessages.length > 0) {
+        claudeMessagesByNote[activeNoteId] = [...claudeMessages];
+        saveToStorage('cortex:claude-messages', claudeMessagesByNote);
+      }
       activeNoteId = id;
       isEditing = id !== null;
-      claudeMessages = [];
+      // Restore messages for the target note
+      claudeMessages = id ? [...(claudeMessagesByNote[id] ?? [])] : [];
       // Keep showClaudePanel as-is so the panel stays open when switching notes
     },
 
@@ -101,10 +110,18 @@ function createNotesStore() {
 
     addClaudeMessage(message: ClaudeMessage): void {
       claudeMessages.push(message);
+      if (activeNoteId) {
+        claudeMessagesByNote[activeNoteId] = [...claudeMessages];
+        saveToStorage('cortex:claude-messages', claudeMessagesByNote);
+      }
     },
 
     clearClaudeMessages(): void {
       claudeMessages = [];
+      if (activeNoteId) {
+        delete claudeMessagesByNote[activeNoteId];
+        saveToStorage('cortex:claude-messages', claudeMessagesByNote);
+      }
     },
 
     setSearchQuery(query: string): void {

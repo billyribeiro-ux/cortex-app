@@ -3,6 +3,7 @@
   import { onMount } from 'svelte';
   import Sidebar from '$lib/components/layout/Sidebar.svelte';
   import TopBar from '$lib/components/layout/TopBar.svelte';
+  import Toast from '$lib/components/ui/Toast.svelte';
   import { appStore } from '$lib/stores/app.svelte.js';
   let { children } = $props();
 
@@ -31,6 +32,8 @@
     </main>
   </div>
 </div>
+
+<Toast />
 
 <style>
   .app-shell {

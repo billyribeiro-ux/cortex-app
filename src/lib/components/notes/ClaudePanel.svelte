@@ -1,21 +1,40 @@
 <script lang="ts">
+  import { onDestroy } from 'svelte';
   import { notesStore } from '$lib/stores/notes.svelte.js';
+  import { renderMarkdown } from '$lib/utils/markdown.js';
   import type { ClaudeMessage } from '$lib/types/index.js';
   import Icon from '@iconify/svelte';
 
   const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined;
   const hasApiKey = $derived(!!API_KEY && API_KEY !== 'undefined');
 
+  const REQUEST_TIMEOUT_MS = 30_000;
+  const COOLDOWN_MS = 1_000;
+
   let inputValue = $state('');
   let isLoading = $state(false);
   let errorMsg = $state('');
   let messagesEl = $state<HTMLDivElement | null>(null);
+  let abortController = $state<AbortController | null>(null);
+  let lastSentAt = $state(0);
+
+  const isCoolingDown = $derived(Date.now() - lastSentAt < COOLDOWN_MS && !isLoading);
+
+  onDestroy(() => {
+    abortController?.abort();
+  });
 
   $effect(() => {
     if (notesStore.claudeMessages.length > 0 && messagesEl) {
       messagesEl.scrollTop = messagesEl.scrollHeight;
     }
   });
+
+  function cancelRequest(): void {
+    abortController?.abort();
+    abortController = null;
+    isLoading = false;
+  }
 
   async function sendMessage(): Promise<void> {
     const content = inputValue.trim();
@@ -27,6 +46,7 @@
     }
 
     errorMsg = '';
+    lastSentAt = Date.now();
 
     const userMsg: ClaudeMessage = {
       id: crypto.randomUUID(),
@@ -37,6 +57,10 @@
     notesStore.addClaudeMessage(userMsg);
     inputValue = '';
     isLoading = true;
+
+    const controller = new AbortController();
+    abortController = controller;
+    const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
     const activeNote = notesStore.activeNote;
     const systemPrompt = activeNote
@@ -53,7 +77,7 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': API_KEY,
+          'x-api-key': API_KEY!,
           'anthropic-version': '2023-06-01',
           'anthropic-dangerous-request-proxy': 'true',
         },
@@ -63,6 +87,7 @@
           system: systemPrompt,
           messages: history,
         }),
+        signal: controller.signal,
       });
 
       if (!response.ok) {
@@ -91,8 +116,15 @@
       };
       notesStore.addClaudeMessage(assistantMsg);
     } catch (err) {
-      errorMsg = err instanceof Error ? err.message : 'Failed to reach Claude.';
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        errorMsg = 'Request cancelled.';
+      } else {
+        console.error('Claude API error:', err);
+        errorMsg = err instanceof Error ? err.message : 'Failed to reach Claude.';
+      }
     } finally {
+      clearTimeout(timeout);
+      abortController = null;
       isLoading = false;
     }
   }
@@ -143,7 +175,13 @@
       {#each notesStore.claudeMessages as msg (msg.id)}
         <div class="message" class:user={msg.role === 'user'} class:assistant={msg.role === 'assistant'}>
           <span class="message-role">{msg.role === 'user' ? 'You' : 'Claude'}</span>
-          <p class="message-content selectable">{msg.content}</p>
+          {#if msg.role === 'assistant'}
+            <div class="message-content markdown-content selectable">
+              {@html renderMarkdown(msg.content)}
+            </div>
+          {:else}
+            <p class="message-content selectable">{msg.content}</p>
+          {/if}
         </div>
       {/each}
     {/if}
@@ -165,18 +203,29 @@
       rows={3}
       disabled={!hasApiKey}
     ></textarea>
-    <button
-      class="send-btn"
-      onclick={() => void sendMessage()}
-      disabled={!hasApiKey || !inputValue.trim() || isLoading}
-      aria-label="Send message"
-    >
+    <div class="input-actions">
       {#if isLoading}
-        <Icon icon="ph:circle-notch" width={16} height={16} class="spin" />
-      {:else}
-        <Icon icon="ph:paper-plane-right" width={16} height={16} />
+        <button
+          class="cancel-btn"
+          onclick={cancelRequest}
+          aria-label="Cancel request"
+        >
+          Cancel
+        </button>
       {/if}
-    </button>
+      <button
+        class="send-btn"
+        onclick={() => void sendMessage()}
+        disabled={!hasApiKey || !inputValue.trim() || isLoading}
+        aria-label="Send message"
+      >
+        {#if isLoading}
+          <Icon icon="ph:circle-notch" width={16} height={16} class="spin" />
+        {:else}
+          <Icon icon="ph:paper-plane-right" width={16} height={16} />
+        {/if}
+      </button>
+    </div>
   </div>
 </div>
 
@@ -320,6 +369,18 @@
     border-bottom-left-radius: 2px;
   }
 
+  .markdown-content :global(p) { margin: 0 0 var(--space-2); }
+  .markdown-content :global(p:last-child) { margin-bottom: 0; }
+  .markdown-content :global(strong) { font-weight: 700; }
+  .markdown-content :global(em) { font-style: italic; }
+  .markdown-content :global(code) { font-family: var(--font-mono); font-size: 0.85em; background: var(--color-bg-tertiary); padding: 1px 4px; border-radius: var(--radius-sm); }
+  .markdown-content :global(pre) { background: var(--color-bg-tertiary); border-radius: var(--radius-md); padding: var(--space-2); margin: var(--space-2) 0; overflow-x: auto; }
+  .markdown-content :global(pre code) { background: none; padding: 0; }
+  .markdown-content :global(ul), .markdown-content :global(ol) { margin: 0 0 var(--space-2) var(--space-4); padding: 0; }
+  .markdown-content :global(li) { margin-bottom: var(--space-1); }
+  .markdown-content :global(a) { color: var(--color-accent-secondary); text-decoration: underline; }
+  .markdown-content :global(blockquote) { border-left: 2px solid var(--color-accent-primary); padding-left: var(--space-2); margin: var(--space-2) 0; color: var(--color-text-secondary); font-style: italic; }
+
   .input-area {
     display: flex;
     flex-direction: column;
@@ -351,8 +412,27 @@
     color: var(--color-text-tertiary);
   }
 
+  .input-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-2);
+  }
+
+  .cancel-btn {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-fast), background var(--transition-fast);
+  }
+
+  .cancel-btn:hover {
+    color: var(--color-accent-danger);
+    background: color-mix(in srgb, var(--color-accent-danger) 10%, transparent);
+  }
+
   .send-btn {
-    align-self: flex-end;
     display: flex;
     align-items: center;
     justify-content: center;

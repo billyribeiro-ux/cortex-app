@@ -3,6 +3,8 @@
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { appStore } from '$lib/stores/app.svelte.js';
+  import { toastStore } from '$lib/stores/toast.svelte.js';
+  import { exportData, importData } from '$lib/utils/data-export.js';
   import Badge from '$lib/components/ui/Badge.svelte';
 
   let mounted = $state(false);
@@ -12,14 +14,13 @@
     label: string;
     href: string;
     icon: string;
-    count: number;
   }
 
   const navItems: NavItem[] = [
-    { label: 'Dashboard', href: '/', icon: 'ph:squares-four', count: 0 },
-    { label: 'Notes', href: '/notes', icon: 'ph:note', count: appStore.noteCount },
-    { label: 'Tasks', href: '/tasks', icon: 'ph:check-square', count: appStore.openTaskCount },
-    { label: 'Goals', href: '/goals', icon: 'ph:target', count: appStore.activeGoalCount },
+    { label: 'Dashboard', href: '/', icon: 'ph:squares-four' },
+    { label: 'Notes', href: '/notes', icon: 'ph:note' },
+    { label: 'Tasks', href: '/tasks', icon: 'ph:check-square' },
+    { label: 'Goals', href: '/goals', icon: 'ph:target' },
   ];
 
   const counts = $derived([
@@ -34,8 +35,33 @@
     return page.url.pathname.startsWith(href);
   }
 
+  let fileInputRef = $state<HTMLInputElement | null>(null);
+
   function toggleSidebar(): void {
     appStore.sidebarCollapsed = !appStore.sidebarCollapsed;
+  }
+
+  function handleExport(): void {
+    exportData();
+    toastStore.success('Data exported');
+  }
+
+  async function handleImport(): Promise<void> {
+    fileInputRef?.click();
+  }
+
+  async function handleFileSelect(e: Event): Promise<void> {
+    const input = e.currentTarget as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    const result = await importData(file);
+    if (result.success) {
+      toastStore.success('Data imported — reloading...');
+      setTimeout(() => window.location.reload(), 1000);
+    } else {
+      toastStore.error(result.error ?? 'Import failed');
+    }
+    input.value = '';
   }
 </script>
 
@@ -57,6 +83,8 @@
         class="nav-item"
         class:active={isActive(item.href)}
         title={appStore.sidebarCollapsed ? item.label : undefined}
+        aria-label={item.label}
+        aria-current={isActive(item.href) ? 'page' : undefined}
       >
         <span class="nav-icon">
           <Icon icon={item.icon} width={20} height={20} />
@@ -72,6 +100,25 @@
   </nav>
 
   <div class="sidebar-footer">
+    {#if !appStore.sidebarCollapsed}
+      <div class="data-actions">
+        <button class="data-btn" onclick={handleExport} title="Export data">
+          <Icon icon="ph:download" width={14} height={14} />
+          <span>Export</span>
+        </button>
+        <button class="data-btn" onclick={() => void handleImport()} title="Import data">
+          <Icon icon="ph:upload" width={14} height={14} />
+          <span>Import</span>
+        </button>
+      </div>
+    {/if}
+    <input
+      bind:this={fileInputRef}
+      type="file"
+      accept=".json"
+      class="file-input-hidden"
+      onchange={(e) => void handleFileSelect(e)}
+    />
     <button class="collapse-btn" onclick={toggleSidebar} aria-label="Toggle sidebar">
       <Icon
         icon={appStore.sidebarCollapsed ? 'ph:arrow-right' : 'ph:arrow-left'}
@@ -177,6 +224,40 @@
     padding: var(--space-3) var(--space-2);
     border-top: 1px solid var(--color-border-subtle);
     flex-shrink: 0;
+  }
+
+  .data-actions {
+    display: flex;
+    gap: var(--space-1);
+    padding: 0 var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+
+  .data-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-fast), color var(--transition-fast);
+    flex: 1;
+    justify-content: center;
+  }
+
+  .data-btn:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-text-secondary);
+  }
+
+  .file-input-hidden {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
   }
 
   .collapse-btn {

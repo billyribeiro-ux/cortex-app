@@ -4,6 +4,7 @@
   import { goalsStore } from '$lib/stores/goals.svelte.js';
   import { appStore } from '$lib/stores/app.svelte.js';
   import { notesStore } from '$lib/stores/notes.svelte.js';
+  import { toastStore } from '$lib/stores/toast.svelte.js';
   import { formatDateForInput, parseDateInput } from '$lib/utils/time.js';
   import Modal from '$lib/components/ui/Modal.svelte';
   import Icon from '@iconify/svelte';
@@ -24,6 +25,7 @@
   let newMilestoneTitle = $state('');
   let deleteConfirm = $state(false);
   let titleInputEl = $state<HTMLInputElement | null>(null);
+  let titleError = $state('');
 
   $effect(() => {
     if (goalsStore.showCreateModal) {
@@ -51,6 +53,7 @@
         milestones = [];
       }
       deleteConfirm = false;
+      titleError = '';
       setTimeout(() => titleInputEl?.focus(), 50);
     }
   });
@@ -79,7 +82,12 @@
   }
 
   function handleSave(): void {
-    if (!title.trim()) return;
+    if (!title.trim()) {
+      titleError = 'Title is required';
+      titleInputEl?.focus();
+      return;
+    }
+    titleError = '';
 
     const data: Omit<Goal, 'id' | 'createdAt' | 'updatedAt'> = {
       title: title.trim(),
@@ -97,8 +105,10 @@
     const editingId = goalsStore.editingGoalId;
     if (isEditing && editingId) {
       appStore.updateGoal(editingId, data);
+      toastStore.success('Goal updated');
     } else {
       goalsStore.createGoal(data);
+      toastStore.success('Goal created');
     }
     goalsStore.closeModal();
   }
@@ -112,6 +122,7 @@
     const editingId = goalsStore.editingGoalId;
     if (editingId) {
       appStore.deleteGoal(editingId);
+      toastStore.success('Goal deleted');
       if (goalsStore.activeGoalId === editingId) {
         goalsStore.setActiveGoal(null);
       }
@@ -119,17 +130,18 @@
     goalsStore.closeModal();
   }
 
-  const baseId = $props.id();
-  const titleId = `${baseId}-title`;
-  const descId = `${baseId}-desc`;
-  const startId = `${baseId}-start`;
-  const targetId = `${baseId}-target`;
+  const componentId = $props.id();
+  const titleId = `${componentId}-title`;
+  const descId = `${componentId}-desc`;
+  const startId = `${componentId}-start`;
+  const targetId = `${componentId}-target`;
 </script>
 
 <Modal
   open={goalsStore.showCreateModal}
   onclose={() => goalsStore.closeModal()}
   title={isEditing ? 'Edit Goal' : 'New Goal'}
+  footerAlign="between"
 >
   {#snippet children()}
     <div class="form">
@@ -140,10 +152,17 @@
           bind:this={titleInputEl}
           id={titleId}
           class="input selectable"
+          class:input-error={!!titleError}
           type="text"
           placeholder="Goal title..."
           bind:value={title}
+          oninput={() => { titleError = ''; }}
+          aria-required="true"
+          aria-invalid={!!titleError}
         />
+        {#if titleError}
+          <span class="field-error">{titleError}</span>
+        {/if}
       </div>
 
       <!-- Description -->
@@ -556,8 +575,15 @@
 
   .ms-add-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  /* Footer */
-  :global(.modal-footer) { justify-content: space-between !important; }
+  .input-error {
+    border-color: var(--color-accent-danger) !important;
+  }
+
+  .field-error {
+    font-size: var(--text-xs);
+    color: var(--color-accent-danger);
+    font-weight: 500;
+  }
 
   .footer-left { display: flex; align-items: center; }
   .footer-right { display: flex; align-items: center; gap: var(--space-3); }

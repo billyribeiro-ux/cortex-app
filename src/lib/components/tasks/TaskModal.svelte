@@ -3,6 +3,7 @@
   import { TASK_STATUS_CONFIG, TASK_PRIORITY_CONFIG } from '$lib/types/index.js';
   import { tasksStore } from '$lib/stores/tasks.svelte.js';
   import { appStore } from '$lib/stores/app.svelte.js';
+  import { toastStore } from '$lib/stores/toast.svelte.js';
   import { formatDateForInput, parseDateInput } from '$lib/utils/time.js';
   import Modal from '$lib/components/ui/Modal.svelte';
   import TagInput from '$lib/components/ui/TagInput.svelte';
@@ -22,6 +23,7 @@
   let newSubtaskTitle = $state('');
   let deleteConfirm = $state(false);
   let titleInputEl = $state<HTMLInputElement | null>(null);
+  let titleError = $state('');
 
   $effect(() => {
     if (tasksStore.showCreateModal && titleInputEl) {
@@ -44,19 +46,25 @@
       } else {
         title = '';
         description = '';
-        status = 'todo';
+        status = tasksStore.defaultNewTaskStatus ?? 'todo';
         priority = 'normal';
         dueDate = '';
-        goalId = null;
+        goalId = tasksStore.defaultNewTaskGoalId ?? null;
         tags = [];
         subtasks = [];
       }
       deleteConfirm = false;
+      titleError = '';
     }
   });
 
   function handleSave(): void {
-    if (!title.trim()) return;
+    if (!title.trim()) {
+      titleError = 'Title is required';
+      titleInputEl?.focus();
+      return;
+    }
+    titleError = '';
 
     const data: Omit<Task, 'id' | 'createdAt' | 'updatedAt'> = {
       title: title.trim(),
@@ -72,8 +80,10 @@
     const editingId = tasksStore.editingTaskId;
     if (isEditing && editingId) {
       appStore.updateTask(editingId, data);
+      toastStore.success('Task updated');
     } else {
       tasksStore.createTask(data);
+      toastStore.success('Task created');
     }
     tasksStore.closeModal();
   }
@@ -87,6 +97,7 @@
     const editingId = tasksStore.editingTaskId;
     if (editingId) {
       appStore.deleteTask(editingId);
+      toastStore.success('Task deleted');
     }
     tasksStore.closeModal();
   }
@@ -119,17 +130,18 @@
     if (e.key === 'Enter') { e.preventDefault(); addSubtask(); }
   }
 
-  const baseId = $props.id();
-  const titleId = `${baseId}-title`;
-  const descId = `${baseId}-desc`;
-  const dueDateId = `${baseId}-due`;
-  const goalId2 = `${baseId}-goal`;
+  const componentId = $props.id();
+  const titleId = `${componentId}-title`;
+  const descId = `${componentId}-desc`;
+  const dueDateId = `${componentId}-due`;
+  const goalFieldId = `${componentId}-goal`;
 </script>
 
 <Modal
   open={tasksStore.showCreateModal}
   onclose={() => tasksStore.closeModal()}
   title={isEditing ? 'Edit Task' : 'New Task'}
+  footerAlign="between"
 >
   {#snippet children()}
     <div class="form">
@@ -140,10 +152,17 @@
           bind:this={titleInputEl}
           id={titleId}
           class="input selectable"
+          class:input-error={!!titleError}
           type="text"
           placeholder="Task title..."
           bind:value={title}
+          oninput={() => { titleError = ''; }}
+          aria-required="true"
+          aria-invalid={!!titleError}
         />
+        {#if titleError}
+          <span class="field-error">{titleError}</span>
+        {/if}
       </div>
 
       <!-- Description -->
@@ -212,9 +231,9 @@
 
       <!-- Goal Link -->
       <div class="field">
-        <label for={goalId2} class="label">Link to Goal</label>
+        <label for={goalFieldId} class="label">Link to Goal</label>
         <select
-          id={goalId2}
+          id={goalFieldId}
           class="select"
           value={goalId ?? ''}
           onchange={(e) => { goalId = (e.currentTarget as HTMLSelectElement).value || null; }}
@@ -480,9 +499,14 @@
     cursor: not-allowed;
   }
 
-  /* Footer */
-  :global(.modal-footer) {
-    justify-content: space-between !important;
+  .input-error {
+    border-color: var(--color-accent-danger) !important;
+  }
+
+  .field-error {
+    font-size: var(--text-xs);
+    color: var(--color-accent-danger);
+    font-weight: 500;
   }
 
   .footer-left {

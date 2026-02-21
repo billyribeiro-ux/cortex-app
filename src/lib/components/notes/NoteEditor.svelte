@@ -4,6 +4,7 @@
   import { appStore } from '$lib/stores/app.svelte.js';
   import { notesStore } from '$lib/stores/notes.svelte.js';
   import { renderMarkdown } from '$lib/utils/markdown.js';
+  import { toastStore } from '$lib/stores/toast.svelte.js';
   import TagInput from '$lib/components/ui/TagInput.svelte';
   import Icon from '@iconify/svelte';
 
@@ -120,6 +121,7 @@
     if (deleteConfirm) {
       appStore.deleteNote(noteId);
       notesStore.setActiveNote(null);
+      toastStore.success('Note deleted');
       deleteConfirm = false;
     } else {
       deleteConfirm = true;

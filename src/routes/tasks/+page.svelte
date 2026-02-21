@@ -9,9 +9,7 @@
 
   // Sync TopBar search → tasks filter
   $effect(() => {
-    if (appStore.searchQuery) {
-      tasksStore.setSearchQuery(appStore.searchQuery);
-    }
+    tasksStore.setSearchQuery(appStore.searchQuery);
   });
 
   function handleKeydown(e: KeyboardEvent): void {
@@ -103,8 +101,8 @@
   }
 
   .empty-sub {
-    font-size: var(--text-sm) !important;
-    color: var(--color-text-tertiary) !important;
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
   }
 
   .cta-btn {

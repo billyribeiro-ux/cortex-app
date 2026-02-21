@@ -12,9 +12,7 @@
 
   // Sync TopBar search → notes filter
   $effect(() => {
-    if (appStore.searchQuery) {
-      notesStore.setSearchQuery(appStore.searchQuery);
-    }
+    notesStore.setSearchQuery(appStore.searchQuery);
   });
 
   function handleNewNote(): void {
@@ -182,8 +180,8 @@
   }
 
   .empty-sub {
-    font-size: var(--text-xs) !important;
-    color: var(--color-text-tertiary) !important;
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
   }
 
   .clear-filters-btn {

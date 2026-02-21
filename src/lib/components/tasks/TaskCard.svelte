@@ -28,6 +28,7 @@
   style:--priority-color={priorityCfg.color}
   role="button"
   tabindex="0"
+  aria-label="Task: {task.title}"
   {onclick}
   onkeydown={(e) => e.key === 'Enter' && onclick()}
 >
