@@ -233,4 +233,17 @@
   .new-note-btn-center:hover {
     background: var(--color-accent-primary-hover);
   }
+
+  @media (max-width: 900px) {
+    .note-list-panel {
+      width: 220px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .note-list-panel {
+      width: 180px;
+      min-width: 160px;
+    }
+  }
 </style>

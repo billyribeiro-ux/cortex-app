@@ -74,7 +74,9 @@
   }
 
   function removeMilestone(id: string): void {
-    milestones = milestones.filter((m) => m.id !== id);
+    milestones = milestones
+      .filter((m) => m.id !== id)
+      .map((m, i) => ({ ...m, order: i }));
   }
 
   function handleMilestoneKeydown(e: KeyboardEvent): void {
