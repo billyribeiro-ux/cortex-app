@@ -48,7 +48,7 @@
     bind:this={inputEl}
     class="tag-text-input selectable"
     type="text"
-    placeholder={tags.length === 0 ? 'Add tags...' : ''}
+    placeholder="Add tags..."
     bind:value={inputValue}
     onkeydown={handleKeydown}
     onblur={() => { if (inputValue.trim()) addTag(); }}

@@ -28,6 +28,31 @@
     {/if}
   </div>
 
+  <!-- Tag filter pills: click to filter, selected tags show highlighted -->
+  {#if notesStore.allTags.length > 0}
+    <div class="tag-filters">
+      {#each notesStore.allTags as tag}
+        <button
+          class="tag-pill"
+          class:active={notesStore.filter.tags.includes(tag)}
+          onclick={() => notesStore.toggleTagFilter(tag)}
+          title={notesStore.filter.tags.includes(tag) ? `Remove filter: ${tag}` : `Filter by: ${tag}`}
+        >
+          {tag}
+        </button>
+      {/each}
+      {#if notesStore.filter.tags.length > 0}
+        <button
+          class="tag-pill clear-tags"
+          onclick={() => notesStore.clearTagFilters()}
+          title="Clear tag filters"
+        >
+          Clear tags
+        </button>
+      {/if}
+    </div>
+  {/if}
+
   <div class="filter-group">
     <select
       class="category-select"
@@ -139,6 +164,44 @@
 
   .clear-btn:hover {
     color: var(--color-text-primary);
+  }
+
+  .tag-filters {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    flex-wrap: wrap;
+  }
+
+  .tag-pill {
+    padding: 2px var(--space-2);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    border: 1px solid var(--color-border-subtle);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  .tag-pill:hover {
+    border-color: var(--color-accent-primary);
+    color: var(--color-accent-primary);
+  }
+
+  .tag-pill.active {
+    border-color: var(--color-accent-primary);
+    background: rgba(108, 92, 231, 0.15);
+    color: var(--color-accent-primary);
+  }
+
+  .tag-pill.clear-tags {
+    color: var(--color-accent-danger);
+  }
+
+  .tag-pill.clear-tags:hover {
+    border-color: var(--color-accent-danger);
   }
 
   .filter-group {

@@ -35,7 +35,7 @@ function createNotesStore() {
         (n) =>
           n.title.toLowerCase().includes(query) ||
           n.content.toLowerCase().includes(query) ||
-          n.tags.some((t) => t.toLowerCase().includes(query))
+          (n.tags ?? []).some((t) => t.toLowerCase().includes(query))
       );
     }
 
@@ -44,7 +44,7 @@ function createNotesStore() {
     }
 
     if (filter.tags.length > 0) {
-      result = result.filter((n) => filter.tags.some((t) => n.tags.includes(t)));
+        result = result.filter((n) => filter.tags.some((t) => (n.tags ?? []).includes(t)));
     }
 
     if (filter.favoritesOnly) {
@@ -70,7 +70,7 @@ function createNotesStore() {
   const allTags = $derived.by<string[]>(() => {
     const tagSet = new Set<string>();
     for (const note of appStore.notes) {
-      for (const tag of note.tags) {
+      for (const tag of (note.tags ?? [])) {
         tagSet.add(tag);
       }
     }
@@ -143,6 +143,10 @@ function createNotesStore() {
       filter.favoritesOnly = false;
       filter.sortField = 'updatedAt';
       filter.sortDirection = 'desc';
+    },
+
+    clearTagFilters(): void {
+      filter.tags = [];
     },
 
     createNote(): string {
