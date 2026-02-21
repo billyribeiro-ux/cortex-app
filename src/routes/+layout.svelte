@@ -1,9 +1,13 @@
 <script lang="ts">
   import '../app.css';
+  import { onMount } from 'svelte';
   import Sidebar from '$lib/components/layout/Sidebar.svelte';
   import TopBar from '$lib/components/layout/TopBar.svelte';
   import { appStore } from '$lib/stores/app.svelte.js';
   let { children } = $props();
+
+  let mounted = $state(false);
+  onMount(() => { mounted = true; });
 
   const sidebarWidth = $derived(
     appStore.sidebarCollapsed ? 'var(--sidebar-collapsed-width)' : 'var(--sidebar-width)'
@@ -12,7 +16,7 @@
 
 <div class="app-shell">
   <Sidebar />
-  <div class="main-area" style:--current-sidebar-width={sidebarWidth}>
+  <div class="main-area" class:transitions-ready={mounted} style:--current-sidebar-width={sidebarWidth}>
     <TopBar />
     <main class="content">
       <svelte:boundary>
@@ -40,8 +44,11 @@
     display: flex;
     flex-direction: column;
     margin-left: var(--current-sidebar-width);
-    transition: margin-left var(--transition-normal);
     min-width: 0;
+  }
+
+  .main-area.transitions-ready {
+    transition: margin-left var(--transition-normal);
   }
 
   .content {

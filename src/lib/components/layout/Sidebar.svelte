@@ -1,8 +1,12 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { appStore } from '$lib/stores/app.svelte.js';
   import Badge from '$lib/components/ui/Badge.svelte';
+
+  let mounted = $state(false);
+  onMount(() => { mounted = true; });
 
   interface NavItem {
     label: string;
@@ -35,7 +39,7 @@
   }
 </script>
 
-<aside class="sidebar" class:collapsed={appStore.sidebarCollapsed}>
+<aside class="sidebar" class:collapsed={appStore.sidebarCollapsed} class:transitions-ready={mounted}>
   <div class="sidebar-header">
     {#if !appStore.sidebarCollapsed}
       <span class="logo-text">Cortex</span>
@@ -89,9 +93,12 @@
     border-right: 1px solid var(--color-border-subtle);
     display: flex;
     flex-direction: column;
-    transition: width var(--transition-normal);
     overflow: hidden;
     z-index: 100;
+  }
+
+  .sidebar.transitions-ready {
+    transition: width var(--transition-normal);
   }
 
   .sidebar.collapsed {
