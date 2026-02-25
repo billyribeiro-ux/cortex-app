@@ -125,36 +125,49 @@
 
   .search-icon {
     position: absolute;
-    left: var(--space-3);
-    color: var(--color-text-tertiary);
+    left: 10px;
+    color: var(--color-text-quaternary);
     display: flex;
     align-items: center;
     pointer-events: none;
+    transition: color var(--transition-normal);
+  }
+
+  .search-wrap:focus-within .search-icon {
+    color: var(--color-accent-primary);
   }
 
   .search-input {
     width: 100%;
     height: 36px;
-    padding: 0 var(--space-8) 0 var(--space-7);
+    padding: 0 var(--space-7) 0 30px;
     background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
     font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
     color: var(--color-text-primary);
-    letter-spacing: var(--tracking-xs);
+    letter-spacing: var(--tracking-sm);
     transition:
-      border-color var(--transition-fast),
-      box-shadow var(--transition-fast);
+      border-color var(--transition-normal),
+      box-shadow var(--transition-normal),
+      background var(--transition-normal);
   }
 
   .search-input::placeholder {
-    color: var(--color-text-tertiary);
+    color: var(--color-text-quaternary);
+    font-weight: var(--weight-medium);
+  }
+
+  .search-input:hover {
+    border-color: var(--color-border-default);
   }
 
   .search-input:focus {
     outline: none;
     border-color: var(--color-accent-primary);
     box-shadow: var(--shadow-glow);
+    background: var(--color-bg-elevated);
   }
 
   .clear-btn {
@@ -165,19 +178,21 @@
     justify-content: center;
     width: 20px;
     height: 20px;
-    border: none;
-    background: none;
-    border-radius: var(--radius-sm);
-    color: var(--color-text-tertiary);
-    cursor: pointer;
+    border-radius: var(--radius-xs);
+    color: var(--color-text-quaternary);
     transition:
       color var(--transition-fast),
-      background var(--transition-fast);
+      background var(--transition-fast),
+      transform var(--transition-fast);
   }
 
   .clear-btn:hover {
-    color: var(--color-text-primary);
+    color: var(--color-text-secondary);
     background: var(--color-bg-hover);
+  }
+
+  .clear-btn:active {
+    transform: scale(0.9);
   }
 
   .tag-filters {

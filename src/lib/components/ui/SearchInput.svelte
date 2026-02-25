@@ -40,52 +40,71 @@
 
   .search-icon {
     position: absolute;
-    left: var(--space-2);
-    color: var(--color-text-tertiary);
+    left: 10px;
+    color: var(--color-text-quaternary);
     display: flex;
     align-items: center;
     pointer-events: none;
+    transition: color var(--transition-normal);
+  }
+
+  .search-wrap:focus-within .search-icon {
+    color: var(--color-accent-primary);
   }
 
   .search-input {
     width: 100%;
     height: 36px;
-    padding: 0 var(--space-8) 0 var(--space-7);
+    padding: 0 var(--space-8) 0 30px;
     background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
     color: var(--color-text-primary);
-    transition: border-color var(--transition-fast),
-                box-shadow var(--transition-fast);
+    letter-spacing: var(--tracking-sm);
+    transition: border-color var(--transition-normal),
+                box-shadow var(--transition-normal),
+                background var(--transition-normal);
   }
 
   .search-input::placeholder {
-    color: var(--color-text-tertiary);
+    color: var(--color-text-quaternary);
+    font-weight: var(--weight-medium);
+  }
+
+  .search-input:hover {
+    border-color: var(--color-border-default);
   }
 
   .search-input:focus {
     outline: none;
     border-color: var(--color-accent-primary);
     box-shadow: var(--shadow-glow);
+    background: var(--color-bg-elevated);
   }
 
   .clear-btn {
     position: absolute;
-    right: var(--space-1-5);
+    right: var(--space-2);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
-    color: var(--color-text-tertiary);
-    border-radius: var(--radius-sm);
-    transition: background var(--transition-fast),
-                color var(--transition-fast);
+    width: 20px;
+    height: 20px;
+    color: var(--color-text-quaternary);
+    border-radius: var(--radius-xs);
+    transition: color var(--transition-fast),
+                background var(--transition-fast),
+                transform var(--transition-fast);
   }
 
   .clear-btn:hover {
     background: var(--color-bg-hover);
-    color: var(--color-text-primary);
+    color: var(--color-text-secondary);
+  }
+
+  .clear-btn:active {
+    transform: scale(0.9);
   }
 </style>
