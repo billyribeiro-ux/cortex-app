@@ -309,7 +309,7 @@
 
   .fav-toggle.active {
     color: var(--color-accent-warning);
-    background: color-mix(in srgb, var(--color-accent-warning) 12%, transparent);
+    background: var(--color-accent-warning-muted);
   }
 
   .sort-group {

@@ -44,7 +44,7 @@
     font-size: var(--text-xs);
     font-weight: var(--weight-medium);
     color: var(--seg-color);
-    min-height: 32px;
+    min-height: 36px;
     letter-spacing: var(--tracking-xs);
     transition:
       background var(--transition-fast),

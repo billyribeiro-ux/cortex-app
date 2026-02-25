@@ -96,18 +96,25 @@
   .toast-message {
     flex: 1;
     color: var(--color-text-primary);
+    letter-spacing: var(--tracking-sm);
   }
 
   .toast-dismiss {
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
     color: var(--color-text-tertiary);
+    border-radius: var(--radius-sm);
     flex-shrink: 0;
-    transition: color var(--transition-fast);
+    transition: color var(--transition-fast),
+                background var(--transition-fast);
   }
 
   .toast-dismiss:hover {
     color: var(--color-text-primary);
+    background: var(--color-bg-hover);
   }
 
   @keyframes toast-in {

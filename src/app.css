@@ -36,14 +36,16 @@
 
   /* ── Semantic Colors ── */
   --color-accent-secondary: #2ac9c4;
+  --color-accent-secondary-muted: rgba(42, 201, 196, 0.12);
   --color-accent-warning: #f0c45a;
+  --color-accent-warning-muted: rgba(240, 196, 90, 0.12);
   --color-accent-danger: #e8614d;
   --color-accent-danger-muted: rgba(232, 97, 77, 0.12);
   --color-accent-success: #34c48e;
   --color-accent-success-muted: rgba(52, 196, 142, 0.12);
 
   /* ═══ Typography ═══ */
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "SF Mono", "JetBrains Mono", "Fira Code", ui-monospace, monospace;
 
   /* Type scale — optically tuned */
@@ -105,6 +107,8 @@
   /* 20px */
   --space-6: 1.5rem;
   /* 24px */
+  --space-7: 1.75rem;
+  /* 28px */
   --space-8: 2rem;
   /* 32px */
   --space-10: 2.5rem;
@@ -154,6 +158,11 @@
   --transition-normal: 180ms var(--ease-out);
   --transition-slow: 300ms var(--ease-out);
   --transition-spring: 400ms var(--ease-spring);
+
+  /* ═══ Component Heights (Apple HIG: 44pt minimum for primary) ═══ */
+  --control-height-sm: 32px;
+  --control-height-md: 36px;
+  --control-height-lg: 44px;
 
   /* ═══ Layout ═══ */
   --sidebar-width: 248px;
@@ -291,6 +300,16 @@ select {
 
 /* ═══ Selection ═══ */
 ::selection {
-  background: rgba(120, 108, 245, 0.3);
+  background: var(--color-accent-primary-muted);
   color: var(--color-text-primary);
+}
+
+::placeholder {
+  color: var(--color-text-quaternary);
+  font-weight: var(--weight-medium);
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }

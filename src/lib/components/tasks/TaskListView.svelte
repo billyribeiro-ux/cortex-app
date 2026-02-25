@@ -217,8 +217,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     border-radius: var(--radius-md);
     transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
   }
@@ -268,13 +268,13 @@
 
   .due-label.today {
     color: var(--color-accent-warning);
-    background: color-mix(in srgb, var(--color-accent-warning) 12%, transparent);
+    background: var(--color-accent-warning-muted);
     font-weight: var(--weight-semibold);
   }
 
   .due-label.soon {
     color: var(--color-accent-warning);
-    background: color-mix(in srgb, var(--color-accent-warning) 6%, transparent);
+    background: var(--color-accent-warning-muted);
   }
 
   .no-due {

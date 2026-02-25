@@ -202,13 +202,13 @@
 
   .due-badge.today {
     color: var(--color-accent-warning);
-    background: color-mix(in srgb, var(--color-accent-warning) 12%, transparent);
+    background: var(--color-accent-warning-muted);
     font-weight: var(--weight-semibold);
   }
 
   .due-badge.soon {
     color: var(--color-accent-warning);
-    background: color-mix(in srgb, var(--color-accent-warning) 6%, transparent);
+    background: var(--color-accent-warning-muted);
   }
 
   .subtask-row {

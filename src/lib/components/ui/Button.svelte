@@ -54,9 +54,9 @@
 
   /* Sizes */
   .btn--sm {
-    padding: var(--space-1) var(--space-3);
+    padding: var(--space-1-5) var(--space-3);
     font-size: var(--text-xs);
-    min-height: 32px;
+    min-height: 36px;
   }
 
   .btn--md {
@@ -75,10 +75,13 @@
   .btn--primary {
     background: var(--color-accent-primary);
     color: #fff;
+    font-weight: var(--weight-semibold);
+    box-shadow: var(--shadow-xs);
   }
 
   .btn--primary:hover:not(:disabled) {
     background: var(--color-accent-primary-hover);
+    box-shadow: var(--shadow-sm);
   }
 
   .btn--primary:focus-visible {
@@ -116,6 +119,8 @@
   .btn--danger {
     background: var(--color-accent-danger);
     color: #fff;
+    font-weight: var(--weight-semibold);
+    box-shadow: var(--shadow-xs);
   }
 
   .btn--danger:hover:not(:disabled) {

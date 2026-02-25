@@ -33,11 +33,11 @@
   }
 
   .view-title {
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     font-weight: var(--weight-semibold);
     color: var(--color-text-primary);
-    letter-spacing: var(--tracking-sm);
-    line-height: var(--leading-sm);
+    letter-spacing: var(--tracking-base);
+    line-height: var(--leading-base);
   }
 
   .topbar-right {

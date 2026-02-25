@@ -191,7 +191,7 @@
     gap: var(--space-1-5);
     width: 100%;
     padding: var(--space-2) var(--space-4);
-    min-height: 40px;
+    min-height: 44px;
     font-size: var(--text-xs);
     font-weight: var(--weight-medium);
     color: var(--color-text-tertiary);

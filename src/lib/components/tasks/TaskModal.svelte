@@ -390,10 +390,10 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-1-5);
-    padding: var(--space-1) var(--space-3);
-    min-height: 32px;
+    padding: var(--space-1-5) var(--space-3);
+    min-height: 36px;
     border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     font-size: var(--text-xs);
     font-weight: var(--weight-medium);
     color: var(--color-text-secondary);
@@ -562,9 +562,10 @@
     cursor: not-allowed;
   }
 
-  .input-error {
-    border-color: var(--color-accent-danger) !important;
-    box-shadow: 0 0 0 3px var(--color-accent-danger-muted) !important;
+  .input.input-error,
+  .input.input-error:focus {
+    border-color: var(--color-accent-danger);
+    box-shadow: var(--shadow-glow-danger);
   }
 
   .field-error {
@@ -589,7 +590,8 @@
     font-size: var(--text-sm);
     font-weight: var(--weight-medium);
     color: var(--color-accent-danger);
-    padding: var(--space-1-5) var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    min-height: 44px;
     border-radius: var(--radius-md);
     transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
   }
@@ -609,7 +611,7 @@
 
   .cancel-btn {
     padding: var(--space-2) var(--space-4);
-    min-height: 36px;
+    min-height: 44px;
     font-size: var(--text-sm);
     font-weight: var(--weight-medium);
     color: var(--color-text-secondary);
@@ -631,7 +633,7 @@
 
   .save-btn {
     padding: var(--space-2) var(--space-5);
-    min-height: 36px;
+    min-height: 44px;
     font-size: var(--text-sm);
     font-weight: var(--weight-semibold);
     background: var(--color-accent-primary);

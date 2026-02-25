@@ -414,8 +414,8 @@
   .status-badge {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 2px var(--space-2);
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2-5, var(--space-2));
     border-radius: var(--radius-full);
     font-size: var(--text-xs);
     font-weight: var(--weight-semibold);
@@ -537,7 +537,7 @@
     align-items: center;
     gap: var(--space-2);
     padding: var(--space-2) var(--space-3);
-    min-height: 40px;
+    min-height: 44px;
     border-radius: var(--radius-md);
     transition: background var(--transition-normal);
   }
@@ -674,7 +674,7 @@
     align-items: center;
     gap: var(--space-2);
     padding: var(--space-2) var(--space-3);
-    min-height: 40px;
+    min-height: 44px;
     border-radius: var(--radius-md);
     transition: background var(--transition-normal);
     text-align: left;
@@ -730,8 +730,9 @@
     font-size: var(--text-xs);
     color: var(--color-accent-primary);
     font-weight: var(--weight-medium);
-    padding: var(--space-1) var(--space-2);
-    border-radius: var(--radius-sm);
+    padding: var(--space-1-5) var(--space-3);
+    min-height: 36px;
+    border-radius: var(--radius-md);
     transition:
       background var(--transition-fast),
       opacity var(--transition-fast);

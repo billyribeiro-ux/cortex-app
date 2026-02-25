@@ -87,8 +87,8 @@
             class="milestone-dot"
             class:completed={ms.isCompleted}
             class:overdue={!ms.isCompleted && ms.targetDate !== null && new Date(ms.targetDate).getTime() < nowMs}
-            style:border-color={ms.isCompleted ? '#00b894' : goal.color}
-            style:background={ms.isCompleted ? '#00b894' : 'var(--color-bg-secondary)'}
+            style:border-color={ms.isCompleted ? 'var(--color-accent-success)' : goal.color}
+            style:background={ms.isCompleted ? 'var(--color-accent-success)' : 'var(--color-bg-secondary)'}
           ></div>
           <span class="milestone-tooltip">{ms.title}</span>
         </div>
@@ -146,7 +146,7 @@
   }
 
   .elapsed-fill.overdue {
-    background: var(--color-accent-danger) !important;
+    background: var(--color-accent-danger);
   }
 
   .today-marker {
@@ -167,7 +167,7 @@
   }
 
   .today-label {
-    font-size: 9px;
+    font-size: var(--text-xs);
     color: var(--color-text-quaternary);
     white-space: nowrap;
     margin-top: 2px;
@@ -201,7 +201,7 @@
   }
 
   .milestone-dot.overdue {
-    border-color: var(--color-accent-danger) !important;
+    border-color: var(--color-accent-danger);
   }
 
   .milestone-tooltip {

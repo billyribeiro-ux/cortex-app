@@ -200,7 +200,7 @@
       color var(--transition-fast),
       transform var(--transition-fast);
     white-space: nowrap;
-    min-height: 40px;
+    min-height: 44px;
   }
 
   .nav-item:hover {

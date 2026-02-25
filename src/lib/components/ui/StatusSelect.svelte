@@ -64,9 +64,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: var(--radius-sm);
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
     transition: background var(--transition-fast),
                 transform var(--transition-fast);
   }
@@ -107,11 +107,15 @@
     font-size: var(--text-xs);
     font-weight: var(--weight-medium);
     border-radius: var(--radius-sm);
-    min-height: 32px;
+    min-height: 36px;
     transition: background var(--transition-fast);
   }
 
-  .option:hover, .option.active {
+  .option:hover {
     background: var(--color-bg-hover);
+  }
+
+  .option.active {
+    background: var(--color-bg-active);
   }
 </style>
