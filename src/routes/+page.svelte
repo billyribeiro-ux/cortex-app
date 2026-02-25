@@ -121,18 +121,27 @@
 </div>
 
 <style>
+  /* ═══════════════════════════════════════════════════════════
+     Dashboard — Apple Principal Engineer quality
+     Token-driven, layered shadows, purposeful motion
+     ═══════════════════════════════════════════════════════════ */
+
   .dashboard {
     display: flex;
     flex-direction: column;
-    gap: var(--space-8);
+    gap: var(--space-10);
+    padding-bottom: var(--space-16);
   }
 
   .dashboard-title {
     font-size: var(--text-3xl);
-    font-weight: 700;
+    font-weight: var(--weight-bold);
     color: var(--color-text-primary);
-    letter-spacing: -0.03em;
+    letter-spacing: var(--tracking-3xl);
+    line-height: var(--leading-3xl);
   }
+
+  /* ── Stats Grid ── */
 
   .stats {
     display: grid;
@@ -140,23 +149,106 @@
     gap: var(--space-4);
   }
 
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1-5);
+    padding: var(--space-6);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      border-color var(--transition-normal),
+      box-shadow var(--transition-normal),
+      transform var(--transition-normal),
+      background var(--transition-normal);
+  }
+
+  .stat-card:hover {
+    border-color: var(--color-border-default);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+    background: var(--color-bg-tertiary);
+  }
+
+  .stat-card:active {
+    transform: scale(0.98);
+    box-shadow: var(--shadow-xs);
+    transition-duration: var(--duration-fast);
+  }
+
+  .stat-card.danger {
+    border-color: var(--color-accent-danger-muted);
+    background: color-mix(in srgb, var(--color-accent-danger) 3%, var(--color-bg-secondary));
+  }
+
+  .stat-card.danger:hover {
+    border-color: color-mix(in srgb, var(--color-accent-danger) 30%, transparent);
+  }
+
+  .stat-value {
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    color: var(--color-accent-primary);
+    letter-spacing: var(--tracking-2xl);
+    line-height: var(--leading-2xl);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-value.overdue {
+    color: var(--color-accent-danger);
+  }
+
+  .stat-label {
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-tertiary);
+    letter-spacing: var(--tracking-xs);
+    line-height: var(--leading-xs);
+    text-transform: uppercase;
+  }
+
+  .stat-breakdown {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-top: var(--space-1);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-normal);
+    color: var(--color-text-quaternary);
+    letter-spacing: var(--tracking-xs);
+    line-height: var(--leading-xs);
+    flex-wrap: wrap;
+  }
+
+  /* ── Onboarding ── */
+
   .onboarding {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-6);
-    padding: var(--space-12) var(--space-6);
+    gap: var(--space-8);
+    padding: var(--space-16) var(--space-6);
+    background: var(--color-bg-tertiary);
+    border: 1.5px dashed var(--color-border-default);
+    border-radius: var(--radius-xl);
     text-align: center;
   }
 
   .onboarding-text {
-    font-size: var(--text-base);
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
     color: var(--color-text-secondary);
+    letter-spacing: var(--tracking-sm);
+    max-width: 32ch;
   }
 
   .onboarding-actions {
     display: flex;
-    gap: var(--space-4);
+    gap: var(--space-3);
     flex-wrap: wrap;
     justify-content: center;
   }
@@ -169,66 +261,33 @@
     background: var(--color-bg-secondary);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
     color: var(--color-text-primary);
     font-size: var(--text-sm);
-    font-weight: 500;
-    transition: background var(--transition-fast), border-color var(--transition-fast);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-sm);
+    line-height: var(--leading-sm);
     text-decoration: none;
+    transition:
+      background var(--transition-normal),
+      border-color var(--transition-normal),
+      box-shadow var(--transition-normal),
+      transform var(--transition-normal);
   }
 
   .onboarding-btn:hover {
     background: var(--color-bg-hover);
     border-color: var(--color-accent-primary);
+    box-shadow: var(--shadow-sm), var(--shadow-glow);
   }
 
-  .stat-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    padding: var(--space-6);
-    background: var(--color-bg-secondary);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-xl);
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-    text-decoration: none;
-    cursor: pointer;
+  .onboarding-btn:active {
+    transform: scale(0.98);
+    box-shadow: var(--shadow-xs);
+    transition-duration: var(--duration-fast);
   }
 
-  .stat-card:hover {
-    border-color: var(--color-border-default);
-    box-shadow: var(--shadow-md);
-  }
-
-  .stat-card.danger {
-    border-color: rgba(225, 112, 85, 0.3);
-  }
-
-  .stat-value {
-    font-size: var(--text-3xl);
-    font-weight: 700;
-    color: var(--color-accent-primary);
-    letter-spacing: -0.03em;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .stat-value.overdue {
-    color: var(--color-accent-danger);
-  }
-
-  .stat-label {
-    font-size: var(--text-sm);
-    color: var(--color-text-secondary);
-    font-weight: 500;
-  }
-
-  .stat-breakdown {
-    display: flex;
-    align-items: center;
-    gap: var(--space-1);
-    font-size: var(--text-xs);
-    color: var(--color-text-tertiary);
-    flex-wrap: wrap;
-  }
+  /* ── Goals Section ── */
 
   .goals-section {
     display: flex;
@@ -238,72 +297,95 @@
 
   .section-title {
     font-size: var(--text-lg);
-    font-weight: 700;
+    font-weight: var(--weight-semibold);
     color: var(--color-text-primary);
-    letter-spacing: -0.01em;
+    letter-spacing: var(--tracking-lg);
+    line-height: var(--leading-lg);
   }
 
   .goals-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-2);
   }
 
   .goal-row {
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    min-height: 44px;
     background: var(--color-bg-secondary);
     border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-lg);
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    border-radius: var(--radius-md);
     cursor: pointer;
     width: 100%;
     text-align: left;
+    transition:
+      border-color var(--transition-normal),
+      box-shadow var(--transition-normal),
+      background var(--transition-normal),
+      transform var(--transition-normal);
   }
 
   .goal-row:hover {
     border-color: var(--color-border-default);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
+    background: var(--color-bg-tertiary);
+  }
+
+  .goal-row:active {
+    transform: scale(0.98);
+    box-shadow: none;
+    transition-duration: var(--duration-fast);
   }
 
   .goal-color-dot {
     width: 10px;
     height: 10px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     flex-shrink: 0;
   }
 
   .goal-row-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: var(--space-0-5);
     min-width: 160px;
     flex-shrink: 0;
   }
 
   .goal-row-title {
     font-size: var(--text-sm);
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     color: var(--color-text-primary);
+    letter-spacing: var(--tracking-sm);
+    line-height: var(--leading-sm);
   }
 
   .goal-row-date {
     font-size: var(--text-xs);
+    font-weight: var(--weight-normal);
     color: var(--color-text-tertiary);
+    letter-spacing: var(--tracking-xs);
+    line-height: var(--leading-xs);
   }
 
   .goal-row-progress {
     flex: 1;
+    min-width: 0;
   }
 
   .nearest-deadline {
     font-size: var(--text-sm);
-    color: var(--color-text-secondary);
+    line-height: var(--leading-sm);
+    letter-spacing: var(--tracking-sm);
+    color: var(--color-text-tertiary);
+    padding-top: var(--space-1);
   }
 
   .nearest-deadline strong {
     color: var(--color-text-primary);
+    font-weight: var(--weight-semibold);
   }
 </style>

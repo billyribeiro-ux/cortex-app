@@ -59,6 +59,6 @@
   }
 
   .fill {
-    transition: stroke-dashoffset 0.4s ease;
+    transition: stroke-dashoffset 0.5s var(--ease-out);
   }
 </style>

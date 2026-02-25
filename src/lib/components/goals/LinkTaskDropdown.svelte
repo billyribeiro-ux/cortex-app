@@ -84,7 +84,7 @@
     background: var(--color-bg-elevated);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-xl);
     z-index: 300;
     overflow: hidden;
   }
@@ -93,7 +93,7 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-3) var(--space-3);
     border-bottom: 1px solid var(--color-border-subtle);
     color: var(--color-text-tertiary);
   }
@@ -105,6 +105,7 @@
     background: transparent;
     border: none;
     outline: none;
+    letter-spacing: var(--tracking-xs);
   }
 
   .search-input::placeholder {
@@ -114,6 +115,7 @@
   .task-list {
     max-height: 240px;
     overflow-y: auto;
+    padding: var(--space-1);
   }
 
   .empty {
@@ -121,6 +123,7 @@
     text-align: center;
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
+    letter-spacing: var(--tracking-xs);
   }
 
   .task-row {
@@ -129,7 +132,9 @@
     gap: var(--space-2);
     width: 100%;
     padding: var(--space-2) var(--space-3);
+    min-height: 36px;
     font-size: var(--text-xs);
+    border-radius: var(--radius-sm);
     transition: background var(--transition-fast);
     text-align: left;
   }
@@ -138,11 +143,17 @@
     background: var(--color-bg-hover);
   }
 
+  .task-row:active {
+    background: var(--color-bg-active);
+    transition: background 0.05s;
+  }
+
   .task-title {
     flex: 1;
     color: var(--color-text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    letter-spacing: var(--tracking-sm);
   }
 </style>

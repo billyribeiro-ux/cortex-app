@@ -31,20 +31,21 @@
   .track {
     flex: 1;
     background: var(--color-bg-tertiary);
-    border-radius: 999px;
+    border-radius: var(--radius-full);
     overflow: hidden;
   }
 
   .fill {
     height: 100%;
-    border-radius: 999px;
-    transition: width 0.4s ease;
+    border-radius: var(--radius-full);
+    transition: width 0.4s var(--ease-out);
   }
 
   .label {
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
-    font-weight: 500;
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-xs);
     white-space: nowrap;
     min-width: 32px;
     text-align: right;

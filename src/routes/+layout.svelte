@@ -51,13 +51,13 @@
   }
 
   .main-area.transitions-ready {
-    transition: margin-left var(--transition-normal);
+    transition: margin-left var(--transition-slow);
   }
 
   .content {
     flex: 1;
     overflow-y: auto;
-    padding: var(--space-6);
+    padding: var(--space-8);
   }
 
   .error-state {
@@ -71,14 +71,29 @@
   }
 
   .error-state button {
-    padding: var(--space-2) var(--space-4);
+    padding: var(--space-2) var(--space-5);
+    min-height: 44px;
     background: var(--color-accent-primary);
     color: var(--color-text-primary);
     border-radius: var(--radius-md);
-    transition: background var(--transition-fast);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-sm);
+    line-height: var(--leading-sm);
+    box-shadow: var(--shadow-sm);
+    transition:
+      background var(--transition-fast),
+      box-shadow var(--transition-fast),
+      transform var(--transition-fast);
   }
 
   .error-state button:hover {
     background: var(--color-accent-primary-hover);
+    box-shadow: var(--shadow-md);
+  }
+
+  .error-state button:active {
+    transform: scale(0.98);
+    box-shadow: var(--shadow-xs);
   }
 </style>

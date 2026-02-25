@@ -65,13 +65,15 @@
     background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
-    min-height: 32px;
+    min-height: 36px;
     cursor: text;
-    transition: border-color var(--transition-fast);
+    transition: border-color var(--transition-fast),
+                box-shadow var(--transition-fast);
   }
 
   .tag-input-wrap:focus-within {
     border-color: var(--color-accent-primary);
+    box-shadow: var(--shadow-glow);
   }
 
   .tag-chip {
@@ -79,11 +81,11 @@
     align-items: center;
     gap: 4px;
     padding: 2px var(--space-2);
-    background: rgba(108, 92, 231, 0.15);
+    background: var(--color-accent-primary-muted);
     color: var(--color-accent-primary);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-xs);
     font-size: var(--text-xs);
-    font-weight: 500;
+    font-weight: var(--weight-medium);
   }
 
   .tag-remove {

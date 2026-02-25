@@ -26,17 +26,18 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 var(--space-6);
+    padding: 0 var(--space-8);
     background: var(--color-bg-secondary);
     border-bottom: 1px solid var(--color-border-subtle);
     flex-shrink: 0;
   }
 
   .view-title {
-    font-size: var(--text-base);
-    font-weight: 600;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
     color: var(--color-text-primary);
-    letter-spacing: -0.01em;
+    letter-spacing: var(--tracking-sm);
+    line-height: var(--leading-sm);
   }
 
   .topbar-right {
