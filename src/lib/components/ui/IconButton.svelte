@@ -33,16 +33,28 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: var(--radius-md);
-    transition: background var(--transition-fast), color var(--transition-fast), opacity var(--transition-fast);
+    transition: background var(--transition-fast),
+                color var(--transition-fast),
+                transform var(--transition-fast),
+                box-shadow var(--transition-fast),
+                opacity var(--transition-fast);
     flex-shrink: 0;
   }
 
+  .icon-btn:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
   .icon-btn:disabled {
-    opacity: 0.4;
+    opacity: 0.35;
     cursor: not-allowed;
+  }
+
+  .icon-btn:focus-visible {
+    box-shadow: var(--shadow-glow);
   }
 
   .icon-btn--primary {
@@ -55,7 +67,7 @@
   }
 
   .icon-btn--secondary {
-    background: var(--color-bg-elevated);
+    background: var(--color-bg-tertiary);
     color: var(--color-text-primary);
     border: 1px solid var(--color-border-default);
   }
@@ -80,6 +92,10 @@
   }
 
   .icon-btn--danger:hover:not(:disabled) {
-    background: #c0604a;
+    background: color-mix(in srgb, var(--color-accent-danger) 85%, black);
+  }
+
+  .icon-btn--danger:focus-visible {
+    box-shadow: var(--shadow-glow-danger);
   }
 </style>

@@ -145,7 +145,7 @@
   }
 
   .sidebar.transitions-ready {
-    transition: width var(--transition-normal);
+    transition: width var(--transition-slow);
   }
 
   .sidebar.collapsed {
@@ -162,10 +162,11 @@
   }
 
   .logo-text {
-    font-size: var(--text-lg);
-    font-weight: 700;
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
     color: var(--color-accent-primary);
-    letter-spacing: -0.02em;
+    letter-spacing: var(--tracking-xl);
+    line-height: var(--leading-xl);
     white-space: nowrap;
   }
 
@@ -182,20 +183,24 @@
     padding: var(--space-3) var(--space-2);
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: var(--space-0-5);
     overflow-y: auto;
   }
 
   .nav-item {
+    position: relative;
     display: flex;
     align-items: center;
     gap: var(--space-3);
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-md);
     color: var(--color-text-secondary);
-    transition: background var(--transition-fast), color var(--transition-fast);
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast),
+      transform var(--transition-fast);
     white-space: nowrap;
-    min-height: 36px;
+    min-height: 40px;
   }
 
   .nav-item:hover {
@@ -203,9 +208,25 @@
     color: var(--color-text-primary);
   }
 
+  .nav-item:active {
+    transform: scale(0.98);
+  }
+
   .nav-item.active {
-    background: rgba(108, 92, 231, 0.15);
+    background: var(--color-accent-primary-muted);
     color: var(--color-accent-primary);
+  }
+
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 20px;
+    background: var(--color-accent-primary);
+    border-radius: 0 var(--radius-full) var(--radius-full) 0;
   }
 
   .nav-icon {
@@ -217,7 +238,9 @@
   .nav-label {
     flex: 1;
     font-size: var(--text-sm);
-    font-weight: 500;
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-sm);
+    line-height: var(--leading-sm);
   }
 
   .sidebar-footer {
@@ -229,19 +252,25 @@
   .data-actions {
     display: flex;
     gap: var(--space-1);
-    padding: 0 var(--space-2);
+    padding: 0 var(--space-1);
     margin-bottom: var(--space-2);
   }
 
   .data-btn {
     display: flex;
     align-items: center;
-    gap: var(--space-1);
-    padding: var(--space-1) var(--space-2);
+    gap: var(--space-1-5);
+    padding: var(--space-1-5) var(--space-2);
+    min-height: 32px;
     font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-xs);
     color: var(--color-text-tertiary);
     border-radius: var(--radius-sm);
-    transition: background var(--transition-fast), color var(--transition-fast);
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast),
+      transform var(--transition-fast);
     flex: 1;
     justify-content: center;
   }
@@ -249,6 +278,11 @@
   .data-btn:hover {
     background: var(--color-bg-hover);
     color: var(--color-text-secondary);
+  }
+
+  .data-btn:active {
+    transform: scale(0.98);
+    background: var(--color-bg-active);
   }
 
   .file-input-hidden {
@@ -266,13 +300,22 @@
     align-items: center;
     justify-content: center;
     padding: var(--space-2);
+    min-height: 40px;
     border-radius: var(--radius-md);
     color: var(--color-text-tertiary);
-    transition: background var(--transition-fast), color var(--transition-fast);
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast),
+      transform var(--transition-fast);
   }
 
   .collapse-btn:hover {
     background: var(--color-bg-hover);
     color: var(--color-text-primary);
+  }
+
+  .collapse-btn:active {
+    transform: scale(0.98);
+    background: var(--color-bg-active);
   }
 </style>

@@ -101,7 +101,7 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    padding: var(--space-2) var(--space-4);
+    padding: var(--space-3) var(--space-4);
     background: var(--color-bg-secondary);
     border-bottom: 1px solid var(--color-border-subtle);
     flex-shrink: 0;
@@ -127,17 +127,24 @@
 
   .search-input {
     width: 100%;
-    height: 30px;
+    height: 36px;
     padding: 0 var(--space-6) 0 var(--space-6);
     background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
     font-size: var(--text-xs);
     color: var(--color-text-primary);
-    transition: border-color var(--transition-fast);
+    transition:
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast);
   }
 
-  .search-input:focus { outline: none; border-color: var(--color-accent-primary); }
+  .search-input:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: var(--shadow-glow);
+  }
+
   .search-input::placeholder { color: var(--color-text-tertiary); }
 
   .clear-btn {
@@ -146,6 +153,13 @@
     display: flex;
     align-items: center;
     color: var(--color-text-tertiary);
+    border-radius: var(--radius-xs);
+    padding: 2px;
+    transition: color var(--transition-fast);
+  }
+
+  .clear-btn:hover {
+    color: var(--color-text-primary);
   }
 
   .status-filters {
@@ -163,20 +177,29 @@
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-sm);
     font-size: var(--text-xs);
-    font-weight: 500;
+    font-weight: var(--weight-medium);
     color: var(--color-text-tertiary);
-    transition: all var(--transition-fast);
+    transition:
+      border-color var(--transition-fast),
+      background var(--transition-fast),
+      color var(--transition-fast);
     white-space: nowrap;
   }
 
   .filter-pill:hover {
     border-color: var(--pill-color, var(--color-accent-primary));
     color: var(--pill-color, var(--color-accent-primary));
+    background: color-mix(in srgb, var(--pill-color, var(--color-accent-primary)) 6%, transparent);
+  }
+
+  .filter-pill:active {
+    background: color-mix(in srgb, var(--pill-color, var(--color-accent-primary)) 20%, transparent);
+    transition: background 0.05s;
   }
 
   .filter-pill.active {
     border-color: var(--pill-color, var(--color-accent-primary));
-    background: color-mix(in srgb, var(--pill-color, var(--color-accent-primary)) 15%, transparent);
+    background: var(--color-accent-primary-muted);
     color: var(--pill-color, var(--color-accent-primary));
   }
 
@@ -187,7 +210,7 @@
   }
 
   .mini-select {
-    height: 30px;
+    height: 32px;
     padding: 0 var(--space-2);
     background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border-subtle);
@@ -195,9 +218,16 @@
     font-size: var(--text-xs);
     color: var(--color-text-secondary);
     cursor: pointer;
+    transition:
+      border-color var(--transition-fast),
+      box-shadow var(--transition-fast);
   }
 
-  .mini-select:focus { outline: none; border-color: var(--color-accent-primary); }
+  .mini-select:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: var(--shadow-glow);
+  }
 
   .sort-group {
     display: flex;
@@ -209,14 +239,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: var(--radius-md);
     color: var(--color-text-tertiary);
-    transition: background var(--transition-fast), color var(--transition-fast);
+    transition:
+      background var(--transition-fast),
+      color var(--transition-fast);
   }
 
-  .sort-dir-btn:hover { background: var(--color-bg-hover); color: var(--color-text-primary); }
+  .sort-dir-btn:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+  }
+
+  .sort-dir-btn:active {
+    background: var(--color-bg-active);
+    transition: background 0.05s;
+  }
 
   .spacer { flex: 1; }
 
@@ -229,11 +269,21 @@
     color: #fff;
     border-radius: var(--radius-md);
     font-size: var(--text-sm);
-    font-weight: 500;
+    font-weight: var(--weight-semibold);
     white-space: nowrap;
-    transition: background var(--transition-fast);
+    min-height: 36px;
+    transition:
+      background var(--transition-fast),
+      transform var(--transition-fast);
     flex-shrink: 0;
   }
 
-  .new-goal-btn:hover { background: var(--color-accent-primary-hover); }
+  .new-goal-btn:hover {
+    background: var(--color-accent-primary-hover);
+  }
+
+  .new-goal-btn:active {
+    transform: scale(0.97);
+    transition: transform 0.1s var(--ease-out);
+  }
 </style>

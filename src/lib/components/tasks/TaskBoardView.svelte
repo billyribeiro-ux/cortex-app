@@ -22,6 +22,33 @@
     gap: var(--space-4);
     height: 100%;
     overflow-x: auto;
-    padding-bottom: var(--space-2);
+    padding: var(--space-4);
+    padding-top: 0;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+
+  .board > :global(*) {
+    scroll-snap-align: start;
+  }
+
+  .board::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .board::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 0 var(--space-4);
+  }
+
+  .board::-webkit-scrollbar-thumb {
+    background: var(--color-border-subtle);
+    border-radius: var(--radius-full);
+    transition: background var(--transition-fast);
+  }
+
+  .board::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
   }
 </style>

@@ -33,13 +33,22 @@
     justify-content: center;
     gap: var(--space-2);
     border-radius: var(--radius-md);
-    font-weight: 500;
-    transition: background var(--transition-fast), color var(--transition-fast), opacity var(--transition-fast);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-sm);
+    transition: background var(--transition-fast),
+                color var(--transition-fast),
+                transform var(--transition-fast),
+                box-shadow var(--transition-fast),
+                opacity var(--transition-fast);
     white-space: nowrap;
   }
 
+  .btn:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
   .btn:disabled {
-    opacity: 0.4;
+    opacity: 0.35;
     cursor: not-allowed;
   }
 
@@ -47,16 +56,19 @@
   .btn--sm {
     padding: var(--space-1) var(--space-3);
     font-size: var(--text-xs);
+    min-height: 32px;
   }
 
   .btn--md {
     padding: var(--space-2) var(--space-4);
     font-size: var(--text-sm);
+    min-height: 36px;
   }
 
   .btn--lg {
     padding: var(--space-3) var(--space-6);
     font-size: var(--text-base);
+    min-height: 44px;
   }
 
   /* Variants */
@@ -69,14 +81,22 @@
     background: var(--color-accent-primary-hover);
   }
 
+  .btn--primary:focus-visible {
+    box-shadow: var(--shadow-glow);
+  }
+
   .btn--secondary {
-    background: var(--color-bg-elevated);
+    background: var(--color-bg-tertiary);
     color: var(--color-text-primary);
     border: 1px solid var(--color-border-default);
   }
 
   .btn--secondary:hover:not(:disabled) {
     background: var(--color-bg-hover);
+  }
+
+  .btn--secondary:focus-visible {
+    box-shadow: var(--shadow-glow);
   }
 
   .btn--ghost {
@@ -89,12 +109,20 @@
     color: var(--color-text-primary);
   }
 
+  .btn--ghost:focus-visible {
+    box-shadow: var(--shadow-glow);
+  }
+
   .btn--danger {
     background: var(--color-accent-danger);
     color: #fff;
   }
 
   .btn--danger:hover:not(:disabled) {
-    background: #c0604a;
+    background: color-mix(in srgb, var(--color-accent-danger) 85%, black);
+  }
+
+  .btn--danger:focus-visible {
+    box-shadow: var(--shadow-glow-danger);
   }
 </style>

@@ -37,14 +37,19 @@
   .segment {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1);
+    gap: var(--space-1-5);
     padding: var(--space-1) var(--space-3);
     border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     font-size: var(--text-xs);
-    font-weight: 500;
+    font-weight: var(--weight-medium);
     color: var(--seg-color);
-    transition: background var(--transition-fast), border-color var(--transition-fast);
+    min-height: 32px;
+    letter-spacing: var(--tracking-xs);
+    transition:
+      background var(--transition-fast),
+      border-color var(--transition-fast),
+      transform var(--transition-fast);
     cursor: pointer;
   }
 
@@ -53,16 +58,25 @@
     background: color-mix(in srgb, var(--seg-color) 10%, transparent);
   }
 
+  .segment:active {
+    transform: scale(0.97);
+    background: color-mix(in srgb, var(--seg-color) 18%, transparent);
+    transition:
+      transform 0.1s var(--ease-out),
+      background 0.05s;
+  }
+
   .segment.active {
     border-color: var(--seg-color);
     background: color-mix(in srgb, var(--seg-color) 15%, transparent);
   }
 
   .seg-count {
-    font-weight: 700;
+    font-weight: var(--weight-bold);
   }
 
   .seg-label {
     color: var(--color-text-secondary);
+    letter-spacing: var(--tracking-xs);
   }
 </style>

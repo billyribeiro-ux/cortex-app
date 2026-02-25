@@ -316,7 +316,7 @@
   .form {
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    gap: var(--space-6);
   }
 
   .field {
@@ -327,10 +327,10 @@
 
   .label {
     font-size: var(--text-xs);
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     color: var(--color-text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: var(--tracking-xs);
   }
 
   .required {
@@ -338,29 +338,46 @@
   }
 
   .input, .textarea, .select {
-    padding: var(--space-2) var(--space-3);
+    height: 36px;
+    padding: 0 var(--space-3);
     background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
     font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
     color: var(--color-text-primary);
-    transition: border-color var(--transition-fast);
+    letter-spacing: var(--tracking-sm);
+    transition: border-color var(--transition-normal), box-shadow var(--transition-normal), background var(--transition-normal);
     width: 100%;
+  }
+
+  .input:hover, .textarea:hover, .select:hover {
+    border-color: var(--color-border-default);
   }
 
   .input:focus, .textarea:focus, .select:focus {
     outline: none;
     border-color: var(--color-accent-primary);
+    box-shadow: var(--shadow-glow);
+    background: var(--color-bg-elevated);
   }
 
   .input::placeholder, .textarea::placeholder {
-    color: var(--color-text-tertiary);
+    color: var(--color-text-quaternary);
+    font-weight: var(--weight-medium);
   }
 
   .textarea {
+    height: auto;
+    padding: var(--space-2) var(--space-3);
     resize: vertical;
     min-height: 80px;
     font-family: inherit;
+    line-height: 1.5;
+  }
+
+  .select {
+    cursor: pointer;
   }
 
   .btn-row {
@@ -372,25 +389,34 @@
   .status-btn, .priority-btn {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1);
+    gap: var(--space-1-5);
     padding: var(--space-1) var(--space-3);
+    min-height: 32px;
     border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     font-size: var(--text-xs);
-    font-weight: 500;
+    font-weight: var(--weight-medium);
     color: var(--color-text-secondary);
-    transition: all var(--transition-fast);
+    letter-spacing: var(--tracking-sm);
+    transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
   }
 
   .status-btn:hover, .priority-btn:hover {
     border-color: var(--btn-color);
     color: var(--btn-color);
+    background: color-mix(in srgb, var(--btn-color) 6%, transparent);
+  }
+
+  .status-btn:active, .priority-btn:active {
+    transform: scale(0.97);
   }
 
   .status-btn.active, .priority-btn.active {
-    border-color: var(--btn-color);
-    background: color-mix(in srgb, var(--btn-color) 15%, transparent);
+    border-color: color-mix(in srgb, var(--btn-color) 40%, transparent);
+    background: color-mix(in srgb, var(--btn-color) 12%, transparent);
     color: var(--btn-color);
+    font-weight: var(--weight-semibold);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--btn-color) 6%, transparent);
   }
 
   .date-row {
@@ -406,20 +432,23 @@
 
   .clear-btn {
     font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
     color: var(--color-text-tertiary);
     text-decoration: underline;
+    text-decoration-color: transparent;
     white-space: nowrap;
-    transition: color var(--transition-fast);
+    transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
   }
 
   .clear-btn:hover {
     color: var(--color-text-primary);
+    text-decoration-color: currentColor;
   }
 
   .subtasks {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--space-1-5);
     background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
@@ -430,29 +459,49 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
+    min-height: 44px;
+    padding: var(--space-1) var(--space-1-5);
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-fast);
+  }
+
+  .subtask-row:hover {
+    background: var(--color-bg-elevated);
   }
 
   .subtask-title {
     flex: 1;
     font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
     color: var(--color-text-primary);
+    letter-spacing: var(--tracking-sm);
   }
 
   .subtask-title.done {
     text-decoration: line-through;
+    text-decoration-color: var(--color-text-quaternary);
     color: var(--color-text-tertiary);
   }
 
   .subtask-del {
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-xs);
     color: var(--color-text-tertiary);
     opacity: 0;
-    transition: opacity var(--transition-fast);
+    transition: opacity var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
   }
 
   .subtask-row:hover .subtask-del {
     opacity: 1;
+  }
+
+  .subtask-del:hover {
+    background: var(--color-accent-danger-muted);
+    color: var(--color-accent-danger);
   }
 
   .subtask-add-row {
@@ -460,53 +509,69 @@
     align-items: center;
     gap: var(--space-2);
     margin-top: var(--space-1);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--color-border-subtle);
   }
 
   .subtask-input {
     flex: 1;
-    height: 28px;
+    height: 32px;
     padding: 0 var(--space-2);
     background: var(--color-bg-elevated);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-sm);
     font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
     color: var(--color-text-primary);
+    letter-spacing: var(--tracking-sm);
+    transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
   }
 
   .subtask-input:focus {
     outline: none;
     border-color: var(--color-accent-primary);
+    box-shadow: var(--shadow-glow);
   }
 
   .subtask-input::placeholder {
-    color: var(--color-text-tertiary);
+    color: var(--color-text-quaternary);
   }
 
   .subtask-add-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     background: var(--color-accent-primary);
     color: #fff;
     border-radius: var(--radius-sm);
-    transition: background var(--transition-fast), opacity var(--transition-fast);
+    transition: background var(--transition-fast), opacity var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .subtask-add-btn:hover:not(:disabled) {
+    background: var(--color-accent-primary-hover);
+  }
+
+  .subtask-add-btn:active:not(:disabled) {
+    transform: scale(0.9);
   }
 
   .subtask-add-btn:disabled {
-    opacity: 0.4;
+    opacity: 0.3;
     cursor: not-allowed;
   }
 
   .input-error {
     border-color: var(--color-accent-danger) !important;
+    box-shadow: 0 0 0 3px var(--color-accent-danger-muted) !important;
   }
 
   .field-error {
     font-size: var(--text-xs);
     color: var(--color-accent-danger);
-    font-weight: 500;
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-sm);
   }
 
   .footer-left {
@@ -522,44 +587,74 @@
 
   .delete-btn {
     font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
     color: var(--color-accent-danger);
-    font-weight: 500;
-    transition: opacity var(--transition-fast);
+    padding: var(--space-1-5) var(--space-3);
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .delete-btn:hover {
+    background: var(--color-accent-danger-muted);
+  }
+
+  .delete-btn:active {
+    transform: scale(0.97);
   }
 
   .delete-btn.confirm {
-    font-weight: 700;
+    font-weight: var(--weight-bold);
+    background: var(--color-accent-danger-muted);
   }
 
   .cancel-btn {
     padding: var(--space-2) var(--space-4);
+    min-height: 36px;
     font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
     color: var(--color-text-secondary);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-md);
-    transition: background var(--transition-fast);
+    letter-spacing: var(--tracking-sm);
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
   }
 
   .cancel-btn:hover {
     background: var(--color-bg-hover);
+    border-color: var(--color-border-strong);
+    color: var(--color-text-primary);
+  }
+
+  .cancel-btn:active {
+    background: var(--color-bg-active);
   }
 
   .save-btn {
     padding: var(--space-2) var(--space-5);
+    min-height: 36px;
     font-size: var(--text-sm);
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     background: var(--color-accent-primary);
     color: #fff;
     border-radius: var(--radius-md);
-    transition: background var(--transition-fast), opacity var(--transition-fast);
+    letter-spacing: var(--tracking-sm);
+    box-shadow: var(--shadow-sm);
+    transition: background var(--transition-fast), opacity var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
   }
 
   .save-btn:hover:not(:disabled) {
     background: var(--color-accent-primary-hover);
+    box-shadow: var(--shadow-md);
+  }
+
+  .save-btn:active:not(:disabled) {
+    transform: scale(0.97);
+    box-shadow: none;
   }
 
   .save-btn:disabled {
-    opacity: 0.4;
+    opacity: 0.35;
     cursor: not-allowed;
+    box-shadow: none;
   }
 </style>

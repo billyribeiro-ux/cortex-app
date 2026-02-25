@@ -119,6 +119,7 @@
     flex-direction: column;
     height: 100%;
     overflow-y: auto;
+    scroll-behavior: smooth;
   }
 
   .list-header {
@@ -126,17 +127,18 @@
     grid-template-columns: 40px 36px 1fr 110px 90px 120px;
     align-items: center;
     padding: var(--space-2) var(--space-4);
-    border-bottom: 1px solid var(--color-border-subtle);
+    border-bottom: 1px solid var(--color-border-default);
     font-size: var(--text-xs);
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     color: var(--color-text-tertiary);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: var(--tracking-xs);
     flex-shrink: 0;
     position: sticky;
     top: 0;
     background: var(--color-bg-primary);
     z-index: 1;
+    backdrop-filter: blur(8px);
   }
 
   .group {
@@ -150,24 +152,31 @@
     gap: var(--space-2);
     padding: var(--space-2) var(--space-4);
     font-size: var(--text-xs);
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-xs);
     background: var(--color-bg-secondary);
     border-bottom: 1px solid var(--color-border-subtle);
     cursor: pointer;
-    transition: background var(--transition-fast);
+    transition: background var(--transition-fast), color var(--transition-fast);
   }
 
   .group-header:hover {
     background: var(--color-bg-hover);
+    color: var(--color-text-primary);
   }
 
   .group-count {
     background: var(--color-bg-elevated);
     color: var(--color-text-tertiary);
-    padding: 1px var(--space-2);
-    border-radius: var(--radius-sm);
+    padding: var(--space-0-5) var(--space-2);
+    border-radius: var(--radius-full);
     font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    min-width: 20px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
   }
 
   .list-row {
@@ -178,57 +187,98 @@
     border-bottom: 1px solid var(--color-border-subtle);
     cursor: pointer;
     transition: background var(--transition-fast);
-    min-height: 40px;
+    min-height: 44px;
   }
 
   .list-row:hover {
     background: var(--color-bg-hover);
+    border-radius: var(--radius-md);
+  }
+
+  .list-row:active {
+    background: var(--color-bg-active);
+  }
+
+  .list-row:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--color-accent-primary);
+    border-radius: var(--radius-md);
   }
 
   .list-row.done {
-    opacity: 0.6;
+    opacity: 0.55;
+  }
+
+  .list-row.done:hover {
+    opacity: 0.7;
   }
 
   .status-cycle-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
-    border-radius: var(--radius-sm);
-    transition: background var(--transition-fast);
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
   }
 
   .status-cycle-btn:hover {
     background: var(--color-bg-hover);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .status-cycle-btn:active {
+    transform: scale(0.9);
+    background: var(--color-bg-active);
   }
 
   .task-title {
     font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
     color: var(--color-text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     padding-right: var(--space-4);
+    letter-spacing: var(--tracking-sm);
   }
 
   .task-title.strikethrough {
     text-decoration: line-through;
+    text-decoration-color: var(--color-text-quaternary);
     color: var(--color-text-tertiary);
   }
 
   .due-label {
     font-size: var(--text-xs);
-    font-weight: 500;
+    font-weight: var(--weight-medium);
     color: var(--color-text-tertiary);
+    letter-spacing: var(--tracking-xs);
+    padding: var(--space-0-5) var(--space-1-5);
+    border-radius: var(--radius-xs);
+    transition: background var(--transition-fast);
   }
 
-  .due-label.overdue { color: var(--color-accent-danger); }
-  .due-label.today { color: var(--color-accent-warning); }
-  .due-label.soon { color: var(--color-accent-warning); opacity: 0.8; }
+  .due-label.overdue {
+    color: var(--color-accent-danger);
+    background: var(--color-accent-danger-muted);
+    font-weight: var(--weight-semibold);
+  }
+
+  .due-label.today {
+    color: var(--color-accent-warning);
+    background: color-mix(in srgb, var(--color-accent-warning) 12%, transparent);
+    font-weight: var(--weight-semibold);
+  }
+
+  .due-label.soon {
+    color: var(--color-accent-warning);
+    background: color-mix(in srgb, var(--color-accent-warning) 6%, transparent);
+  }
 
   .no-due {
-    color: var(--color-text-tertiary);
+    color: var(--color-text-quaternary);
     font-size: var(--text-xs);
   }
 
@@ -236,6 +286,9 @@
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
     margin-right: var(--space-1);
+    font-weight: var(--weight-medium);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: var(--tracking-xs);
   }
 
   .mini-bar {
@@ -243,7 +296,7 @@
     width: 40px;
     height: 3px;
     background: var(--color-bg-tertiary);
-    border-radius: 2px;
+    border-radius: var(--radius-full);
     overflow: hidden;
     vertical-align: middle;
   }
@@ -251,7 +304,8 @@
   .mini-fill {
     height: 100%;
     background: var(--color-accent-success);
-    border-radius: 2px;
+    border-radius: var(--radius-full);
+    transition: width var(--transition-slow);
   }
 
   .col-subtasks {
@@ -268,14 +322,19 @@
   }
 
   .tag-pill {
-    padding: 1px var(--space-2);
+    padding: var(--space-0-5) var(--space-2);
     background: var(--color-bg-tertiary);
     color: var(--color-text-tertiary);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-xs);
     font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-xs);
+    line-height: 1.4;
   }
 
-  .tag-pill.muted { opacity: 0.7; }
+  .tag-pill.muted {
+    color: var(--color-text-quaternary);
+  }
 
   @media (max-width: 768px) {
     .list-header {

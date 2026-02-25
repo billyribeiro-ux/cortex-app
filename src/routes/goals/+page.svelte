@@ -97,7 +97,7 @@
     flex-direction: column;
     height: 100%;
     overflow: hidden;
-    margin: calc(-1 * var(--space-6));
+    margin: calc(-1 * var(--space-8));
   }
 
   .detail-view {
@@ -123,7 +123,7 @@
   .goals-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: var(--space-4);
+    gap: var(--space-5);
     align-content: start;
   }
 
@@ -132,15 +132,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-3);
+    gap: var(--space-4);
     flex: 1;
-    color: var(--color-text-tertiary);
+    color: var(--color-text-quaternary);
     text-align: center;
     min-height: 300px;
   }
 
   .empty-state p {
-    font-size: var(--text-base);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-sm);
+    line-height: var(--leading-sm);
     color: var(--color-text-secondary);
   }
 
@@ -153,22 +156,40 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    padding: var(--space-2) var(--space-5);
+    padding: var(--space-3) var(--space-5);
+    min-height: 44px;
     background: var(--color-accent-primary);
     color: #fff;
     border-radius: var(--radius-md);
     font-size: var(--text-sm);
-    font-weight: 500;
-    transition: background var(--transition-fast);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-sm);
+    box-shadow: var(--shadow-sm);
+    transition: background var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
     margin-top: var(--space-2);
   }
 
-  .cta-btn:hover { background: var(--color-accent-primary-hover); }
+  .cta-btn:hover {
+    background: var(--color-accent-primary-hover);
+    box-shadow: var(--shadow-md);
+  }
+
+  .cta-btn:active {
+    transform: scale(0.97);
+    box-shadow: var(--shadow-xs);
+  }
 
   .clear-btn {
     font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-sm);
     color: var(--color-accent-primary);
     text-decoration: underline;
-    text-underline-offset: 2px;
+    text-underline-offset: 3px;
+    transition: opacity var(--transition-fast);
+  }
+
+  .clear-btn:hover {
+    opacity: 0.8;
   }
 </style>

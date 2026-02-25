@@ -114,13 +114,14 @@
   .backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
     padding: var(--space-4);
-    animation: fade-in var(--transition-fast) ease;
+    animation: fade-in var(--duration-normal) var(--ease-out);
   }
 
   @keyframes fade-in {
@@ -133,16 +134,16 @@
     background: var(--color-bg-secondary);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-xl);
     display: flex;
     flex-direction: column;
     max-height: 90vh;
-    animation: slide-up var(--transition-fast) ease;
+    animation: slide-up var(--transition-spring);
   }
 
   @keyframes slide-up {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(16px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
   .modal-header {
@@ -155,20 +156,23 @@
   }
 
   .modal-title {
-    font-size: var(--text-base);
-    font-weight: 600;
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
     color: var(--color-text-primary);
+    letter-spacing: var(--tracking-lg);
   }
 
   .close-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     border-radius: var(--radius-md);
     color: var(--color-text-tertiary);
-    transition: background var(--transition-fast), color var(--transition-fast);
+    transition: background var(--transition-fast),
+                color var(--transition-fast),
+                transform var(--transition-fast);
   }
 
   .close-btn:hover {
@@ -176,10 +180,14 @@
     color: var(--color-text-primary);
   }
 
+  .close-btn:active {
+    transform: scale(0.92);
+  }
+
   .modal-body {
     flex: 1;
     overflow-y: auto;
-    padding: var(--space-6);
+    padding: var(--space-6) var(--space-8);
   }
 
   .modal-footer {

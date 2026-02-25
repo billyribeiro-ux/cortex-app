@@ -16,12 +16,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 18px;
-    height: 18px;
+    min-width: 20px;
+    height: 20px;
     padding: 0 var(--space-1);
-    border-radius: 9px;
+    border-radius: var(--radius-full);
     font-size: var(--text-xs);
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-xs);
     line-height: 1;
     flex-shrink: 0;
   }
@@ -32,22 +33,22 @@
   }
 
   .badge--accent {
-    background: rgba(108, 92, 231, 0.2);
+    background: var(--color-accent-primary-muted);
     color: var(--color-accent-primary);
   }
 
   .badge--warning {
-    background: rgba(253, 203, 110, 0.15);
+    background: rgba(240, 197, 90, 0.12);
     color: var(--color-accent-warning);
   }
 
   .badge--danger {
-    background: rgba(225, 112, 85, 0.15);
+    background: var(--color-accent-danger-muted);
     color: var(--color-accent-danger);
   }
 
   .badge--success {
-    background: rgba(0, 184, 148, 0.15);
+    background: var(--color-accent-success-muted);
     color: var(--color-accent-success);
   }
 </style>

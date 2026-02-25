@@ -47,17 +47,17 @@ export interface TaskFilter {
 }
 
 export const TASK_STATUS_CONFIG: Record<TaskStatus, { label: string; color: string; icon: string }> = {
-  'todo': { label: 'To Do', color: '#a0a0a8', icon: 'ph:circle-dashed' },
-  'in-progress': { label: 'In Progress', color: '#6c5ce7', icon: 'ph:circle-half' },
-  'review': { label: 'Review', color: '#fdcb6e', icon: 'ph:eye' },
-  'done': { label: 'Done', color: '#00b894', icon: 'ph:check-circle-fill' },
+  'todo': { label: 'To Do', color: '#9d9da7', icon: 'ph:circle-dashed' },
+  'in-progress': { label: 'In Progress', color: '#786cf5', icon: 'ph:circle-half' },
+  'review': { label: 'Review', color: '#f0c45a', icon: 'ph:eye' },
+  'done': { label: 'Done', color: '#34c48e', icon: 'ph:check-circle-fill' },
 };
 
 export const TASK_PRIORITY_CONFIG: Record<TaskPriority, { label: string; color: string; icon: string; order: number }> = {
-  'urgent': { label: 'Urgent', color: '#e17055', icon: 'ph:fire-fill', order: 0 },
-  'high': { label: 'High', color: '#fdcb6e', icon: 'ph:arrow-up-bold', order: 1 },
-  'normal': { label: 'Normal', color: '#a0a0a8', icon: 'ph:minus-bold', order: 2 },
-  'low': { label: 'Low', color: '#6e6e78', icon: 'ph:arrow-down-bold', order: 3 },
+  'urgent': { label: 'Urgent', color: '#e8614d', icon: 'ph:fire-fill', order: 0 },
+  'high': { label: 'High', color: '#f0c45a', icon: 'ph:arrow-up-bold', order: 1 },
+  'normal': { label: 'Normal', color: '#9d9da7', icon: 'ph:minus-bold', order: 2 },
+  'low': { label: 'Low', color: '#636370', icon: 'ph:arrow-down-bold', order: 3 },
 };
 
 export interface Milestone {
@@ -98,16 +98,16 @@ export interface GoalFilter {
 }
 
 export const GOAL_STATUS_CONFIG: Record<GoalStatus, { label: string; color: string; icon: string }> = {
-  'not-started': { label: 'Not Started', color: '#6e6e78', icon: 'ph:circle-dashed' },
-  'active': { label: 'Active', color: '#6c5ce7', icon: 'ph:play-circle-fill' },
-  'paused': { label: 'Paused', color: '#fdcb6e', icon: 'ph:pause-circle-fill' },
-  'completed': { label: 'Completed', color: '#00b894', icon: 'ph:check-circle-fill' },
-  'abandoned': { label: 'Abandoned', color: '#e17055', icon: 'ph:x-circle-fill' },
+  'not-started': { label: 'Not Started', color: '#636370', icon: 'ph:circle-dashed' },
+  'active': { label: 'Active', color: '#786cf5', icon: 'ph:play-circle-fill' },
+  'paused': { label: 'Paused', color: '#f0c45a', icon: 'ph:pause-circle-fill' },
+  'completed': { label: 'Completed', color: '#34c48e', icon: 'ph:check-circle-fill' },
+  'abandoned': { label: 'Abandoned', color: '#e8614d', icon: 'ph:x-circle-fill' },
 };
 
 export const GOAL_COLORS: string[] = [
-  '#6c5ce7', '#00b894', '#00cec9', '#0984e3', '#e17055',
-  '#fdcb6e', '#e84393', '#d63031', '#a29bfe', '#55a3e8',
+  '#786cf5', '#34c48e', '#2ac9c4', '#4a9eff', '#e8614d',
+  '#f0c45a', '#e05490', '#d63031', '#a29bfe', '#5aabf0',
 ];
 
 export type ActiveView = 'dashboard' | 'notes' | 'tasks' | 'goals';

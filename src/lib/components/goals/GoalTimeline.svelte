@@ -113,12 +113,13 @@
     text-align: center;
     background: var(--color-bg-tertiary);
     border-radius: var(--radius-md);
+    letter-spacing: var(--tracking-xs);
   }
 
   .timeline-wrap {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 
   .timeline-bar-container {
@@ -130,18 +131,18 @@
 
   .track {
     width: 100%;
-    height: 12px;
+    height: 8px;
     background: var(--color-bg-tertiary);
-    border-radius: 999px;
+    border-radius: var(--radius-full);
     overflow: hidden;
     position: relative;
   }
 
   .elapsed-fill {
     height: 100%;
-    border-radius: 999px;
-    transition: width 0.4s ease;
-    opacity: 0.8;
+    border-radius: var(--radius-full);
+    transition: width 0.4s var(--ease-out);
+    opacity: 0.85;
   }
 
   .elapsed-fill.overdue {
@@ -159,17 +160,20 @@
   }
 
   .today-line {
-    width: 2px;
+    width: 1px;
     height: 24px;
     background: var(--color-text-primary);
-    opacity: 0.6;
+    opacity: 0.4;
   }
 
   .today-label {
     font-size: 9px;
-    color: var(--color-text-tertiary);
+    color: var(--color-text-quaternary);
     white-space: nowrap;
     margin-top: 2px;
+    letter-spacing: var(--tracking-xs);
+    text-transform: uppercase;
+    font-weight: var(--weight-medium);
   }
 
   .milestone-marker {
@@ -184,11 +188,12 @@
   }
 
   .milestone-dot {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     border: 2px solid;
     transition: transform var(--transition-fast);
+    box-shadow: var(--shadow-xs);
   }
 
   .milestone-dot:hover {
@@ -202,18 +207,19 @@
   .milestone-tooltip {
     display: none;
     position: absolute;
-    bottom: calc(100% + 6px);
+    bottom: calc(100% + 8px);
     left: 50%;
     transform: translateX(-50%);
     background: var(--color-bg-elevated);
     border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-sm);
-    padding: 3px var(--space-2);
+    border-radius: var(--radius-md);
+    padding: var(--space-1-5) var(--space-3);
     font-size: var(--text-xs);
     color: var(--color-text-primary);
     white-space: nowrap;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
     z-index: 10;
+    letter-spacing: var(--tracking-xs);
   }
 
   .timeline-labels {
@@ -222,11 +228,13 @@
     align-items: center;
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
+    letter-spacing: var(--tracking-xs);
   }
 
   .overdue-label {
     font-size: var(--text-xs);
     color: var(--color-accent-danger);
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-xs);
   }
 </style>
