@@ -145,7 +145,7 @@
     justify-content: center;
     gap: var(--space-2);
     width: 100%;
-    min-height: 36px;
+    min-height: 44px;
     padding: var(--space-2) var(--space-3);
     background: var(--color-accent-primary);
     color: #fff;
@@ -259,7 +259,7 @@
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
-    min-height: 36px;
+    min-height: 44px;
     padding: var(--space-2) var(--space-5);
     background: var(--color-accent-primary);
     color: #fff;

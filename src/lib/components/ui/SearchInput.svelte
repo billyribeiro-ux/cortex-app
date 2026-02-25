@@ -25,7 +25,7 @@
   />
   {#if value.length > 0}
     <button class="clear-btn" onclick={clear} aria-label="Clear search">
-      <Icon icon="ph:x" width={14} height={14} />
+      <Icon icon="ph:x" width={12} height={12} />
     </button>
   {/if}
 </div>
@@ -55,7 +55,7 @@
   .search-input {
     width: 100%;
     height: 36px;
-    padding: 0 var(--space-8) 0 30px;
+    padding: 0 var(--space-7) 0 30px;
     background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);

@@ -261,12 +261,12 @@
     align-items: center;
     gap: var(--space-1-5);
     padding: var(--space-1-5) var(--space-2);
-    min-height: 32px;
+    min-height: 36px;
     font-size: var(--text-xs);
     font-weight: var(--weight-medium);
     letter-spacing: var(--tracking-xs);
     color: var(--color-text-tertiary);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     transition:
       background var(--transition-fast),
       color var(--transition-fast),

@@ -195,10 +195,11 @@
   .filter-pill {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 3px var(--space-2);
+    gap: var(--space-1);
+    padding: var(--space-1-5) var(--space-3);
+    min-height: 36px;
     border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     font-size: var(--text-xs);
     font-weight: var(--weight-medium);
     color: var(--color-text-tertiary);
@@ -233,23 +234,31 @@
   }
 
   .mini-select {
-    height: 32px;
-    padding: 0 var(--space-2);
+    height: 36px;
+    padding: 0 var(--space-3);
     background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
     font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
     color: var(--color-text-secondary);
     cursor: pointer;
+    letter-spacing: var(--tracking-sm);
     transition:
-      border-color var(--transition-fast),
-      box-shadow var(--transition-fast);
+      border-color var(--transition-normal),
+      box-shadow var(--transition-normal),
+      background var(--transition-normal);
+  }
+
+  .mini-select:hover {
+    border-color: var(--color-border-default);
   }
 
   .mini-select:focus {
     outline: none;
     border-color: var(--color-accent-primary);
     box-shadow: var(--shadow-glow);
+    background: var(--color-bg-elevated);
   }
 
   .sort-group {
@@ -262,8 +271,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: var(--radius-md);
     color: var(--color-text-tertiary);
     transition:
@@ -287,26 +296,30 @@
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    padding: var(--space-2) var(--space-4);
+    padding: 0 var(--space-5);
     background: var(--color-accent-primary);
     color: #fff;
     border-radius: var(--radius-md);
     font-size: var(--text-sm);
     font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-sm);
     white-space: nowrap;
-    min-height: 36px;
+    min-height: 44px;
     transition:
       background var(--transition-fast),
-      transform var(--transition-fast);
+      transform var(--transition-fast),
+      box-shadow var(--transition-fast);
     flex-shrink: 0;
+    box-shadow: var(--shadow-xs);
   }
 
   .new-goal-btn:hover {
     background: var(--color-accent-primary-hover);
+    box-shadow: var(--shadow-sm);
   }
 
   .new-goal-btn:active {
     transform: scale(0.97);
-    transition: transform 0.1s var(--ease-out);
+    box-shadow: none;
   }
 </style>

@@ -222,10 +222,10 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
-    padding: var(--space-1) var(--space-2);
-    min-height: 30px;
+    padding: var(--space-1-5) var(--space-3);
+    min-height: 36px;
     border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     font-size: var(--text-xs);
     font-weight: var(--weight-medium);
     color: var(--color-text-tertiary);
@@ -347,8 +347,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: var(--radius-sm);
     color: var(--color-text-quaternary);
     transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
@@ -374,7 +374,7 @@
     align-items: center;
     gap: var(--space-1-5);
     padding: 0 var(--space-4);
-    min-height: 36px;
+    min-height: 44px;
     background: var(--color-accent-primary);
     color: #fff;
     border-radius: var(--radius-md);
