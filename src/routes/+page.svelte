@@ -4,10 +4,12 @@
   import { tasksStore } from '$lib/stores/tasks.svelte.js';
   import { goalsStore } from '$lib/stores/goals.svelte.js';
   import { notesStore } from '$lib/stores/notes.svelte.js';
+  import { promptsStore } from '$lib/stores/prompts.svelte.js';
+  import { stacksStore } from '$lib/stores/stacks.svelte.js';
   import ProgressBar from '$lib/components/ui/ProgressBar.svelte';
   import Icon from '@iconify/svelte';
 
-  const isEmpty = $derived(appStore.notes.length === 0 && appStore.tasks.length === 0 && appStore.goals.length === 0);
+  const isEmpty = $derived(appStore.notes.length === 0 && appStore.tasks.length === 0 && appStore.goals.length === 0 && appStore.prompts.length === 0 && appStore.stacks.length === 0);
 
   const nearestGoal = $derived.by(() => {
     const active = appStore.goals.filter((g) => g.status === 'active' && g.targetDate !== null);
@@ -48,6 +50,14 @@
           <Icon icon="ph:target" width={20} height={20} />
           Set a Goal
         </a>
+        <a href="/prompts" class="onboarding-btn" onclick={() => { promptsStore.createPrompt(); }}>
+          <Icon icon="ph:chat-text" width={20} height={20} />
+          Create a Prompt
+        </a>
+        <a href="/stacks" class="onboarding-btn" onclick={() => { stacksStore.createStack(); }}>
+          <Icon icon="ph:stack" width={20} height={20} />
+          Create a Stack
+        </a>
       </div>
     </div>
   {:else}
@@ -79,6 +89,14 @@
             <span>Avg progress: {avgProgress}%</span>
           </div>
         {/if}
+      </a>
+      <a href="/prompts" class="stat-card">
+        <span class="stat-value">{appStore.promptCount}</span>
+        <span class="stat-label">Prompts</span>
+      </a>
+      <a href="/stacks" class="stat-card">
+        <span class="stat-value">{appStore.stackCount}</span>
+        <span class="stat-label">Stacks</span>
       </a>
     </div>
 

@@ -2,6 +2,8 @@ const STORAGE_KEYS = [
   'cortex:notes',
   'cortex:tasks',
   'cortex:goals',
+  'cortex:prompts',
+  'cortex:stacks',
   'cortex:note-categories',
   'cortex:claude-messages',
   'cortex:sidebar-collapsed',

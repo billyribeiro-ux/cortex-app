@@ -110,7 +110,7 @@ export const GOAL_COLORS: string[] = [
   '#f0c45a', '#e05490', '#d63031', '#a29bfe', '#5aabf0',
 ];
 
-export type ActiveView = 'dashboard' | 'notes' | 'tasks' | 'goals';
+export type ActiveView = 'dashboard' | 'notes' | 'tasks' | 'goals' | 'prompts' | 'stacks';
 
 export interface AppState {
   activeView: ActiveView;
@@ -154,4 +154,44 @@ export interface ClaudeMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: string;
+}
+
+export interface Prompt {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+  isFavorite: boolean;
+}
+
+export type PromptSortField = 'updatedAt' | 'createdAt' | 'title';
+
+export interface PromptFilter {
+  searchQuery: string;
+  tags: string[];
+  favoritesOnly: boolean;
+  sortField: PromptSortField;
+  sortDirection: SortDirection;
+}
+
+export interface Stack {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+  isFavorite: boolean;
+}
+
+export type StackSortField = 'updatedAt' | 'createdAt' | 'title';
+
+export interface StackFilter {
+  searchQuery: string;
+  tags: string[];
+  favoritesOnly: boolean;
+  sortField: StackSortField;
+  sortDirection: SortDirection;
 }

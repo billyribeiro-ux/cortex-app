@@ -21,6 +21,8 @@
     { label: 'Notes', href: '/notes', icon: 'ph:note' },
     { label: 'Tasks', href: '/tasks', icon: 'ph:check-square' },
     { label: 'Goals', href: '/goals', icon: 'ph:target' },
+    { label: 'Prompts', href: '/prompts', icon: 'ph:chat-text' },
+    { label: 'Stacks', href: '/stacks', icon: 'ph:stack' },
   ];
 
   const counts = $derived([
@@ -28,6 +30,8 @@
     appStore.noteCount,
     appStore.openTaskCount,
     appStore.activeGoalCount,
+    appStore.promptCount,
+    appStore.stackCount,
   ]);
 
   function isActive(href: string): boolean {
