@@ -1,104 +1,110 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
   import Icon from '@iconify/svelte';
+  import { fade, scale } from 'svelte/transition';
+  import { backOut } from 'svelte/easing';
 
-  const FOCUS_SELECTOR = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-
+  /**
+   * Props for the Modal component
+   */
   interface Props {
+    /** Whether the modal is currently open */
     open: boolean;
+    /** Callback fired when the modal requests to close */
     onclose: () => void;
+    /** The title of the modal */
     title: string;
+    /** Maximum width of the modal dialog */
     maxWidth?: string;
+    /** Alignment of the footer content */
     footerAlign?: 'end' | 'between';
+    /** Accessible description ID for screen readers */
+    ariaDescribedBy?: string;
+    /** The main content of the modal */
     children: Snippet;
+    /** The footer content of the modal */
     footer?: Snippet;
   }
 
-  let { open, onclose, title, maxWidth = '600px', footerAlign = 'end', children, footer }: Props = $props();
-  let modalRef = $state<HTMLDivElement | null>(null);
-  let previousActiveElement = $state<Element | null>(null);
+  let { 
+    open, 
+    onclose, 
+    title, 
+    maxWidth = '600px', 
+    footerAlign = 'end', 
+    ariaDescribedBy,
+    children, 
+    footer 
+  }: Props = $props();
+  
+  let dialogRef = $state<HTMLDialogElement | null>(null);
   const titleId = 'modal-title-' + crypto.randomUUID().slice(0, 8);
 
   $effect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden';
-      previousActiveElement = document.activeElement;
-      queueMicrotask(() => {
-        const el = modalRef;
-        if (!el) return;
-        const focusables = Array.from(el.querySelectorAll<HTMLElement>(FOCUS_SELECTOR));
-        const first = focusables[0];
-        if (first) first.focus();
-        else el.focus();
-      });
-    } else {
-      document.body.style.overflow = '';
-      if (previousActiveElement && typeof (previousActiveElement as HTMLElement).focus === 'function') {
-        (previousActiveElement as HTMLElement).focus();
+    if (open && dialogRef && !dialogRef.open) {
+      try {
+        dialogRef.showModal();
+        document.body.style.overflow = 'hidden';
+      } catch (e) {
+        console.error('Failed to open modal:', e);
+      }
+    } else if (!open && dialogRef && dialogRef.open) {
+      try {
+        dialogRef.close();
+        document.body.style.overflow = '';
+      } catch (e) {
+        console.error('Failed to close modal:', e);
       }
     }
+    
     return () => {
       document.body.style.overflow = '';
     };
   });
 
-  function handleKeydown(e: KeyboardEvent): void {
-    if (e.key === 'Escape') onclose();
+  /**
+   * Handles the close button click
+   */
+  function handleClose() {
+    onclose();
   }
 
-  function handleModalKeydown(e: KeyboardEvent): void {
-    if (e.key !== 'Tab') return;
-    const el = modalRef;
-    if (!el) return;
-    const focusables = Array.from(el.querySelectorAll<HTMLElement>(FOCUS_SELECTOR));
-    if (focusables.length === 0) return;
-    const first = focusables[0]!;
-    const last = focusables[focusables.length - 1]!;
-    if (e.shiftKey) {
-      if (document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      }
-    } else {
-      if (document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
+  /**
+   * Handles clicks on the dialog backdrop
+   */
+  function handleBackdropClick(e: MouseEvent) {
+    if (e.target === dialogRef) {
+      onclose();
     }
-  }
-
-  function handleBackdropClick(e: MouseEvent): void {
-    if (e.target === e.currentTarget) onclose();
   }
 </script>
 
-<svelte:window onkeydown={handleKeydown} />
-
 {#if open}
-  <div
-    class="backdrop"
-    role="presentation"
-    tabindex="-1"
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+  <dialog
+    bind:this={dialogRef}
+    class="modal-dialog"
+    style:--max-width={maxWidth}
+    aria-labelledby={titleId}
+    aria-describedby={ariaDescribedBy}
+    aria-modal="true"
+    onclose={handleClose}
     onclick={handleBackdropClick}
     onkeydown={(e) => e.key === 'Escape' && onclose()}
+    transition:fade={{ duration: 150 }}
   >
-    <div
-      bind:this={modalRef}
-      class="modal-card"
-      style:max-width={maxWidth}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={titleId}
-      tabindex="-1"
-      onkeydown={handleModalKeydown}
+    <div 
+      class="modal-content"
+      in:scale={{ duration: 300, start: 0.96, easing: backOut }}
+      out:scale={{ duration: 150, start: 0.98 }}
     >
       <div class="modal-header">
         <h2 id={titleId} class="modal-title">{title}</h2>
         <button class="close-btn" onclick={onclose} aria-label="Close modal">
-          <Icon icon="ph:x" width={18} height={18} />
+          <Icon icon="ph:x" width={24} height={24} />
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id={ariaDescribedBy}>
         {@render children()}
       </div>
       {#if footer}
@@ -107,30 +113,26 @@
         </div>
       {/if}
     </div>
-  </div>
+  </dialog>
 {/if}
 
 <style>
-  .backdrop {
-    position: fixed;
-    inset: 0;
+  .modal-dialog {
+    padding: 0;
+    margin: auto;
+    background: transparent;
+    border: none;
+    max-width: var(--max-width);
+    width: 100%;
+    overflow: visible;
+  }
+
+  .modal-dialog::backdrop {
     background: rgba(0, 0, 0, 0.65);
     backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    padding: var(--space-4);
-    animation: fade-in var(--duration-normal) var(--ease-out);
   }
 
-  @keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  .modal-card {
-    width: 100%;
+  .modal-content {
     background: var(--color-bg-secondary);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-xl);
@@ -138,12 +140,8 @@
     display: flex;
     flex-direction: column;
     max-height: 90vh;
-    animation: slide-up var(--transition-spring);
-  }
-
-  @keyframes slide-up {
-    from { opacity: 0; transform: translateY(16px) scale(0.98); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    width: 100%;
+    color: var(--color-text-primary);
   }
 
   .modal-header {
@@ -160,6 +158,7 @@
     font-weight: var(--weight-semibold);
     color: var(--color-text-primary);
     letter-spacing: var(--tracking-lg);
+    margin: 0;
   }
 
   .close-btn {

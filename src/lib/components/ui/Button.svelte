@@ -1,27 +1,51 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
+  /**
+   * Props for the Button component
+   */
   interface Props {
+    /** The visual variant of the button */
     variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+    /** The size of the button, affects padding and font size */
     size?: 'sm' | 'md' | 'lg';
+    /** The HTML button type */
+    type?: 'button' | 'submit' | 'reset';
+    /** Whether the button is disabled */
     disabled?: boolean;
-    onclick?: () => void;
+    /** Accessible label for screen readers */
+    ariaLabel?: string;
+    /** Controls attribute for accessibility */
+    ariaControls?: string;
+    /** Expanded state for accessibility */
+    ariaExpanded?: boolean;
+    /** Click handler */
+    onclick?: (e: MouseEvent) => void;
+    /** Button content */
     children?: Snippet;
   }
 
   let {
     variant = 'primary',
     size = 'md',
+    type = 'button',
     disabled = false,
+    ariaLabel,
+    ariaControls,
+    ariaExpanded,
     onclick,
     children,
   }: Props = $props();
 </script>
 
 <button
+  {type}
   class={['btn', `btn--${variant}`, `btn--${size}`]}
   {disabled}
-  {onclick}
+  aria-label={ariaLabel}
+  aria-controls={ariaControls}
+  aria-expanded={ariaExpanded}
+  onclick={onclick}
 >
   {@render children?.()}
 </button>
@@ -54,21 +78,21 @@
 
   /* Sizes */
   .btn--sm {
-    padding: var(--space-1-5) var(--space-3);
-    font-size: var(--text-xs);
-    min-height: 36px;
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    min-height: var(--control-height-sm);
   }
 
   .btn--md {
-    padding: var(--space-2) var(--space-4);
-    font-size: var(--text-sm);
-    min-height: 36px;
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--text-base);
+    min-height: var(--control-height-md);
   }
 
   .btn--lg {
-    padding: var(--space-3) var(--space-6);
-    font-size: var(--text-base);
-    min-height: 44px;
+    padding: var(--space-4) var(--space-6);
+    font-size: var(--text-lg);
+    min-height: var(--control-height-lg);
   }
 
   /* Variants */
@@ -84,10 +108,6 @@
     box-shadow: var(--shadow-sm);
   }
 
-  .btn--primary:focus-visible {
-    box-shadow: var(--shadow-glow);
-  }
-
   .btn--secondary {
     background: var(--color-bg-tertiary);
     color: var(--color-text-primary);
@@ -96,10 +116,6 @@
 
   .btn--secondary:hover:not(:disabled) {
     background: var(--color-bg-hover);
-  }
-
-  .btn--secondary:focus-visible {
-    box-shadow: var(--shadow-glow);
   }
 
   .btn--ghost {
@@ -112,10 +128,6 @@
     color: var(--color-text-primary);
   }
 
-  .btn--ghost:focus-visible {
-    box-shadow: var(--shadow-glow);
-  }
-
   .btn--danger {
     background: var(--color-accent-danger);
     color: #fff;
@@ -125,9 +137,5 @@
 
   .btn--danger:hover:not(:disabled) {
     background: color-mix(in srgb, var(--color-accent-danger) 85%, black);
-  }
-
-  .btn--danger:focus-visible {
-    box-shadow: var(--shadow-glow-danger);
   }
 </style>

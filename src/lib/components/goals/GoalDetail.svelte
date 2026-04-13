@@ -626,9 +626,7 @@
   }
 
   .milestone-input:focus {
-    outline: none;
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-glow);
   }
 
   .milestone-input::placeholder { color: var(--color-text-tertiary); }

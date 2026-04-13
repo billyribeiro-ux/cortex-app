@@ -380,9 +380,7 @@
   }
 
   .input:focus, .textarea:focus {
-    outline: none;
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-glow);
     background: var(--color-bg-elevated);
   }
 
@@ -601,9 +599,7 @@
   }
 
   .ms-input:focus {
-    outline: none;
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-glow);
   }
 
   .ms-input::placeholder { color: var(--color-text-tertiary); }
@@ -655,7 +651,6 @@
   .input.input-error,
   .input.input-error:focus {
     border-color: var(--color-accent-danger);
-    box-shadow: var(--shadow-glow-danger);
   }
 
   .field-error {

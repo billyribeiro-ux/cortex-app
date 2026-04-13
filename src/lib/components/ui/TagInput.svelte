@@ -73,7 +73,8 @@
 
   .tag-input-wrap:focus-within {
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-glow);
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
   }
 
   .tag-chip {

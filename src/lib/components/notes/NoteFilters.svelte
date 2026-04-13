@@ -164,9 +164,7 @@
   }
 
   .search-input:focus {
-    outline: none;
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-glow);
     background: var(--color-bg-elevated);
   }
 
@@ -275,9 +273,7 @@
 
   .category-select:focus,
   .sort-select:focus {
-    outline: none;
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-glow);
     background: var(--color-bg-elevated);
   }
 

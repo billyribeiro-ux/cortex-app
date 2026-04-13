@@ -5,6 +5,7 @@
   import StackFilters from '$lib/components/stacks/StackFilters.svelte';
   import StackEditor from '$lib/components/stacks/StackEditor.svelte';
   import Icon from '@iconify/svelte';
+  import { fly } from 'svelte/transition';
 
   let editorRef = $state<{ handleForceSave: () => void } | null>(null);
 
@@ -52,15 +53,24 @@
 
       <div class="list-scroll">
         {#if appStore.stacks.length === 0}
-          <div class="empty-state">
-            <Icon icon="ph:stack" width={40} height={40} />
-            <p>No stacks yet.</p>
-            <p class="empty-sub">Create your first stack!</p>
+          <div class="empty-state" in:fly={{ y: 20, duration: 400, delay: 100 }}>
+            <div class="empty-icon-wrap">
+              <Icon icon="ph:stack" width={32} height={32} />
+            </div>
+            <div class="empty-text">
+              <h3>No stacks yet</h3>
+              <p class="empty-sub">Create your first stack!</p>
+            </div>
           </div>
         {:else if stacksStore.filteredStacks.length === 0}
-          <div class="empty-state">
-            <Icon icon="ph:funnel" width={40} height={40} />
-            <p>No stacks match your filters.</p>
+          <div class="empty-state" in:fly={{ y: 20, duration: 400 }}>
+            <div class="empty-icon-wrap">
+              <Icon icon="ph:funnel" width={32} height={32} />
+            </div>
+            <div class="empty-text">
+              <h3>No stacks found</h3>
+              <p class="empty-sub">Try adjusting your filters.</p>
+            </div>
             <button class="clear-filters-btn" onclick={() => stacksStore.clearFilters()}>
               Clear filters
             </button>
@@ -83,9 +93,14 @@
       {#if stacksStore.activeStack}
         <StackEditor bind:this={editorRef} stack={stacksStore.activeStack} />
       {:else}
-        <div class="no-item-state">
-          <Icon icon="ph:stack" width={48} height={48} />
-          <p>Select a stack or create a new one</p>
+        <div class="no-item-state" in:fly={{ y: 20, duration: 400, delay: 150 }}>
+          <div class="empty-icon-wrap-large">
+            <Icon icon="ph:stack" width={48} height={48} />
+          </div>
+          <div class="empty-text">
+            <h3>Select a stack</h3>
+            <p class="empty-sub">Or create a new one</p>
+          </div>
           <button class="new-btn-center" onclick={handleNewStack}>
             <Icon icon="ph:plus" width={16} height={16} />
             New Stack
@@ -173,18 +188,34 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-3);
+    gap: var(--space-4);
     padding: var(--space-8) var(--space-4);
     text-align: center;
-    color: var(--color-text-quaternary);
     height: 100%;
   }
 
-  .empty-state p {
-    font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
-    color: var(--color-text-secondary);
-    line-height: var(--leading-sm);
+  .empty-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-tertiary);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .empty-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .empty-text h3 {
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-primary);
     margin: 0;
   }
 
@@ -193,6 +224,7 @@
     font-weight: var(--weight-medium);
     color: var(--color-text-tertiary);
     letter-spacing: var(--tracking-xs);
+    margin: 0;
   }
 
   .clear-filters-btn {
@@ -226,19 +258,29 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-4);
+    gap: var(--space-6);
     height: 100%;
-    color: var(--color-text-quaternary);
     text-align: center;
   }
 
-  .no-item-state p {
-    font-size: var(--text-base);
-    font-weight: var(--weight-medium);
-    color: var(--color-text-secondary);
-    line-height: var(--leading-base);
-    margin: 0;
-    letter-spacing: var(--tracking-sm);
+  .empty-icon-wrap-large {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-full);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-tertiary);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .no-item-state .empty-text h3 {
+    font-size: var(--text-lg);
+  }
+
+  .no-item-state .empty-sub {
+    font-size: var(--text-sm);
   }
 
   .new-btn-center {

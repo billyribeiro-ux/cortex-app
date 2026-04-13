@@ -69,7 +69,7 @@
   }
 </script>
 
-<aside class="sidebar" class:collapsed={appStore.sidebarCollapsed} class:transitions-ready={mounted}>
+<aside class="sidebar" class:collapsed={appStore.sidebarCollapsed}>
   <div class="sidebar-header">
     {#if !appStore.sidebarCollapsed}
       <span class="logo-text">Cortex</span>
@@ -123,7 +123,12 @@
       class="file-input-hidden"
       onchange={(e) => void handleFileSelect(e)}
     />
-    <button class="collapse-btn" onclick={toggleSidebar} aria-label="Toggle sidebar">
+    <button 
+      class="collapse-btn" 
+      onclick={toggleSidebar} 
+      aria-label="Toggle sidebar"
+      aria-expanded={!appStore.sidebarCollapsed}
+    >
       <Icon
         icon={appStore.sidebarCollapsed ? 'ph:arrow-right' : 'ph:arrow-left'}
         width={18}
@@ -135,25 +140,15 @@
 
 <style>
   .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: relative;
     height: 100vh;
-    width: var(--sidebar-width);
+    width: 100%;
     background: var(--color-bg-secondary);
     border-right: 1px solid var(--color-border-subtle);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     z-index: 100;
-  }
-
-  .sidebar.transitions-ready {
-    transition: width var(--transition-slow);
-  }
-
-  .sidebar.collapsed {
-    width: var(--sidebar-collapsed-width);
   }
 
   .sidebar-header {

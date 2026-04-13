@@ -6,6 +6,7 @@
   import TaskListView from '$lib/components/tasks/TaskListView.svelte';
   import TaskModal from '$lib/components/tasks/TaskModal.svelte';
   import Icon from '@iconify/svelte';
+  import { fly } from 'svelte/transition';
 
   // Sync TopBar search → tasks filter
   $effect(() => {
@@ -44,19 +45,28 @@
 
   <div class="tasks-body">
     {#if !hasAnyTasks}
-      <div class="empty-state">
-        <Icon icon="ph:check-square" width={48} height={48} />
-        <p>No tasks yet.</p>
-        <p class="empty-sub">Create your first task to get started!</p>
+      <div class="empty-state" in:fly={{ y: 20, duration: 400, delay: 100 }}>
+        <div class="empty-icon-wrap">
+          <Icon icon="ph:check-square" width={48} height={48} />
+        </div>
+        <div class="empty-text">
+          <h3>No tasks yet</h3>
+          <p class="empty-sub">Create your first task to get started!</p>
+        </div>
         <button class="cta-btn" onclick={() => tasksStore.openCreateModal()}>
           <Icon icon="ph:plus" width={16} height={16} />
           New Task
         </button>
       </div>
     {:else if !hasFilteredTasks}
-      <div class="empty-state">
-        <Icon icon="ph:funnel" width={48} height={48} />
-        <p>No tasks match your filters.</p>
+      <div class="empty-state" in:fly={{ y: 20, duration: 400 }}>
+        <div class="empty-icon-wrap">
+          <Icon icon="ph:funnel" width={48} height={48} />
+        </div>
+        <div class="empty-text">
+          <h3>No tasks found</h3>
+          <p class="empty-sub">Try adjusting your filters or search query.</p>
+        </div>
         <button class="clear-btn" onclick={() => tasksStore.clearFilters()}>Clear filters</button>
       </div>
     {:else if tasksStore.viewMode === 'board'}
@@ -89,23 +99,41 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-4);
+    gap: var(--space-6);
     height: 100%;
-    color: var(--color-text-quaternary);
     text-align: center;
   }
 
-  .empty-state p {
-    font-size: var(--text-sm);
-    font-weight: var(--weight-medium);
-    letter-spacing: var(--tracking-sm);
-    line-height: var(--leading-sm);
-    color: var(--color-text-secondary);
+  .empty-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-full);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-tertiary);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .empty-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .empty-text h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-primary);
+    margin: 0;
   }
 
   .empty-sub {
     font-size: var(--text-sm);
-    color: var(--color-text-tertiary);
+    color: var(--color-text-secondary);
+    max-width: 300px;
+    line-height: var(--leading-base);
   }
 
   .cta-btn {

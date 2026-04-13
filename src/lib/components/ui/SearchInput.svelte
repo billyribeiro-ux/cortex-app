@@ -1,32 +1,50 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
 
+  /**
+   * Props for the SearchInput component
+   */
   interface Props {
+    /** The search value */
     value: string;
+    /** Placeholder text for the input */
     placeholder?: string;
+    /** Accessible label for screen readers */
+    ariaLabel?: string;
   }
 
-  let { value = $bindable(''), placeholder = 'Search...' }: Props = $props();
+  let { value = $bindable(''), placeholder = 'Search...', ariaLabel }: Props = $props();
+  let inputEl: HTMLInputElement;
 
+  /**
+   * Clears the search input and focuses it
+   */
   function clear(): void {
     value = '';
+    inputEl?.focus();
   }
 </script>
 
-<div class="search-wrap">
-  <span class="search-icon">
-    <Icon icon="ph:magnifying-glass" width={16} height={16} />
+<div class="search-wrap" role="search">
+  <span class="search-icon" aria-hidden="true">
+    <Icon icon="ph:magnifying-glass" width={20} height={20} />
   </span>
   <input
+    bind:this={inputEl}
     class="search-input selectable"
-    type="text"
+    type="search"
     {placeholder}
+    aria-label={ariaLabel || placeholder}
     bind:value
   />
   {#if value.length > 0}
     <button class="clear-btn" onclick={clear} aria-label="Clear search">
-      <Icon icon="ph:x" width={12} height={12} />
+      <Icon icon="ph:x" width={16} height={16} />
     </button>
+  {:else}
+    <div class="shortcut-hint" aria-hidden="true">
+      <kbd>⌘F</kbd>
+    </div>
   {/if}
 </div>
 
@@ -35,12 +53,12 @@
     position: relative;
     display: flex;
     align-items: center;
-    width: 220px;
+    width: 240px;
   }
 
   .search-icon {
     position: absolute;
-    left: 10px;
+    left: 12px;
     color: var(--color-text-quaternary);
     display: flex;
     align-items: center;
@@ -54,12 +72,12 @@
 
   .search-input {
     width: 100%;
-    height: 36px;
-    padding: 0 var(--space-7) 0 30px;
+    height: var(--control-height-md);
+    padding: 0 var(--space-8) 0 40px;
     background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
-    font-size: var(--text-xs);
+    font-size: var(--text-base);
     font-weight: var(--weight-medium);
     color: var(--color-text-primary);
     letter-spacing: var(--tracking-sm);
@@ -77,11 +95,11 @@
     border-color: var(--color-border-default);
   }
 
-  .search-input:focus {
-    outline: none;
+  .search-input:focus-visible {
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-glow);
     background: var(--color-bg-elevated);
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: -1px;
   }
 
   .clear-btn {
@@ -90,8 +108,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
     color: var(--color-text-quaternary);
     border-radius: var(--radius-xs);
     transition: color var(--transition-fast),
@@ -106,5 +124,24 @@
 
   .clear-btn:active {
     transform: scale(0.9);
+  }
+
+  .shortcut-hint {
+    position: absolute;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .shortcut-hint kbd {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 4px;
+    padding: 2px 6px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   }
 </style>

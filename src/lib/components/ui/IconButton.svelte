@@ -53,10 +53,6 @@
     cursor: not-allowed;
   }
 
-  .icon-btn:focus-visible {
-    box-shadow: var(--shadow-glow);
-  }
-
   .icon-btn--primary {
     background: var(--color-accent-primary);
     color: #fff;
@@ -93,9 +89,5 @@
 
   .icon-btn--danger:hover:not(:disabled) {
     background: color-mix(in srgb, var(--color-accent-danger) 85%, black);
-  }
-
-  .icon-btn--danger:focus-visible {
-    box-shadow: var(--shadow-glow-danger);
   }
 </style>

@@ -102,12 +102,6 @@
     transition-duration: 80ms;
   }
 
-  .task-card:focus-visible {
-    outline: none;
-    box-shadow: var(--shadow-glow);
-    border-color: var(--color-accent-primary);
-  }
-
   .task-card.done {
     opacity: 0.55;
   }

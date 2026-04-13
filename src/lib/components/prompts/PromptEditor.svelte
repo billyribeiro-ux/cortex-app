@@ -270,7 +270,6 @@
   }
 
   .title-input:focus {
-    outline: none;
     border-bottom-color: var(--color-accent-primary);
   }
 

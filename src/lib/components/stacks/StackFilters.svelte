@@ -134,7 +134,6 @@
 
   .search-input:focus {
     border-color: var(--color-accent-primary);
-    box-shadow: 0 0 0 2px var(--color-accent-primary-muted);
   }
 
   .search-input::placeholder {

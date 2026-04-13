@@ -4,6 +4,7 @@
   import Sidebar from '$lib/components/layout/Sidebar.svelte';
   import TopBar from '$lib/components/layout/TopBar.svelte';
   import Toast from '$lib/components/ui/Toast.svelte';
+  import CommandPalette from '$lib/components/ui/CommandPalette.svelte';
   import { appStore } from '$lib/stores/app.svelte.js';
   let { children } = $props();
 
@@ -15,9 +16,9 @@
   );
 </script>
 
-<div class="app-shell">
+<div class="app-shell" class:transitions-ready={mounted} style:--current-sidebar-width={sidebarWidth}>
   <Sidebar />
-  <div class="main-area" class:transitions-ready={mounted} style:--current-sidebar-width={sidebarWidth}>
+  <div class="main-area">
     <TopBar />
     <main class="content">
       <svelte:boundary>
@@ -34,24 +35,24 @@
 </div>
 
 <Toast />
+<CommandPalette />
 
 <style>
   .app-shell {
-    display: flex;
+    display: grid;
+    grid-template-columns: var(--current-sidebar-width) 1fr;
     height: 100vh;
     overflow: hidden;
   }
 
-  .main-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    margin-left: var(--current-sidebar-width);
-    min-width: 0;
+  .app-shell.transitions-ready {
+    transition: grid-template-columns var(--transition-slow);
   }
 
-  .main-area.transitions-ready {
-    transition: margin-left var(--transition-slow);
+  .main-area {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
   }
 
   .content {

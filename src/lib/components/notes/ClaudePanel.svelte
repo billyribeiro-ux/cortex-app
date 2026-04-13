@@ -488,9 +488,7 @@
   }
 
   .claude-input:focus {
-    outline: none;
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-glow);
   }
 
   .claude-input::placeholder {

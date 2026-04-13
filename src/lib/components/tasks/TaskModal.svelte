@@ -356,9 +356,7 @@
   }
 
   .input:focus, .textarea:focus, .select:focus {
-    outline: none;
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-glow);
     background: var(--color-bg-elevated);
   }
 
@@ -528,9 +526,7 @@
   }
 
   .subtask-input:focus {
-    outline: none;
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-glow);
   }
 
   .subtask-input::placeholder {
@@ -565,7 +561,6 @@
   .input.input-error,
   .input.input-error:focus {
     border-color: var(--color-accent-danger);
-    box-shadow: var(--shadow-glow-danger);
   }
 
   .field-error {

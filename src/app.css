@@ -2,51 +2,51 @@
 
 :root {
   /* ═══════════════════════════════════════════════════════════
-     DESIGN TOKENS — Apple-Grade Dark Theme
-     Base unit: 8px | Type scale: modular | Color: warm neutral
+     DESIGN TOKENS — Google Enterprise Standards (MD3)
+     Base unit: 8px | Type scale: modular | Color: Google Dark
      ═══════════════════════════════════════════════════════════ */
 
-  /* ── Color Palette — Dark Mode (elevated luminance, warm neutral) ── */
-  --color-bg-primary: #101012;
-  --color-bg-secondary: #161618;
-  --color-bg-tertiary: #1c1c1f;
-  --color-bg-elevated: #232326;
-  --color-bg-hover: #2b2b2f;
-  --color-bg-active: #323236;
-  --color-bg-wash: rgba(255, 255, 255, 0.03);
+  /* ── Color Palette — Dark Mode (Google Workspace) ── */
+  --color-bg-primary: #202124;
+  --color-bg-secondary: #292a2d;
+  --color-bg-tertiary: #303134;
+  --color-bg-elevated: #3c4043;
+  --color-bg-hover: rgba(255, 255, 255, 0.08);
+  --color-bg-active: rgba(255, 255, 255, 0.12);
+  --color-bg-wash: rgba(255, 255, 255, 0.04);
 
   /* ── Borders ── */
-  --color-border-subtle: rgba(255, 255, 255, 0.06);
-  --color-border-default: rgba(255, 255, 255, 0.10);
-  --color-border-strong: rgba(255, 255, 255, 0.16);
-  --color-border-focus: rgba(120, 108, 245, 0.5);
+  --color-border-subtle: #3c4043;
+  --color-border-default: #5f6368;
+  --color-border-strong: #80868b;
+  --color-border-focus: #8ab4f8;
 
-  /* ── Text (calibrated for reduced eye strain on dark) ── */
-  --color-text-primary: #f0f0f2;
-  --color-text-secondary: #9d9da7;
-  --color-text-tertiary: #636370;
-  --color-text-quaternary: #4a4a55;
-  --color-text-inverse: #101012;
+  /* ── Text (WCAG 2.2 AA/AAA compliant) ── */
+  --color-text-primary: #e8eaed;
+  --color-text-secondary: #9aa0a6;
+  --color-text-tertiary: #80868b;
+  --color-text-quaternary: #5f6368;
+  --color-text-inverse: #202124;
 
-  /* ── Accent (refined, slightly muted for sophistication) ── */
-  --color-accent-primary: #786cf5;
-  --color-accent-primary-hover: #8a80f7;
-  --color-accent-primary-muted: rgba(120, 108, 245, 0.12);
-  --color-accent-primary-wash: rgba(120, 108, 245, 0.06);
+  /* ── Accent (Google Blue 300) ── */
+  --color-accent-primary: #8ab4f8;
+  --color-accent-primary-hover: #aecbfa;
+  --color-accent-primary-muted: rgba(138, 180, 248, 0.12);
+  --color-accent-primary-wash: rgba(138, 180, 248, 0.04);
 
-  /* ── Semantic Colors ── */
-  --color-accent-secondary: #2ac9c4;
-  --color-accent-secondary-muted: rgba(42, 201, 196, 0.12);
-  --color-accent-warning: #f0c45a;
-  --color-accent-warning-muted: rgba(240, 196, 90, 0.12);
-  --color-accent-danger: #e8614d;
-  --color-accent-danger-muted: rgba(232, 97, 77, 0.12);
-  --color-accent-success: #34c48e;
-  --color-accent-success-muted: rgba(52, 196, 142, 0.12);
+  /* ── Semantic Colors (Google MD3 Dark) ── */
+  --color-accent-secondary: #81c995;
+  --color-accent-secondary-muted: rgba(129, 201, 149, 0.12);
+  --color-accent-warning: #fdd663;
+  --color-accent-warning-muted: rgba(253, 214, 99, 0.12);
+  --color-accent-danger: #f28b82;
+  --color-accent-danger-muted: rgba(242, 139, 130, 0.12);
+  --color-accent-success: #81c995;
+  --color-accent-success-muted: rgba(129, 201, 149, 0.12);
 
   /* ═══ Typography ═══ */
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: "SF Mono", "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  --font-sans: "Roboto", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: "Roboto Mono", "JetBrains Mono", "Fira Code", ui-monospace, monospace;
 
   /* Type scale — optically tuned */
   --text-xs: 0.6875rem;
@@ -159,10 +159,10 @@
   --transition-slow: 300ms var(--ease-out);
   --transition-spring: 400ms var(--ease-spring);
 
-  /* ═══ Component Heights (Apple HIG: 44pt minimum for primary) ═══ */
-  --control-height-sm: 32px;
-  --control-height-md: 36px;
-  --control-height-lg: 44px;
+  /* ═══ Component Heights (Google Enterprise: 48px touch targets) ═══ */
+  --control-height-sm: 36px;
+  --control-height-md: 48px;
+  --control-height-lg: 56px;
 
   /* ═══ Layout ═══ */
   --sidebar-width: 248px;
@@ -254,7 +254,7 @@ textarea,
   background: var(--color-border-strong);
 }
 
-/* ═══ Focus Styles ═══ */
+/* ═══ Focus Styles (WCAG 2.2 AA/AAA) ═══ */
 :focus-visible {
   outline: 2px solid var(--color-accent-primary);
   outline-offset: 2px;

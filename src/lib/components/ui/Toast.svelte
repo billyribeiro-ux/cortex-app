@@ -1,6 +1,8 @@
 <script lang="ts">
   import { toastStore } from '$lib/stores/toast.svelte.js';
   import Icon from '@iconify/svelte';
+  import { fly, scale } from 'svelte/transition';
+  import { backOut, backIn } from 'svelte/easing';
 
   const iconMap = {
     success: 'ph:check-circle',
@@ -12,7 +14,11 @@
 {#if toastStore.toasts.length > 0}
   <div class="toast-container" role="status" aria-live="polite">
     {#each toastStore.toasts as toast (toast.id)}
-      <div class="toast toast--{toast.type}">
+      <div 
+        class="toast toast--{toast.type}"
+        in:fly={{ y: 20, duration: 400, easing: backOut }}
+        out:scale={{ start: 0.9, duration: 200, easing: backIn }}
+      >
         <Icon icon={iconMap[toast.type]} width={16} height={16} />
         <span class="toast-message">{toast.message}</span>
         <button
@@ -54,7 +60,6 @@
     box-shadow: var(--shadow-lg);
     color: var(--color-text-primary);
     pointer-events: auto;
-    animation: toast-in var(--transition-spring);
     max-width: 380px;
     overflow: hidden;
   }
@@ -115,16 +120,5 @@
   .toast-dismiss:hover {
     color: var(--color-text-primary);
     background: var(--color-bg-hover);
-  }
-
-  @keyframes toast-in {
-    from {
-      opacity: 0;
-      transform: translateY(8px) scale(0.96);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
   }
 </style>

@@ -152,9 +152,7 @@
   }
 
   .search-input:focus {
-    outline: none;
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-glow);
     background: var(--color-bg-elevated);
   }
 
@@ -255,9 +253,7 @@
   }
 
   .mini-select:focus {
-    outline: none;
     border-color: var(--color-accent-primary);
-    box-shadow: var(--shadow-glow);
     background: var(--color-bg-elevated);
   }
 
