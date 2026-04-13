@@ -31,6 +31,8 @@
   </span>
   <input
     bind:this={inputEl}
+    id="global-search-input"
+    name="global-search-input"
     class="search-input selectable"
     type="search"
     {placeholder}

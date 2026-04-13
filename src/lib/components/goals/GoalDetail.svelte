@@ -165,6 +165,8 @@
         </div>
         {#if goal.progressMode === 'manual'}
           <input
+            id="manual-progress-slider"
+            name="manual-progress"
             class="progress-slider"
             type="range"
             min="0"
@@ -204,6 +206,8 @@
               <Icon icon="ph:dots-six-vertical" width={14} height={14} />
             </span>
             <input
+              id="milestone-checkbox-{ms.id}"
+              name="milestone-checkbox-{ms.id}"
               type="checkbox"
               checked={ms.isCompleted}
               onchange={() => { const id = goalsStore.activeGoalId ?? goal.id; if (id) goalsStore.toggleMilestone(id, ms.id); }}
@@ -228,6 +232,8 @@
 
         <div class="milestone-add-row">
           <input
+            id="new-milestone-input"
+            name="new-milestone-input"
             class="milestone-input selectable"
             type="text"
             placeholder="Add milestone..."

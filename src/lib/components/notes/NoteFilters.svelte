@@ -15,6 +15,8 @@
       <Icon icon="ph:magnifying-glass" width={14} height={14} />
     </span>
     <input
+      id="note-search"
+      name="note-search"
       class="search-input selectable"
       type="text"
       placeholder="Search notes..."

@@ -153,6 +153,7 @@
         <input
           bind:this={titleInputEl}
           id={titleId}
+          name="goal-title"
           class="input selectable"
           class:input-error={!!titleError}
           type="text"
@@ -172,6 +173,7 @@
         <label for={descId} class="label">Description</label>
         <textarea
           id={descId}
+          name="goal-description"
           class="textarea selectable"
           placeholder="Describe your goal... (supports markdown)"
           bind:value={description}
@@ -236,12 +238,12 @@
       <div class="date-row">
         <div class="field">
           <label for={startId} class="label">Start Date</label>
-          <input id={startId} class="input date-input selectable" type="date" bind:value={startDate} />
+          <input id={startId} name="start-date" class="input date-input selectable" type="date" bind:value={startDate} />
         </div>
         <div class="field">
           <label for={targetId} class="label">Target Date</label>
           <div class="date-with-clear">
-            <input id={targetId} class="input date-input selectable" type="date" bind:value={targetDate} />
+            <input id={targetId} name="target-date" class="input date-input selectable" type="date" bind:value={targetDate} />
             {#if targetDate}
               <button class="clear-btn" onclick={() => { targetDate = ''; }}>Clear</button>
             {/if}
@@ -267,6 +269,8 @@
         {#if progressMode === 'manual'}
           <div class="manual-progress">
             <input
+              id="goal-manual-progress"
+              name="goal-manual-progress"
               class="progress-slider"
               type="range"
               min="0"
@@ -286,6 +290,8 @@
             <div class="ms-row">
               <span class="ms-order">{ms.order + 1}.</span>
               <input
+                id="milestone-input-{ms.id}"
+                name="milestone-input-{ms.id}"
                 class="ms-input selectable"
                 type="text"
                 bind:value={ms.title}
@@ -298,6 +304,8 @@
           {/each}
           <div class="ms-add-row">
             <input
+              id="new-milestone-modal-input"
+              name="new-milestone-modal-input"
               class="ms-input selectable"
               type="text"
               placeholder="Add milestone..."

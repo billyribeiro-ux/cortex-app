@@ -21,6 +21,8 @@
   <div class="search-wrap">
     <span class="search-icon"><Icon icon="ph:magnifying-glass" width={14} height={14} /></span>
     <input
+      id="goal-search"
+      name="goal-search"
       class="search-input selectable"
       type="text"
       placeholder="Search goals..."

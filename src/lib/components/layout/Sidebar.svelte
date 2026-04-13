@@ -118,6 +118,8 @@
     {/if}
     <input
       bind:this={fileInputRef}
+      id="file-import-input"
+      name="file-import-input"
       type="file"
       accept=".json"
       class="file-input-hidden"

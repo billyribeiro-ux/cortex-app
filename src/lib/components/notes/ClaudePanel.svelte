@@ -197,6 +197,8 @@
 
   <div class="input-area">
     <textarea
+      id="claude-input"
+      name="claude-input"
       class="claude-input selectable"
       placeholder={hasApiKey ? 'Ask a question...' : 'Configure API key to enable'}
       bind:value={inputValue}

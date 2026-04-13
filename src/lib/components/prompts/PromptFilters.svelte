@@ -15,6 +15,8 @@
       <Icon icon="ph:magnifying-glass" width={14} height={14} />
     </span>
     <input
+      id="prompt-search"
+      name="prompt-search"
       class="search-input selectable"
       type="text"
       placeholder="Search prompts..."

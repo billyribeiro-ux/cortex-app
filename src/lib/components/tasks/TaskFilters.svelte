@@ -21,6 +21,8 @@
   <div class="search-wrap">
     <span class="search-icon"><Icon icon="ph:magnifying-glass" width={14} height={14} /></span>
     <input
+      id="task-search"
+      name="task-search"
       class="search-input selectable"
       type="text"
       placeholder="Search tasks..."
@@ -74,6 +76,8 @@
   <!-- Show completed toggle -->
   <label class="toggle-label">
     <input
+      id="task-filter-show-completed"
+      name="show-completed"
       type="checkbox"
       checked={tasksStore.filter.showCompleted}
       onchange={(e) => tasksStore.setShowCompleted((e.currentTarget as HTMLInputElement).checked)}

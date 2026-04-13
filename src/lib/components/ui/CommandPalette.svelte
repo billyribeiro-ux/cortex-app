@@ -84,6 +84,8 @@
         <Icon icon="ph:magnifying-glass" width={20} height={20} class="search-icon" />
         <input
           bind:this={inputEl}
+          id="command-palette-input"
+          name="command-palette-input"
           type="text"
           class="palette-input"
           placeholder="Type a command or search..."
