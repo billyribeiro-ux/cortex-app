@@ -59,6 +59,8 @@
     flex: 1;
     overflow-y: auto;
     padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
   }
 
   .error-state {

@@ -595,6 +595,9 @@
     display: flex;
     align-items: center;
     color: var(--color-text-tertiary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
     opacity: 0;
     transition: opacity var(--transition-fast), color var(--transition-fast);
     border-radius: var(--radius-xs);

@@ -93,6 +93,9 @@
     display: flex;
     align-items: center;
     color: inherit;
+    background: transparent;
+    border: none;
+    cursor: pointer;
     opacity: 0.7;
     transition: opacity var(--transition-fast);
   }

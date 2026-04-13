@@ -489,6 +489,9 @@
     height: 24px;
     border-radius: var(--radius-xs);
     color: var(--color-text-tertiary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
     opacity: 0;
     transition: opacity var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
   }
@@ -588,6 +591,9 @@
     padding: var(--space-2) var(--space-3);
     min-height: 44px;
     border-radius: var(--radius-md);
+    background: transparent;
+    border: none;
+    cursor: pointer;
     transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
   }
 

@@ -115,7 +115,7 @@
   .stacks-page {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    flex: 1;
     overflow: hidden;
     margin: calc(-1 * var(--space-8));
   }
@@ -179,6 +179,8 @@
 
   .list-scroll {
     flex: 1;
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
     padding: var(--space-1-5);
   }
@@ -191,7 +193,7 @@
     gap: var(--space-4);
     padding: var(--space-8) var(--space-4);
     text-align: center;
-    height: 100%;
+    flex: 1;
   }
 
   .empty-icon-wrap {
