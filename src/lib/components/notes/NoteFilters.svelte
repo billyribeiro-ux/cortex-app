@@ -57,6 +57,8 @@
 
   <div class="filter-group">
     <select
+      id="note-category-filter"
+      name="note-category-filter"
       class="category-select"
       value={notesStore.filter.category ?? ''}
       onchange={(e) => {
@@ -83,6 +85,8 @@
 
   <div class="sort-group">
     <select
+      id="note-sort-field"
+      name="note-sort-field"
       class="sort-select"
       value={notesStore.filter.sortField}
       onchange={(e) => notesStore.setSortField((e.currentTarget as HTMLSelectElement).value as 'updatedAt' | 'createdAt' | 'title')}

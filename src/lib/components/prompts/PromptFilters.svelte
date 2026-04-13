@@ -66,6 +66,8 @@
 
   <div class="sort-group">
     <select
+      id="prompt-sort-field"
+      name="prompt-sort-field"
       class="sort-select"
       value={promptsStore.filter.sortField}
       onchange={(e) => promptsStore.setSortField((e.currentTarget as HTMLSelectElement).value as 'updatedAt' | 'createdAt' | 'title')}

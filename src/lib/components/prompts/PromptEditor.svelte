@@ -136,6 +136,8 @@
     <div class="editor-meta">
       <input
         bind:this={titleInputRef}
+        id="prompt-title-input"
+        name="prompt-title"
         class="title-input selectable"
         type="text"
         placeholder="Untitled Prompt"
@@ -205,6 +207,8 @@
     {#if viewMode === 'edit' || viewMode === 'split'}
       <textarea
         bind:this={textareaRef}
+        id="prompt-content-input"
+        name="prompt-content"
         class="markdown-textarea selectable"
         class:full={viewMode === 'edit'}
         placeholder="Start writing your prompt..."

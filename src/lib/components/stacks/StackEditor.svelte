@@ -136,6 +136,8 @@
     <div class="editor-meta">
       <input
         bind:this={titleInputRef}
+        id="stack-title-input"
+        name="stack-title"
         class="title-input selectable"
         type="text"
         placeholder="Untitled Stack"
@@ -205,6 +207,8 @@
     {#if viewMode === 'edit' || viewMode === 'split'}
       <textarea
         bind:this={textareaRef}
+        id="stack-content-input"
+        name="stack-content"
         class="markdown-textarea selectable"
         class:full={viewMode === 'edit'}
         placeholder="Start writing your stack..."

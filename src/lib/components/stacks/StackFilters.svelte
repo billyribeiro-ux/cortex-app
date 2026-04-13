@@ -66,6 +66,8 @@
 
   <div class="sort-group">
     <select
+      id="stack-sort-field"
+      name="stack-sort-field"
       class="sort-select"
       value={stacksStore.filter.sortField}
       onchange={(e) => stacksStore.setSortField((e.currentTarget as HTMLSelectElement).value as 'updatedAt' | 'createdAt' | 'title')}

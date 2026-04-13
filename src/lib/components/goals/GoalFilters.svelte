@@ -60,6 +60,8 @@
 
   <!-- Category filter -->
   <select
+    id="goal-category-filter"
+    name="goal-category-filter"
     class="mini-select"
     value={goalsStore.filter.category ?? ''}
     onchange={(e) => {
@@ -76,6 +78,8 @@
   <!-- Sort -->
   <div class="sort-group">
     <select
+      id="goal-sort-field"
+      name="goal-sort-field"
       class="mini-select"
       value={goalsStore.filter.sortField}
       onchange={(e) => goalsStore.setSortField((e.currentTarget as HTMLSelectElement).value as 'updatedAt' | 'createdAt' | 'title' | 'targetDate' | 'progress')}

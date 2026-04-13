@@ -151,6 +151,7 @@
         <input
           bind:this={titleInputEl}
           id={titleId}
+          name="task-title"
           class="input selectable"
           class:input-error={!!titleError}
           type="text"
@@ -170,6 +171,7 @@
         <label for={descId} class="label">Description</label>
         <textarea
           id={descId}
+          name="task-description"
           class="textarea selectable"
           placeholder="Add details... (supports markdown)"
           bind:value={description}
@@ -219,6 +221,7 @@
         <div class="date-row">
           <input
             id={dueDateId}
+            name="task-due-date"
             class="input date-input selectable"
             type="date"
             bind:value={dueDate}
@@ -234,6 +237,7 @@
         <label for={goalFieldId} class="label">Link to Goal</label>
         <select
           id={goalFieldId}
+          name="task-goal"
           class="select"
           value={goalId ?? ''}
           onchange={(e) => { goalId = (e.currentTarget as HTMLSelectElement).value || null; }}
@@ -262,6 +266,8 @@
           {#each subtasks as s (s.id)}
             <div class="subtask-row">
               <input
+                id={`subtask-toggle-${s.id}`}
+                name={`subtask-toggle-${s.id}`}
                 type="checkbox"
                 checked={s.isCompleted}
                 onchange={() => toggleSubtask(s.id)}
@@ -275,6 +281,8 @@
           {/each}
           <div class="subtask-add-row">
             <input
+              id="new-subtask-title"
+              name="new-subtask-title"
               class="subtask-input selectable"
               type="text"
               placeholder="Add subtask..."

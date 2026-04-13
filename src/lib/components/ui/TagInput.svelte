@@ -46,7 +46,6 @@
   {/each}
   <input
     bind:this={inputEl}
-    id="tag-input-{crypto.randomUUID().slice(0, 8)}"
     name="tag-input"
     class="tag-text-input selectable"
     type="text"

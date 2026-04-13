@@ -46,6 +46,7 @@
   {/each}
   <input
     bind:this={inputEl}
+    name="note-tag-input"
     class="tag-text-input selectable"
     type="text"
     placeholder={tags.length === 0 ? 'Add tags...' : ''}

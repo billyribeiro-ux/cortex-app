@@ -60,6 +60,8 @@
 
   <!-- Priority filter -->
   <select
+    id="task-priority-filter"
+    name="task-priority-filter"
     class="mini-select"
     value={tasksStore.filter.priority ?? ''}
     onchange={(e) => {
@@ -88,6 +90,8 @@
   <!-- Sort -->
   <div class="sort-group">
     <select
+      id="task-sort-field"
+      name="task-sort-field"
       class="mini-select"
       value={tasksStore.filter.sortField}
       onchange={(e) => tasksStore.setSortField((e.currentTarget as HTMLSelectElement).value as 'priority' | 'dueDate' | 'createdAt' | 'updatedAt' | 'title')}

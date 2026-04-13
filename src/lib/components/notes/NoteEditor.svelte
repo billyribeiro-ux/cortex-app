@@ -143,6 +143,8 @@
     <div class="editor-meta">
       <input
         bind:this={titleInputRef}
+        id="note-title-input"
+        name="note-title"
         class="title-input selectable"
         type="text"
         placeholder="Untitled Note"
@@ -235,6 +237,8 @@
     {#if viewMode === 'edit' || viewMode === 'split'}
       <textarea
         bind:this={textareaRef}
+        id="note-content-input"
+        name="note-content"
         class="markdown-textarea selectable"
         class:full={viewMode === 'edit'}
         placeholder="Start writing in Markdown..."

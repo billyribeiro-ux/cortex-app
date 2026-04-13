@@ -41,6 +41,8 @@
   <div class="search-wrap">
     <Icon icon="ph:magnifying-glass" width={14} height={14} />
     <input
+      id="link-task-search"
+      name="link-task-search"
       class="search-input selectable"
       type="text"
       placeholder="Search tasks..."
