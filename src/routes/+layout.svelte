@@ -53,6 +53,7 @@
     display: flex;
     flex-direction: column;
     min-width: 0;
+    min-height: 0;
   }
 
   .content {
@@ -61,6 +62,7 @@
     padding: var(--space-8);
     display: flex;
     flex-direction: column;
+    min-height: 0;
   }
 
   .error-state {
