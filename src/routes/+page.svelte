@@ -6,10 +6,30 @@
   import { notesStore } from '$lib/stores/notes.svelte.js';
   import { promptsStore } from '$lib/stores/prompts.svelte.js';
   import { stacksStore } from '$lib/stores/stacks.svelte.js';
+  import { githubStore } from '$lib/stores/github.svelte.js';
+  import { terminalStore } from '$lib/stores/terminal.svelte.js';
+  import { vercelStore } from '$lib/stores/vercel.svelte.js';
+  import { pnpmStore } from '$lib/stores/pnpm.svelte.js';
+  import { claudeCodeStore } from '$lib/stores/claude-code.svelte.js';
+  import { supabaseStore } from '$lib/stores/supabase.svelte.js';
+  import { rustStore } from '$lib/stores/rust.svelte.js';
   import ProgressBar from '$lib/components/ui/ProgressBar.svelte';
   import Icon from '@iconify/svelte';
 
-  const isEmpty = $derived(appStore.notes.length === 0 && appStore.tasks.length === 0 && appStore.goals.length === 0 && appStore.prompts.length === 0 && appStore.stacks.length === 0);
+  const isEmpty = $derived(
+    appStore.notes.length === 0 &&
+    appStore.tasks.length === 0 &&
+    appStore.goals.length === 0 &&
+    appStore.prompts.length === 0 &&
+    appStore.stacks.length === 0 &&
+    appStore.github.length === 0 &&
+    appStore.terminal.length === 0 &&
+    appStore.vercel.length === 0 &&
+    appStore.pnpm.length === 0 &&
+    appStore.claudeCode.length === 0 &&
+    appStore.supabase.length === 0 &&
+    appStore.rust.length === 0
+  );
 
   const nearestGoal = $derived.by(() => {
     const active = appStore.goals.filter((g) => g.status === 'active' && g.targetDate !== null);
@@ -58,6 +78,34 @@
           <Icon icon="ph:stack" width={20} height={20} />
           Create a Stack
         </a>
+        <a href="/github" class="onboarding-btn" onclick={() => { githubStore.createGithub(); }}>
+          <Icon icon="simple-icons:github" width={20} height={20} />
+          Add a GitHub Item
+        </a>
+        <a href="/terminal" class="onboarding-btn" onclick={() => { terminalStore.createTerminal(); }}>
+          <Icon icon="ph:terminal-window" width={20} height={20} />
+          Add a Terminal Item
+        </a>
+        <a href="/vercel" class="onboarding-btn" onclick={() => { vercelStore.createVercel(); }}>
+          <Icon icon="simple-icons:vercel" width={20} height={20} />
+          Add a Vercel Item
+        </a>
+        <a href="/pnpm" class="onboarding-btn" onclick={() => { pnpmStore.createPnpm(); }}>
+          <Icon icon="simple-icons:pnpm" width={20} height={20} />
+          Add a PNPM Item
+        </a>
+        <a href="/claude-code" class="onboarding-btn" onclick={() => { claudeCodeStore.createClaudeCode(); }}>
+          <Icon icon="simple-icons:anthropic" width={20} height={20} />
+          Add a Claude Code Item
+        </a>
+        <a href="/supabase" class="onboarding-btn" onclick={() => { supabaseStore.createSupabase(); }}>
+          <Icon icon="simple-icons:supabase" width={20} height={20} />
+          Add a Supabase Item
+        </a>
+        <a href="/rust" class="onboarding-btn" onclick={() => { rustStore.createRust(); }}>
+          <Icon icon="simple-icons:rust" width={20} height={20} />
+          Add a Rust Item
+        </a>
       </div>
     </div>
   {:else}
@@ -97,6 +145,34 @@
       <a href="/stacks" class="stat-card">
         <span class="stat-value">{appStore.stackCount}</span>
         <span class="stat-label">Stacks</span>
+      </a>
+      <a href="/github" class="stat-card">
+        <span class="stat-value">{appStore.githubCount}</span>
+        <span class="stat-label">GitHub</span>
+      </a>
+      <a href="/terminal" class="stat-card">
+        <span class="stat-value">{appStore.terminalCount}</span>
+        <span class="stat-label">Terminal</span>
+      </a>
+      <a href="/vercel" class="stat-card">
+        <span class="stat-value">{appStore.vercelCount}</span>
+        <span class="stat-label">Vercel</span>
+      </a>
+      <a href="/pnpm" class="stat-card">
+        <span class="stat-value">{appStore.pnpmCount}</span>
+        <span class="stat-label">PNPM</span>
+      </a>
+      <a href="/claude-code" class="stat-card">
+        <span class="stat-value">{appStore.claudeCodeCount}</span>
+        <span class="stat-label">Claude Code</span>
+      </a>
+      <a href="/supabase" class="stat-card">
+        <span class="stat-value">{appStore.supabaseCount}</span>
+        <span class="stat-label">Supabase</span>
+      </a>
+      <a href="/rust" class="stat-card">
+        <span class="stat-value">{appStore.rustCount}</span>
+        <span class="stat-label">Rust</span>
       </a>
     </div>
 

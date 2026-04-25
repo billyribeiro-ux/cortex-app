@@ -1,4 +1,18 @@
-import type { Note, Task, Goal, Prompt, Stack, AppState } from '$lib/types/index.js';
+import type {
+  Note,
+  Task,
+  Goal,
+  Prompt,
+  Stack,
+  GithubItem,
+  TerminalItem,
+  VercelItem,
+  PnpmItem,
+  ClaudeCodeItem,
+  SupabaseItem,
+  RustItem,
+  AppState,
+} from '$lib/types/index.js';
 import { loadFromStorage, saveToStorage } from '$lib/utils/local-storage.js';
 
 function createAppStore() {
@@ -7,6 +21,13 @@ function createAppStore() {
   let goals = $state<Goal[]>(loadFromStorage('cortex:goals', []));
   let prompts = $state<Prompt[]>(loadFromStorage('cortex:prompts', []));
   let stacks = $state<Stack[]>(loadFromStorage('cortex:stacks', []));
+  let github = $state<GithubItem[]>(loadFromStorage('cortex:github', []));
+  let terminal = $state<TerminalItem[]>(loadFromStorage('cortex:terminal', []));
+  let vercel = $state<VercelItem[]>(loadFromStorage('cortex:vercel', []));
+  let pnpm = $state<PnpmItem[]>(loadFromStorage('cortex:pnpm', []));
+  let claudeCode = $state<ClaudeCodeItem[]>(loadFromStorage('cortex:claude-code', []));
+  let supabase = $state<SupabaseItem[]>(loadFromStorage('cortex:supabase', []));
+  let rust = $state<RustItem[]>(loadFromStorage('cortex:rust', []));
   let activeView = $state<AppState['activeView']>('dashboard');
   let sidebarCollapsed = $state<boolean>(loadFromStorage('cortex:sidebar-collapsed', false));
   let searchQuery = $state<string>('');
@@ -17,6 +38,13 @@ function createAppStore() {
   const activeGoalCount = $derived(goals.filter((g) => g.status === 'active').length);
   const promptCount = $derived(prompts.length);
   const stackCount = $derived(stacks.length);
+  const githubCount = $derived(github.length);
+  const terminalCount = $derived(terminal.length);
+  const vercelCount = $derived(vercel.length);
+  const pnpmCount = $derived(pnpm.length);
+  const claudeCodeCount = $derived(claudeCode.length);
+  const supabaseCount = $derived(supabase.length);
+  const rustCount = $derived(rust.length);
 
   return {
     // State (getters for reading, since we can't export reassigned $state)
@@ -25,6 +53,13 @@ function createAppStore() {
     get goals() { return goals; },
     get prompts() { return prompts; },
     get stacks() { return stacks; },
+    get github() { return github; },
+    get terminal() { return terminal; },
+    get vercel() { return vercel; },
+    get pnpm() { return pnpm; },
+    get claudeCode() { return claudeCode; },
+    get supabase() { return supabase; },
+    get rust() { return rust; },
     get activeView() { return activeView; },
     get sidebarCollapsed() { return sidebarCollapsed; },
     get searchQuery() { return searchQuery; },
@@ -35,6 +70,13 @@ function createAppStore() {
     get activeGoalCount() { return activeGoalCount; },
     get promptCount() { return promptCount; },
     get stackCount() { return stackCount; },
+    get githubCount() { return githubCount; },
+    get terminalCount() { return terminalCount; },
+    get vercelCount() { return vercelCount; },
+    get pnpmCount() { return pnpmCount; },
+    get claudeCodeCount() { return claudeCodeCount; },
+    get supabaseCount() { return supabaseCount; },
+    get rustCount() { return rustCount; },
 
     // Setters
     set activeView(view: AppState['activeView']) { activeView = view; },
@@ -137,6 +179,139 @@ function createAppStore() {
     deleteStack(id: string): void {
       stacks = stacks.filter((s) => s.id !== id);
       saveToStorage('cortex:stacks', stacks);
+    },
+
+    // GitHub mutations
+    addGithub(item: GithubItem): void {
+      github = [...github, item];
+      saveToStorage('cortex:github', github);
+    },
+    updateGithub(id: string, updates: Partial<GithubItem>): void {
+      const index = github.findIndex((x) => x.id === id);
+      if (index !== -1) {
+        github = github.map((x, i) =>
+          i === index ? { ...x, ...updates, updatedAt: new Date().toISOString() } : x
+        );
+        saveToStorage('cortex:github', github);
+      }
+    },
+    deleteGithub(id: string): void {
+      github = github.filter((x) => x.id !== id);
+      saveToStorage('cortex:github', github);
+    },
+
+    // Terminal mutations
+    addTerminal(item: TerminalItem): void {
+      terminal = [...terminal, item];
+      saveToStorage('cortex:terminal', terminal);
+    },
+    updateTerminal(id: string, updates: Partial<TerminalItem>): void {
+      const index = terminal.findIndex((x) => x.id === id);
+      if (index !== -1) {
+        terminal = terminal.map((x, i) =>
+          i === index ? { ...x, ...updates, updatedAt: new Date().toISOString() } : x
+        );
+        saveToStorage('cortex:terminal', terminal);
+      }
+    },
+    deleteTerminal(id: string): void {
+      terminal = terminal.filter((x) => x.id !== id);
+      saveToStorage('cortex:terminal', terminal);
+    },
+
+    // Vercel mutations
+    addVercel(item: VercelItem): void {
+      vercel = [...vercel, item];
+      saveToStorage('cortex:vercel', vercel);
+    },
+    updateVercel(id: string, updates: Partial<VercelItem>): void {
+      const index = vercel.findIndex((x) => x.id === id);
+      if (index !== -1) {
+        vercel = vercel.map((x, i) =>
+          i === index ? { ...x, ...updates, updatedAt: new Date().toISOString() } : x
+        );
+        saveToStorage('cortex:vercel', vercel);
+      }
+    },
+    deleteVercel(id: string): void {
+      vercel = vercel.filter((x) => x.id !== id);
+      saveToStorage('cortex:vercel', vercel);
+    },
+
+    // PNPM mutations
+    addPnpm(item: PnpmItem): void {
+      pnpm = [...pnpm, item];
+      saveToStorage('cortex:pnpm', pnpm);
+    },
+    updatePnpm(id: string, updates: Partial<PnpmItem>): void {
+      const index = pnpm.findIndex((x) => x.id === id);
+      if (index !== -1) {
+        pnpm = pnpm.map((x, i) =>
+          i === index ? { ...x, ...updates, updatedAt: new Date().toISOString() } : x
+        );
+        saveToStorage('cortex:pnpm', pnpm);
+      }
+    },
+    deletePnpm(id: string): void {
+      pnpm = pnpm.filter((x) => x.id !== id);
+      saveToStorage('cortex:pnpm', pnpm);
+    },
+
+    // Claude Code mutations
+    addClaudeCode(item: ClaudeCodeItem): void {
+      claudeCode = [...claudeCode, item];
+      saveToStorage('cortex:claude-code', claudeCode);
+    },
+    updateClaudeCode(id: string, updates: Partial<ClaudeCodeItem>): void {
+      const index = claudeCode.findIndex((x) => x.id === id);
+      if (index !== -1) {
+        claudeCode = claudeCode.map((x, i) =>
+          i === index ? { ...x, ...updates, updatedAt: new Date().toISOString() } : x
+        );
+        saveToStorage('cortex:claude-code', claudeCode);
+      }
+    },
+    deleteClaudeCode(id: string): void {
+      claudeCode = claudeCode.filter((x) => x.id !== id);
+      saveToStorage('cortex:claude-code', claudeCode);
+    },
+
+    // Supabase mutations
+    addSupabase(item: SupabaseItem): void {
+      supabase = [...supabase, item];
+      saveToStorage('cortex:supabase', supabase);
+    },
+    updateSupabase(id: string, updates: Partial<SupabaseItem>): void {
+      const index = supabase.findIndex((x) => x.id === id);
+      if (index !== -1) {
+        supabase = supabase.map((x, i) =>
+          i === index ? { ...x, ...updates, updatedAt: new Date().toISOString() } : x
+        );
+        saveToStorage('cortex:supabase', supabase);
+      }
+    },
+    deleteSupabase(id: string): void {
+      supabase = supabase.filter((x) => x.id !== id);
+      saveToStorage('cortex:supabase', supabase);
+    },
+
+    // Rust mutations
+    addRust(item: RustItem): void {
+      rust = [...rust, item];
+      saveToStorage('cortex:rust', rust);
+    },
+    updateRust(id: string, updates: Partial<RustItem>): void {
+      const index = rust.findIndex((x) => x.id === id);
+      if (index !== -1) {
+        rust = rust.map((x, i) =>
+          i === index ? { ...x, ...updates, updatedAt: new Date().toISOString() } : x
+        );
+        saveToStorage('cortex:rust', rust);
+      }
+    },
+    deleteRust(id: string): void {
+      rust = rust.filter((x) => x.id !== id);
+      saveToStorage('cortex:rust', rust);
     }
   };
 }

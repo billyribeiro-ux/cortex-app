@@ -110,7 +110,20 @@ export const GOAL_COLORS: string[] = [
   '#f0c45a', '#e05490', '#d63031', '#a29bfe', '#5aabf0',
 ];
 
-export type ActiveView = 'dashboard' | 'notes' | 'tasks' | 'goals' | 'prompts' | 'stacks';
+export type ActiveView =
+  | 'dashboard'
+  | 'notes'
+  | 'tasks'
+  | 'goals'
+  | 'prompts'
+  | 'stacks'
+  | 'github'
+  | 'terminal'
+  | 'vercel'
+  | 'pnpm'
+  | 'claude-code'
+  | 'supabase'
+  | 'rust';
 
 export interface AppState {
   activeView: ActiveView;
@@ -193,5 +206,145 @@ export interface StackFilter {
   tags: string[];
   favoritesOnly: boolean;
   sortField: StackSortField;
+  sortDirection: SortDirection;
+}
+
+export interface GithubItem {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+  isFavorite: boolean;
+}
+
+export type GithubSortField = 'updatedAt' | 'createdAt' | 'title';
+
+export interface GithubFilter {
+  searchQuery: string;
+  tags: string[];
+  favoritesOnly: boolean;
+  sortField: GithubSortField;
+  sortDirection: SortDirection;
+}
+
+export interface TerminalItem {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+  isFavorite: boolean;
+}
+
+export type TerminalSortField = 'updatedAt' | 'createdAt' | 'title';
+
+export interface TerminalFilter {
+  searchQuery: string;
+  tags: string[];
+  favoritesOnly: boolean;
+  sortField: TerminalSortField;
+  sortDirection: SortDirection;
+}
+
+export interface VercelItem {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+  isFavorite: boolean;
+}
+
+export type VercelSortField = 'updatedAt' | 'createdAt' | 'title';
+
+export interface VercelFilter {
+  searchQuery: string;
+  tags: string[];
+  favoritesOnly: boolean;
+  sortField: VercelSortField;
+  sortDirection: SortDirection;
+}
+
+export interface PnpmItem {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+  isFavorite: boolean;
+}
+
+export type PnpmSortField = 'updatedAt' | 'createdAt' | 'title';
+
+export interface PnpmFilter {
+  searchQuery: string;
+  tags: string[];
+  favoritesOnly: boolean;
+  sortField: PnpmSortField;
+  sortDirection: SortDirection;
+}
+
+export interface ClaudeCodeItem {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+  isFavorite: boolean;
+}
+
+export type ClaudeCodeSortField = 'updatedAt' | 'createdAt' | 'title';
+
+export interface ClaudeCodeFilter {
+  searchQuery: string;
+  tags: string[];
+  favoritesOnly: boolean;
+  sortField: ClaudeCodeSortField;
+  sortDirection: SortDirection;
+}
+
+export interface SupabaseItem {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+  isFavorite: boolean;
+}
+
+export type SupabaseSortField = 'updatedAt' | 'createdAt' | 'title';
+
+export interface SupabaseFilter {
+  searchQuery: string;
+  tags: string[];
+  favoritesOnly: boolean;
+  sortField: SupabaseSortField;
+  sortDirection: SortDirection;
+}
+
+export interface RustItem {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+  isFavorite: boolean;
+}
+
+export type RustSortField = 'updatedAt' | 'createdAt' | 'title';
+
+export interface RustFilter {
+  searchQuery: string;
+  tags: string[];
+  favoritesOnly: boolean;
+  sortField: RustSortField;
   sortDirection: SortDirection;
 }

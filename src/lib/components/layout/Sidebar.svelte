@@ -23,6 +23,13 @@
     { label: 'Goals', href: '/goals', icon: 'ph:target' },
     { label: 'Prompts', href: '/prompts', icon: 'ph:chat-text' },
     { label: 'Stacks', href: '/stacks', icon: 'ph:stack' },
+    { label: 'GitHub', href: '/github', icon: 'simple-icons:github' },
+    { label: 'Terminal', href: '/terminal', icon: 'ph:terminal-window' },
+    { label: 'Vercel', href: '/vercel', icon: 'simple-icons:vercel' },
+    { label: 'PNPM', href: '/pnpm', icon: 'simple-icons:pnpm' },
+    { label: 'Claude Code', href: '/claude-code', icon: 'simple-icons:anthropic' },
+    { label: 'Supabase', href: '/supabase', icon: 'simple-icons:supabase' },
+    { label: 'Rust', href: '/rust', icon: 'simple-icons:rust' },
   ];
 
   const counts = $derived([
@@ -32,6 +39,13 @@
     appStore.activeGoalCount,
     appStore.promptCount,
     appStore.stackCount,
+    appStore.githubCount,
+    appStore.terminalCount,
+    appStore.vercelCount,
+    appStore.pnpmCount,
+    appStore.claudeCodeCount,
+    appStore.supabaseCount,
+    appStore.rustCount,
   ]);
 
   function isActive(href: string): boolean {
