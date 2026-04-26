@@ -128,7 +128,7 @@
   </div>
 
   <!-- New Task button -->
-  <button class="new-task-btn" onclick={() => tasksStore.openCreateModal()}>
+  <button class="new-task-btn" onclick={() => tasksStore.openCreateModal()} aria-label="New Task">
     <Icon icon="ph:plus" width={14} height={14} />
     New Task
   </button>

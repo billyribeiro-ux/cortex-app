@@ -5,6 +5,7 @@
   import PNPMFilters from '$lib/components/pnpm/PNPMFilters.svelte';
   import PNPMEditor from '$lib/components/pnpm/PNPMEditor.svelte';
   import Icon from '@iconify/svelte';
+  import DetailToolbar from '$lib/components/ui/DetailToolbar.svelte';
   import { fly } from 'svelte/transition';
 
   let editorRef = $state<{ handleForceSave: () => void } | null>(null);
@@ -15,6 +16,10 @@
 
   function handleNew(): void {
     pnpmStore.createPnpm();
+  }
+
+  function handleBackToList(): void {
+    pnpmStore.setActivePnpm(null);
   }
 
   function handleKeydown(e: KeyboardEvent): void {
@@ -41,7 +46,7 @@
 <div class="pnpm-page">
   <PNPMFilters />
 
-  <div class="pnpm-body">
+  <div class="pnpm-body" class:detail-open={!!pnpmStore.activePnpm}>
     <aside class="list-panel">
       <div class="list-header">
         <button class="new-btn" onclick={handleNew}>
@@ -89,6 +94,11 @@
 
     <div class="editor-panel">
       {#if pnpmStore.activePnpm}
+        <DetailToolbar
+          label="PNPM"
+          title={pnpmStore.activePnpm.title}
+          onback={handleBackToList}
+        />
         <PNPMEditor bind:this={editorRef} item={pnpmStore.activePnpm} />
       {:else}
         <div class="no-item-state" in:fly={{ y: 20, duration: 400, delay: 150 }}>

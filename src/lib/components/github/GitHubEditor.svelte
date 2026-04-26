@@ -6,6 +6,9 @@
   import { renderMarkdown } from '$lib/utils/markdown.js';
   import { toastStore } from '$lib/stores/toast.svelte.js';
   import TagInput from '$lib/components/ui/TagInput.svelte';
+  import ConfirmDeleteModal from '$lib/components/ui/ConfirmDeleteModal.svelte';
+  import CopyContentModal from '$lib/components/ui/CopyContentModal.svelte';
+  import { copyText } from '$lib/utils/clipboard.js';
   import Icon from '@iconify/svelte';
 
   interface Props {
@@ -16,7 +19,8 @@
 
   type ViewMode = 'edit' | 'split' | 'preview';
   let viewMode = $state<ViewMode>('split');
-  let deleteConfirm = $state(false);
+  let showDeleteModal = $state(false);
+  let copyFallbackText = $state('');
   let savedFlash = $state(false);
 
   let debounceTimer = $state<ReturnType<typeof setTimeout> | null>(null);
@@ -101,25 +105,33 @@
     if (itemId) githubStore.toggleFavorite(itemId);
   }
 
-  function handleDuplicate(): void {
-    const itemId = githubStore.activeGithubId;
-    if (!itemId) return;
-    const newId = githubStore.duplicateGithub(itemId);
-    if (newId) githubStore.setActiveGithub(newId);
+  async function handleCopyContent(): Promise<void> {
+    const text = item.content.trim() ? item.content : item.title;
+    if (!text.trim()) {
+      toastStore.info('Nothing to copy');
+      return;
+    }
+
+    try {
+      await copyText(text);
+      toastStore.success('GitHub copied');
+    } catch {
+      copyFallbackText = text;
+      toastStore.info('Clipboard needs manual copy');
+    }
   }
 
   function handleDeleteClick(): void {
+    showDeleteModal = true;
+  }
+
+  function handleConfirmDelete(): void {
     const itemId = githubStore.activeGithubId;
     if (!itemId) return;
-    if (deleteConfirm) {
-      appStore.deleteGithub(itemId);
-      githubStore.setActiveGithub(null);
-      toastStore.success('GitHub deleted');
-      deleteConfirm = false;
-    } else {
-      deleteConfirm = true;
-      setTimeout(() => { deleteConfirm = false; }, 3000);
-    }
+    appStore.deleteGithub(itemId);
+    githubStore.setActiveGithub(null);
+    toastStore.success('GitHub deleted');
+    showDeleteModal = false;
   }
 
   // svelte-ignore non_reactive_update — saveTrigger is $state; this is correct
@@ -181,22 +193,22 @@
         <Icon icon={item.isFavorite ? 'ph:star-fill' : 'ph:star'} width={16} height={16} />
       </button>
 
-      <button class="action-btn" onclick={handleDuplicate} aria-label="Duplicate GitHub" title="Duplicate">
+      <button
+        class="action-btn"
+        onclick={handleCopyContent}
+        aria-label="Copy github content"
+        title="Copy content"
+      >
         <Icon icon="ph:copy" width={16} height={16} />
       </button>
 
       <button
         class="action-btn"
-        class:danger={deleteConfirm}
         onclick={handleDeleteClick}
-        aria-label={deleteConfirm ? 'Confirm delete' : 'Delete GitHub'}
-        title={deleteConfirm ? 'Click again to confirm' : 'Delete GitHub'}
+        aria-label="Delete github"
+        title="Delete github"
       >
-        {#if deleteConfirm}
-          <Icon icon="ph:warning" width={16} height={16} />
-        {:else}
-          <Icon icon="ph:trash" width={16} height={16} />
-        {/if}
+        <Icon icon="ph:trash" width={16} height={16} />
       </button>
     </div>
   </div>
@@ -231,6 +243,21 @@
     {/if}
   </div>
 </div>
+
+<ConfirmDeleteModal
+  open={showDeleteModal}
+  itemLabel="GitHub"
+  itemTitle={item.title}
+  oncancel={() => { showDeleteModal = false; }}
+  onconfirm={handleConfirmDelete}
+/>
+
+
+<CopyContentModal
+  open={copyFallbackText.length > 0}
+  text={copyFallbackText}
+  onclose={() => { copyFallbackText = ''; }}
+/>
 
 <style>
   .editor-wrap {
@@ -366,14 +393,6 @@
     color: var(--color-accent-warning);
   }
 
-  .action-btn.danger {
-    color: var(--color-accent-danger);
-    background: var(--color-accent-danger-muted);
-  }
-
-  .action-btn.danger:hover {
-    background: var(--color-accent-danger-muted);
-  }
 
   .action-btn.save-btn {
     color: var(--color-accent-success);

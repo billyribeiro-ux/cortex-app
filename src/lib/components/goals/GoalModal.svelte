@@ -7,6 +7,7 @@
   import { toastStore } from '$lib/stores/toast.svelte.js';
   import { formatDateForInput, parseDateInput } from '$lib/utils/time.js';
   import Modal from '$lib/components/ui/Modal.svelte';
+  import ConfirmDeleteModal from '$lib/components/ui/ConfirmDeleteModal.svelte';
   import Icon from '@iconify/svelte';
 
   const isEditing = $derived(goalsStore.editingGoal !== null);
@@ -23,7 +24,7 @@
   let manualProgress = $state(0);
   let milestones = $state<Milestone[]>([]);
   let newMilestoneTitle = $state('');
-  let deleteConfirm = $state(false);
+  let showDeleteModal = $state(false);
   let titleInputEl = $state<HTMLInputElement | null>(null);
   let titleError = $state('');
 
@@ -52,7 +53,7 @@
         manualProgress = 0;
         milestones = [];
       }
-      deleteConfirm = false;
+      showDeleteModal = false;
       titleError = '';
       setTimeout(() => titleInputEl?.focus(), 50);
     }
@@ -116,11 +117,10 @@
   }
 
   function handleDelete(): void {
-    if (!deleteConfirm) {
-      deleteConfirm = true;
-      setTimeout(() => { deleteConfirm = false; }, 3000);
-      return;
-    }
+    showDeleteModal = true;
+  }
+
+  function handleConfirmDelete(): void {
     const editingId = goalsStore.editingGoalId;
     if (editingId) {
       appStore.deleteGoal(editingId);
@@ -129,6 +129,7 @@
         goalsStore.setActiveGoal(null);
       }
     }
+    showDeleteModal = false;
     goalsStore.closeModal();
   }
 
@@ -326,11 +327,10 @@
       {#if isEditing}
         <button
           class="delete-btn"
-          class:confirm={deleteConfirm}
           onclick={handleDelete}
-          aria-label={deleteConfirm ? 'Click again to confirm delete' : 'Delete goal'}
+          aria-label="Delete goal"
         >
-          {deleteConfirm ? 'Click again to confirm' : 'Delete Goal'}
+          Delete Goal
         </button>
       {/if}
     </div>
@@ -342,6 +342,14 @@
     </div>
   {/snippet}
 </Modal>
+
+<ConfirmDeleteModal
+  open={showDeleteModal}
+  itemLabel="Goal"
+  itemTitle={title || goal?.title || 'Untitled goal'}
+  oncancel={() => { showDeleteModal = false; }}
+  onconfirm={handleConfirmDelete}
+/>
 
 <style>
   .form {
@@ -692,10 +700,6 @@
     background: var(--color-accent-danger-muted);
   }
 
-  .delete-btn.confirm {
-    font-weight: var(--weight-bold);
-    background: var(--color-accent-danger-muted);
-  }
 
   .cancel-btn {
     padding: var(--space-2) var(--space-4);

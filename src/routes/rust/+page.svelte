@@ -5,6 +5,7 @@
   import RustFilters from '$lib/components/rust/RustFilters.svelte';
   import RustEditor from '$lib/components/rust/RustEditor.svelte';
   import Icon from '@iconify/svelte';
+  import DetailToolbar from '$lib/components/ui/DetailToolbar.svelte';
   import { fly } from 'svelte/transition';
 
   let editorRef = $state<{ handleForceSave: () => void } | null>(null);
@@ -15,6 +16,10 @@
 
   function handleNew(): void {
     rustStore.createRust();
+  }
+
+  function handleBackToList(): void {
+    rustStore.setActiveRust(null);
   }
 
   function handleKeydown(e: KeyboardEvent): void {
@@ -41,7 +46,7 @@
 <div class="rust-page">
   <RustFilters />
 
-  <div class="rust-body">
+  <div class="rust-body" class:detail-open={!!rustStore.activeRust}>
     <aside class="list-panel">
       <div class="list-header">
         <button class="new-btn" onclick={handleNew}>
@@ -89,6 +94,11 @@
 
     <div class="editor-panel">
       {#if rustStore.activeRust}
+        <DetailToolbar
+          label="Rust"
+          title={rustStore.activeRust.title}
+          onback={handleBackToList}
+        />
         <RustEditor bind:this={editorRef} item={rustStore.activeRust} />
       {:else}
         <div class="no-item-state" in:fly={{ y: 20, duration: 400, delay: 150 }}>

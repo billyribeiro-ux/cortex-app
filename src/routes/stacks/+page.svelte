@@ -5,6 +5,7 @@
   import StackFilters from '$lib/components/stacks/StackFilters.svelte';
   import StackEditor from '$lib/components/stacks/StackEditor.svelte';
   import Icon from '@iconify/svelte';
+  import DetailToolbar from '$lib/components/ui/DetailToolbar.svelte';
   import { fly } from 'svelte/transition';
 
   let editorRef = $state<{ handleForceSave: () => void } | null>(null);
@@ -15,6 +16,10 @@
 
   function handleNewStack(): void {
     stacksStore.createStack();
+  }
+
+  function handleBackToList(): void {
+    stacksStore.setActiveStack(null);
   }
 
   function handleKeydown(e: KeyboardEvent): void {
@@ -41,7 +46,7 @@
 <div class="stacks-page">
   <StackFilters />
 
-  <div class="stacks-body">
+  <div class="stacks-body" class:detail-open={!!stacksStore.activeStack}>
     <!-- Left: Stack List -->
     <aside class="list-panel">
       <div class="list-header">
@@ -91,6 +96,11 @@
     <!-- Center: Stack Editor -->
     <div class="editor-panel">
       {#if stacksStore.activeStack}
+        <DetailToolbar
+          label="Stacks"
+          title={stacksStore.activeStack.title}
+          onback={handleBackToList}
+        />
         <StackEditor bind:this={editorRef} stack={stacksStore.activeStack} />
       {:else}
         <div class="no-item-state" in:fly={{ y: 20, duration: 400, delay: 150 }}>

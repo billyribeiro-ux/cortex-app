@@ -5,6 +5,7 @@
   import DevFilters from '$lib/components/dev/DevFilters.svelte';
   import DevEditor from '$lib/components/dev/DevEditor.svelte';
   import Icon from '@iconify/svelte';
+  import DetailToolbar from '$lib/components/ui/DetailToolbar.svelte';
   import { fly } from 'svelte/transition';
 
   let editorRef = $state<{ handleForceSave: () => void } | null>(null);
@@ -15,6 +16,10 @@
 
   function handleNew(): void {
     devStore.createDev();
+  }
+
+  function handleBackToList(): void {
+    devStore.setActiveDev(null);
   }
 
   function handleKeydown(e: KeyboardEvent): void {
@@ -41,7 +46,7 @@
 <div class="dev-page">
   <DevFilters />
 
-  <div class="dev-body">
+  <div class="dev-body" class:detail-open={!!devStore.activeDev}>
     <aside class="list-panel">
       <div class="list-header">
         <button class="new-btn" onclick={handleNew}>
@@ -89,6 +94,11 @@
 
     <div class="editor-panel">
       {#if devStore.activeDev}
+        <DetailToolbar
+          label="Dev"
+          title={devStore.activeDev.title}
+          onback={handleBackToList}
+        />
         <DevEditor bind:this={editorRef} item={devStore.activeDev} />
       {:else}
         <div class="no-item-state" in:fly={{ y: 20, duration: 400, delay: 150 }}>

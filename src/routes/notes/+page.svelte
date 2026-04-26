@@ -5,6 +5,7 @@
   import NoteFilters from '$lib/components/notes/NoteFilters.svelte';
   import NoteEditor from '$lib/components/notes/NoteEditor.svelte';
   import Icon from '@iconify/svelte';
+  import DetailToolbar from '$lib/components/ui/DetailToolbar.svelte';
   import { fly } from 'svelte/transition';
 
   let searchInputEl = $state<HTMLInputElement | null>(null);
@@ -17,6 +18,10 @@
 
   function handleNewNote(): void {
     notesStore.createNote();
+  }
+
+  function handleBackToList(): void {
+    notesStore.setActiveNote(null);
   }
 
   function handleKeydown(e: KeyboardEvent): void {
@@ -43,7 +48,7 @@
 <div class="notes-page">
   <NoteFilters />
 
-  <div class="notes-body">
+  <div class="notes-body" class:detail-open={!!notesStore.activeNote}>
     <!-- Left: Note List -->
     <aside class="note-list-panel">
       <div class="note-list-header">
@@ -93,6 +98,11 @@
     <!-- Center: Note Editor -->
     <div class="editor-panel">
       {#if notesStore.activeNote}
+        <DetailToolbar
+          label="Notes"
+          title={notesStore.activeNote.title}
+          onback={handleBackToList}
+        />
         <NoteEditor bind:this={editorRef} note={notesStore.activeNote} />
       {:else}
         <div class="no-note-state" in:fly={{ y: 20, duration: 400, delay: 150 }}>

@@ -6,6 +6,9 @@
   import { renderMarkdown } from '$lib/utils/markdown.js';
   import { toastStore } from '$lib/stores/toast.svelte.js';
   import TagInput from '$lib/components/ui/TagInput.svelte';
+  import ConfirmDeleteModal from '$lib/components/ui/ConfirmDeleteModal.svelte';
+  import CopyContentModal from '$lib/components/ui/CopyContentModal.svelte';
+  import { copyText } from '$lib/utils/clipboard.js';
   import Icon from '@iconify/svelte';
 
   interface Props {
@@ -16,7 +19,8 @@
 
   type ViewMode = 'edit' | 'split' | 'preview';
   let viewMode = $state<ViewMode>('split');
-  let deleteConfirm = $state(false);
+  let showDeleteModal = $state(false);
+  let copyFallbackText = $state('');
   let savedFlash = $state(false);
 
   let debounceTimer = $state<ReturnType<typeof setTimeout> | null>(null);
@@ -101,25 +105,33 @@
     if (itemId) vercelStore.toggleFavorite(itemId);
   }
 
-  function handleDuplicate(): void {
-    const itemId = vercelStore.activeVercelId;
-    if (!itemId) return;
-    const newId = vercelStore.duplicateVercel(itemId);
-    if (newId) vercelStore.setActiveVercel(newId);
+  async function handleCopyContent(): Promise<void> {
+    const text = item.content.trim() ? item.content : item.title;
+    if (!text.trim()) {
+      toastStore.info('Nothing to copy');
+      return;
+    }
+
+    try {
+      await copyText(text);
+      toastStore.success('Vercel copied');
+    } catch {
+      copyFallbackText = text;
+      toastStore.info('Clipboard needs manual copy');
+    }
   }
 
   function handleDeleteClick(): void {
+    showDeleteModal = true;
+  }
+
+  function handleConfirmDelete(): void {
     const itemId = vercelStore.activeVercelId;
     if (!itemId) return;
-    if (deleteConfirm) {
-      appStore.deleteVercel(itemId);
-      vercelStore.setActiveVercel(null);
-      toastStore.success('Vercel deleted');
-      deleteConfirm = false;
-    } else {
-      deleteConfirm = true;
-      setTimeout(() => { deleteConfirm = false; }, 3000);
-    }
+    appStore.deleteVercel(itemId);
+    vercelStore.setActiveVercel(null);
+    toastStore.success('Vercel deleted');
+    showDeleteModal = false;
   }
 
   // svelte-ignore non_reactive_update — saveTrigger is $state; this is correct
@@ -181,22 +193,22 @@
         <Icon icon={item.isFavorite ? 'ph:star-fill' : 'ph:star'} width={16} height={16} />
       </button>
 
-      <button class="action-btn" onclick={handleDuplicate} aria-label="Duplicate Vercel" title="Duplicate">
+      <button
+        class="action-btn"
+        onclick={handleCopyContent}
+        aria-label="Copy vercel content"
+        title="Copy content"
+      >
         <Icon icon="ph:copy" width={16} height={16} />
       </button>
 
       <button
         class="action-btn"
-        class:danger={deleteConfirm}
         onclick={handleDeleteClick}
-        aria-label={deleteConfirm ? 'Confirm delete' : 'Delete Vercel'}
-        title={deleteConfirm ? 'Click again to confirm' : 'Delete Vercel'}
+        aria-label="Delete vercel"
+        title="Delete vercel"
       >
-        {#if deleteConfirm}
-          <Icon icon="ph:warning" width={16} height={16} />
-        {:else}
-          <Icon icon="ph:trash" width={16} height={16} />
-        {/if}
+        <Icon icon="ph:trash" width={16} height={16} />
       </button>
     </div>
   </div>
@@ -231,6 +243,21 @@
     {/if}
   </div>
 </div>
+
+<ConfirmDeleteModal
+  open={showDeleteModal}
+  itemLabel="Vercel"
+  itemTitle={item.title}
+  oncancel={() => { showDeleteModal = false; }}
+  onconfirm={handleConfirmDelete}
+/>
+
+
+<CopyContentModal
+  open={copyFallbackText.length > 0}
+  text={copyFallbackText}
+  onclose={() => { copyFallbackText = ''; }}
+/>
 
 <style>
   .editor-wrap {
@@ -366,14 +393,6 @@
     color: var(--color-accent-warning);
   }
 
-  .action-btn.danger {
-    color: var(--color-accent-danger);
-    background: var(--color-accent-danger-muted);
-  }
-
-  .action-btn.danger:hover {
-    background: var(--color-accent-danger-muted);
-  }
 
   .action-btn.save-btn {
     color: var(--color-accent-success);

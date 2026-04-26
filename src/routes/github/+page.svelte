@@ -5,6 +5,7 @@
   import GitHubFilters from '$lib/components/github/GitHubFilters.svelte';
   import GitHubEditor from '$lib/components/github/GitHubEditor.svelte';
   import Icon from '@iconify/svelte';
+  import DetailToolbar from '$lib/components/ui/DetailToolbar.svelte';
   import { fly } from 'svelte/transition';
 
   let editorRef = $state<{ handleForceSave: () => void } | null>(null);
@@ -15,6 +16,10 @@
 
   function handleNew(): void {
     githubStore.createGithub();
+  }
+
+  function handleBackToList(): void {
+    githubStore.setActiveGithub(null);
   }
 
   function handleKeydown(e: KeyboardEvent): void {
@@ -41,7 +46,7 @@
 <div class="github-page">
   <GitHubFilters />
 
-  <div class="github-body">
+  <div class="github-body" class:detail-open={!!githubStore.activeGithub}>
     <aside class="list-panel">
       <div class="list-header">
         <button class="new-btn" onclick={handleNew}>
@@ -89,6 +94,11 @@
 
     <div class="editor-panel">
       {#if githubStore.activeGithub}
+        <DetailToolbar
+          label="GitHub"
+          title={githubStore.activeGithub.title}
+          onback={handleBackToList}
+        />
         <GitHubEditor bind:this={editorRef} item={githubStore.activeGithub} />
       {:else}
         <div class="no-item-state" in:fly={{ y: 20, duration: 400, delay: 150 }}>

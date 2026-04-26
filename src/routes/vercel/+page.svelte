@@ -5,6 +5,7 @@
   import VercelFilters from '$lib/components/vercel/VercelFilters.svelte';
   import VercelEditor from '$lib/components/vercel/VercelEditor.svelte';
   import Icon from '@iconify/svelte';
+  import DetailToolbar from '$lib/components/ui/DetailToolbar.svelte';
   import { fly } from 'svelte/transition';
 
   let editorRef = $state<{ handleForceSave: () => void } | null>(null);
@@ -15,6 +16,10 @@
 
   function handleNew(): void {
     vercelStore.createVercel();
+  }
+
+  function handleBackToList(): void {
+    vercelStore.setActiveVercel(null);
   }
 
   function handleKeydown(e: KeyboardEvent): void {
@@ -41,7 +46,7 @@
 <div class="vercel-page">
   <VercelFilters />
 
-  <div class="vercel-body">
+  <div class="vercel-body" class:detail-open={!!vercelStore.activeVercel}>
     <aside class="list-panel">
       <div class="list-header">
         <button class="new-btn" onclick={handleNew}>
@@ -89,6 +94,11 @@
 
     <div class="editor-panel">
       {#if vercelStore.activeVercel}
+        <DetailToolbar
+          label="Vercel"
+          title={vercelStore.activeVercel.title}
+          onback={handleBackToList}
+        />
         <VercelEditor bind:this={editorRef} item={vercelStore.activeVercel} />
       {:else}
         <div class="no-item-state" in:fly={{ y: 20, duration: 400, delay: 150 }}>

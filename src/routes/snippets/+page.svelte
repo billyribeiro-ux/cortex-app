@@ -5,6 +5,7 @@
   import SnippetFilters from '$lib/components/snippets/SnippetFilters.svelte';
   import SnippetEditor from '$lib/components/snippets/SnippetEditor.svelte';
   import Icon from '@iconify/svelte';
+  import DetailToolbar from '$lib/components/ui/DetailToolbar.svelte';
   import { fly } from 'svelte/transition';
 
   let editorRef = $state<{ handleForceSave: () => void } | null>(null);
@@ -15,6 +16,10 @@
 
   function handleNew(): void {
     snippetsStore.createSnippet();
+  }
+
+  function handleBackToList(): void {
+    snippetsStore.setActiveSnippet(null);
   }
 
   function handleKeydown(e: KeyboardEvent): void {
@@ -41,7 +46,7 @@
 <div class="snippets-page">
   <SnippetFilters />
 
-  <div class="snippets-body">
+  <div class="snippets-body" class:detail-open={!!snippetsStore.activeSnippet}>
     <aside class="list-panel">
       <div class="list-header">
         <button class="new-btn" onclick={handleNew}>
@@ -89,6 +94,11 @@
 
     <div class="editor-panel">
       {#if snippetsStore.activeSnippet}
+        <DetailToolbar
+          label="Snippets"
+          title={snippetsStore.activeSnippet.title}
+          onback={handleBackToList}
+        />
         <SnippetEditor bind:this={editorRef} item={snippetsStore.activeSnippet} />
       {:else}
         <div class="no-item-state" in:fly={{ y: 20, duration: 400, delay: 150 }}>

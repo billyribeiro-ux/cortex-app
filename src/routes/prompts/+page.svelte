@@ -5,6 +5,7 @@
   import PromptFilters from '$lib/components/prompts/PromptFilters.svelte';
   import PromptEditor from '$lib/components/prompts/PromptEditor.svelte';
   import Icon from '@iconify/svelte';
+  import DetailToolbar from '$lib/components/ui/DetailToolbar.svelte';
   import { fly } from 'svelte/transition';
 
   let editorRef = $state<{ handleForceSave: () => void } | null>(null);
@@ -15,6 +16,10 @@
 
   function handleNewPrompt(): void {
     promptsStore.createPrompt();
+  }
+
+  function handleBackToList(): void {
+    promptsStore.setActivePrompt(null);
   }
 
   function handleKeydown(e: KeyboardEvent): void {
@@ -41,7 +46,7 @@
 <div class="prompts-page">
   <PromptFilters />
 
-  <div class="prompts-body">
+  <div class="prompts-body" class:detail-open={!!promptsStore.activePrompt}>
     <!-- Left: Prompt List -->
     <aside class="list-panel">
       <div class="list-header">
@@ -91,6 +96,11 @@
     <!-- Center: Prompt Editor -->
     <div class="editor-panel">
       {#if promptsStore.activePrompt}
+        <DetailToolbar
+          label="Prompts"
+          title={promptsStore.activePrompt.title}
+          onback={handleBackToList}
+        />
         <PromptEditor bind:this={editorRef} prompt={promptsStore.activePrompt} />
       {:else}
         <div class="no-item-state" in:fly={{ y: 20, duration: 400, delay: 150 }}>

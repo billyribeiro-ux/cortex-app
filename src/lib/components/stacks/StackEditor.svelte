@@ -6,6 +6,9 @@
   import { renderMarkdown } from '$lib/utils/markdown.js';
   import { toastStore } from '$lib/stores/toast.svelte.js';
   import TagInput from '$lib/components/ui/TagInput.svelte';
+  import ConfirmDeleteModal from '$lib/components/ui/ConfirmDeleteModal.svelte';
+  import CopyContentModal from '$lib/components/ui/CopyContentModal.svelte';
+  import { copyText } from '$lib/utils/clipboard.js';
   import Icon from '@iconify/svelte';
 
   interface Props {
@@ -16,7 +19,8 @@
 
   type ViewMode = 'edit' | 'split' | 'preview';
   let viewMode = $state<ViewMode>('split');
-  let deleteConfirm = $state(false);
+  let showDeleteModal = $state(false);
+  let copyFallbackText = $state('');
   let savedFlash = $state(false);
 
   let debounceTimer = $state<ReturnType<typeof setTimeout> | null>(null);
@@ -101,25 +105,33 @@
     if (stackId) stacksStore.toggleFavorite(stackId);
   }
 
-  function handleDuplicate(): void {
-    const stackId = stacksStore.activeStackId;
-    if (!stackId) return;
-    const newId = stacksStore.duplicateStack(stackId);
-    if (newId) stacksStore.setActiveStack(newId);
+  async function handleCopyContent(): Promise<void> {
+    const text = stack.content.trim() ? stack.content : stack.title;
+    if (!text.trim()) {
+      toastStore.info('Nothing to copy');
+      return;
+    }
+
+    try {
+      await copyText(text);
+      toastStore.success('Stack copied');
+    } catch {
+      copyFallbackText = text;
+      toastStore.info('Clipboard needs manual copy');
+    }
   }
 
   function handleDeleteClick(): void {
+    showDeleteModal = true;
+  }
+
+  function handleConfirmDelete(): void {
     const stackId = stacksStore.activeStackId;
     if (!stackId) return;
-    if (deleteConfirm) {
-      appStore.deleteStack(stackId);
-      stacksStore.setActiveStack(null);
-      toastStore.success('Stack deleted');
-      deleteConfirm = false;
-    } else {
-      deleteConfirm = true;
-      setTimeout(() => { deleteConfirm = false; }, 3000);
-    }
+    appStore.deleteStack(stackId);
+    stacksStore.setActiveStack(null);
+    toastStore.success('Stack deleted');
+    showDeleteModal = false;
   }
 
   // svelte-ignore non_reactive_update — saveTrigger is $state; this is correct
@@ -182,22 +194,22 @@
         <Icon icon={stack.isFavorite ? 'ph:star-fill' : 'ph:star'} width={16} height={16} />
       </button>
 
-      <button class="action-btn" onclick={handleDuplicate} aria-label="Duplicate stack" title="Duplicate">
+      <button
+        class="action-btn"
+        onclick={handleCopyContent}
+        aria-label="Copy stack content"
+        title="Copy content"
+      >
         <Icon icon="ph:copy" width={16} height={16} />
       </button>
 
       <button
         class="action-btn"
-        class:danger={deleteConfirm}
         onclick={handleDeleteClick}
-        aria-label={deleteConfirm ? 'Confirm delete' : 'Delete stack'}
-        title={deleteConfirm ? 'Click again to confirm' : 'Delete stack'}
+        aria-label="Delete stack"
+        title="Delete stack"
       >
-        {#if deleteConfirm}
-          <Icon icon="ph:warning" width={16} height={16} />
-        {:else}
-          <Icon icon="ph:trash" width={16} height={16} />
-        {/if}
+        <Icon icon="ph:trash" width={16} height={16} />
       </button>
     </div>
   </div>
@@ -233,6 +245,21 @@
     {/if}
   </div>
 </div>
+
+<ConfirmDeleteModal
+  open={showDeleteModal}
+  itemLabel="Stack"
+  itemTitle={stack.title}
+  oncancel={() => { showDeleteModal = false; }}
+  onconfirm={handleConfirmDelete}
+/>
+
+
+<CopyContentModal
+  open={copyFallbackText.length > 0}
+  text={copyFallbackText}
+  onclose={() => { copyFallbackText = ''; }}
+/>
 
 <style>
   .editor-wrap {
@@ -368,14 +395,6 @@
     color: var(--color-accent-warning);
   }
 
-  .action-btn.danger {
-    color: var(--color-accent-danger);
-    background: var(--color-accent-danger-muted);
-  }
-
-  .action-btn.danger:hover {
-    background: var(--color-accent-danger-muted);
-  }
 
   .action-btn.save-btn {
     color: var(--color-accent-success);

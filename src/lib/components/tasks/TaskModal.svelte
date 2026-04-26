@@ -6,6 +6,7 @@
   import { toastStore } from '$lib/stores/toast.svelte.js';
   import { formatDateForInput, parseDateInput } from '$lib/utils/time.js';
   import Modal from '$lib/components/ui/Modal.svelte';
+  import ConfirmDeleteModal from '$lib/components/ui/ConfirmDeleteModal.svelte';
   import TagInput from '$lib/components/ui/TagInput.svelte';
   import Icon from '@iconify/svelte';
 
@@ -21,7 +22,7 @@
   let tags = $state<string[]>([]);
   let subtasks = $state<Subtask[]>([]);
   let newSubtaskTitle = $state('');
-  let deleteConfirm = $state(false);
+  let showDeleteModal = $state(false);
   let titleInputEl = $state<HTMLInputElement | null>(null);
   let titleError = $state('');
 
@@ -53,7 +54,7 @@
         tags = [];
         subtasks = [];
       }
-      deleteConfirm = false;
+      showDeleteModal = false;
       titleError = '';
     }
   });
@@ -89,16 +90,16 @@
   }
 
   function handleDelete(): void {
-    if (!deleteConfirm) {
-      deleteConfirm = true;
-      setTimeout(() => { deleteConfirm = false; }, 3000);
-      return;
-    }
+    showDeleteModal = true;
+  }
+
+  function handleConfirmDelete(): void {
     const editingId = tasksStore.editingTaskId;
     if (editingId) {
       appStore.deleteTask(editingId);
       toastStore.success('Task deleted');
     }
+    showDeleteModal = false;
     tasksStore.closeModal();
   }
 
@@ -303,11 +304,10 @@
       {#if isEditing}
         <button
           class="delete-btn"
-          class:confirm={deleteConfirm}
           onclick={handleDelete}
-          aria-label={deleteConfirm ? 'Click again to confirm delete' : 'Delete task'}
+          aria-label="Delete task"
         >
-          {deleteConfirm ? 'Click again to confirm' : 'Delete Task'}
+          Delete Task
         </button>
       {/if}
     </div>
@@ -320,11 +320,26 @@
   {/snippet}
 </Modal>
 
+<ConfirmDeleteModal
+  open={showDeleteModal}
+  itemLabel="Task"
+  itemTitle={title || task?.title || 'Untitled task'}
+  oncancel={() => { showDeleteModal = false; }}
+  onconfirm={handleConfirmDelete}
+/>
+
 <style>
   .form {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+
+  .field:nth-child(1),
+  .field:nth-child(2),
+  .field:nth-child(7),
+  .field:nth-child(8) {
+    grid-column: 1 / -1;
   }
 
   .field {
@@ -337,7 +352,7 @@
     font-size: var(--text-xs);
     font-weight: var(--weight-semibold);
     color: var(--color-text-secondary);
-    text-transform: uppercase;
+    text-transform: none;
     letter-spacing: var(--tracking-xs);
   }
 
@@ -346,9 +361,9 @@
   }
 
   .input, .textarea, .select {
-    height: 36px;
+    height: 38px;
     padding: 0 var(--space-3);
-    background: var(--color-bg-tertiary);
+    background: rgba(12, 18, 27, 0.68);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
     font-size: var(--text-sm);
@@ -377,7 +392,7 @@
     height: auto;
     padding: var(--space-2) var(--space-3);
     resize: vertical;
-    min-height: 80px;
+    min-height: 88px;
     font-family: inherit;
     line-height: 1.5;
   }
@@ -389,7 +404,11 @@
   .btn-row {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    gap: var(--space-1-5);
+    padding: var(--space-1);
+    background: rgba(255, 255, 255, 0.024);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
   }
 
   .status-btn, .priority-btn {
@@ -397,9 +416,9 @@
     align-items: center;
     gap: var(--space-1-5);
     padding: var(--space-1-5) var(--space-3);
-    min-height: 36px;
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-md);
+    min-height: 32px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
     font-size: var(--text-xs);
     font-weight: var(--weight-medium);
     color: var(--color-text-secondary);
@@ -422,7 +441,7 @@
     background: color-mix(in srgb, var(--btn-color) 12%, transparent);
     color: var(--btn-color);
     font-weight: var(--weight-semibold);
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--btn-color) 6%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
   .date-row {
@@ -455,7 +474,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-1-5);
-    background: var(--color-bg-tertiary);
+    background: rgba(12, 18, 27, 0.58);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
     padding: var(--space-3);
@@ -597,7 +616,7 @@
     font-weight: var(--weight-medium);
     color: var(--color-accent-danger);
     padding: var(--space-2) var(--space-3);
-    min-height: 44px;
+    min-height: 36px;
     border-radius: var(--radius-md);
     background: transparent;
     border: none;
@@ -613,14 +632,10 @@
     transform: scale(0.97);
   }
 
-  .delete-btn.confirm {
-    font-weight: var(--weight-bold);
-    background: var(--color-accent-danger-muted);
-  }
 
   .cancel-btn {
     padding: var(--space-2) var(--space-4);
-    min-height: 44px;
+    min-height: 36px;
     font-size: var(--text-sm);
     font-weight: var(--weight-medium);
     color: var(--color-text-secondary);
@@ -642,7 +657,7 @@
 
   .save-btn {
     padding: var(--space-2) var(--space-5);
-    min-height: 44px;
+    min-height: 36px;
     font-size: var(--text-sm);
     font-weight: var(--weight-semibold);
     background: var(--color-accent-primary);
@@ -667,5 +682,27 @@
     opacity: 0.35;
     cursor: not-allowed;
     box-shadow: none;
+  }
+
+  @media (max-width: 640px) {
+    .form {
+      grid-template-columns: 1fr;
+    }
+
+    .field:nth-child(1),
+    .field:nth-child(2),
+    .field:nth-child(7),
+    .field:nth-child(8) {
+      grid-column: auto;
+    }
+
+    .footer-right {
+      width: 100%;
+    }
+
+    .cancel-btn,
+    .save-btn {
+      flex: 1;
+    }
   }
 </style>
