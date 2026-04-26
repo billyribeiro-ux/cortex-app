@@ -17,6 +17,13 @@
     { label: 'Go to Goals', icon: 'ph:target', action: () => goto('/goals') },
     { label: 'Go to Prompts', icon: 'ph:chat-text', action: () => goto('/prompts') },
     { label: 'Go to Stacks', icon: 'ph:stack', action: () => goto('/stacks') },
+    { label: 'Go to GitHub', icon: 'simple-icons:github', action: () => goto('/github') },
+    { label: 'Go to Terminal', icon: 'ph:terminal-window', action: () => goto('/terminal') },
+    { label: 'Go to Vercel', icon: 'simple-icons:vercel', action: () => goto('/vercel') },
+    { label: 'Go to PNPM', icon: 'simple-icons:pnpm', action: () => goto('/pnpm') },
+    { label: 'Go to Snippets', icon: 'ph:brackets-curly', action: () => goto('/snippets') },
+    { label: 'Go to Supabase', icon: 'simple-icons:supabase', action: () => goto('/supabase') },
+    { label: 'Go to Rust', icon: 'simple-icons:rust', action: () => goto('/rust') },
     { label: 'Go to Dev', icon: 'ph:code', action: () => goto('/dev') },
     { label: 'Toggle Sidebar', icon: 'ph:sidebar', action: () => { appStore.sidebarCollapsed = !appStore.sidebarCollapsed; } },
   ];
@@ -47,9 +54,11 @@
         isOpen = false;
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
+        if (filteredCommands.length === 0) return;
         selectedIndex = (selectedIndex + 1) % filteredCommands.length;
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
+        if (filteredCommands.length === 0) return;
         selectedIndex = (selectedIndex - 1 + filteredCommands.length) % filteredCommands.length;
       } else if (e.key === 'Enter') {
         e.preventDefault();

@@ -121,7 +121,7 @@ export type ActiveView =
   | 'terminal'
   | 'vercel'
   | 'pnpm'
-  | 'claude-code'
+  | 'snippets'
   | 'supabase'
   | 'rust'
   | 'dev';
@@ -161,13 +161,6 @@ export interface NoteFilter {
   favoritesOnly: boolean;
   sortField: NoteSortField;
   sortDirection: SortDirection;
-}
-
-export interface ClaudeMessage {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: string;
 }
 
 export interface Prompt {
@@ -290,7 +283,7 @@ export interface PnpmFilter {
   sortDirection: SortDirection;
 }
 
-export interface ClaudeCodeItem {
+export interface SnippetItem {
   id: string;
   title: string;
   content: string;
@@ -300,13 +293,13 @@ export interface ClaudeCodeItem {
   isFavorite: boolean;
 }
 
-export type ClaudeCodeSortField = 'updatedAt' | 'createdAt' | 'title';
+export type SnippetSortField = 'updatedAt' | 'createdAt' | 'title';
 
-export interface ClaudeCodeFilter {
+export interface SnippetFilter {
   searchQuery: string;
   tags: string[];
   favoritesOnly: boolean;
-  sortField: ClaudeCodeSortField;
+  sortField: SnippetSortField;
   sortDirection: SortDirection;
 }
 

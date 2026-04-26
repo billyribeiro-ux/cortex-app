@@ -8,7 +8,7 @@ import type {
   TerminalItem,
   VercelItem,
   PnpmItem,
-  ClaudeCodeItem,
+  SnippetItem,
   SupabaseItem,
   RustItem,
   DevItem,
@@ -26,12 +26,13 @@ function createAppStore() {
   let terminal = $state<TerminalItem[]>(loadFromStorage('cortex:terminal', []));
   let vercel = $state<VercelItem[]>(loadFromStorage('cortex:vercel', []));
   let pnpm = $state<PnpmItem[]>(loadFromStorage('cortex:pnpm', []));
-  let claudeCode = $state<ClaudeCodeItem[]>(loadFromStorage('cortex:claude-code', []));
+  let snippets = $state<SnippetItem[]>(loadFromStorage('cortex:claude-code', []));
   let supabase = $state<SupabaseItem[]>(loadFromStorage('cortex:supabase', []));
   let rust = $state<RustItem[]>(loadFromStorage('cortex:rust', []));
   let dev = $state<DevItem[]>(loadFromStorage('cortex:dev', []));
   let activeView = $state<AppState['activeView']>('dashboard');
   let sidebarCollapsed = $state<boolean>(loadFromStorage('cortex:sidebar-collapsed', false));
+  let mobileSidebarOpen = $state<boolean>(false);
   let searchQuery = $state<string>('');
 
   // Derived counts
@@ -44,7 +45,7 @@ function createAppStore() {
   const terminalCount = $derived(terminal.length);
   const vercelCount = $derived(vercel.length);
   const pnpmCount = $derived(pnpm.length);
-  const claudeCodeCount = $derived(claudeCode.length);
+  const snippetsCount = $derived(snippets.length);
   const supabaseCount = $derived(supabase.length);
   const rustCount = $derived(rust.length);
   const devCount = $derived(dev.length);
@@ -60,12 +61,13 @@ function createAppStore() {
     get terminal() { return terminal; },
     get vercel() { return vercel; },
     get pnpm() { return pnpm; },
-    get claudeCode() { return claudeCode; },
+    get snippets() { return snippets; },
     get supabase() { return supabase; },
     get rust() { return rust; },
     get dev() { return dev; },
     get activeView() { return activeView; },
     get sidebarCollapsed() { return sidebarCollapsed; },
+    get mobileSidebarOpen() { return mobileSidebarOpen; },
     get searchQuery() { return searchQuery; },
 
     // Derived
@@ -78,7 +80,7 @@ function createAppStore() {
     get terminalCount() { return terminalCount; },
     get vercelCount() { return vercelCount; },
     get pnpmCount() { return pnpmCount; },
-    get claudeCodeCount() { return claudeCodeCount; },
+    get snippetsCount() { return snippetsCount; },
     get supabaseCount() { return supabaseCount; },
     get rustCount() { return rustCount; },
     get devCount() { return devCount; },
@@ -89,6 +91,7 @@ function createAppStore() {
       sidebarCollapsed = value;
       saveToStorage('cortex:sidebar-collapsed', sidebarCollapsed);
     },
+    set mobileSidebarOpen(value: boolean) { mobileSidebarOpen = value; },
     set searchQuery(value: string) { searchQuery = value; },
 
     // Note mutations
@@ -262,23 +265,23 @@ function createAppStore() {
       saveToStorage('cortex:pnpm', pnpm);
     },
 
-    // Claude Code mutations
-    addClaudeCode(item: ClaudeCodeItem): void {
-      claudeCode = [...claudeCode, item];
-      saveToStorage('cortex:claude-code', claudeCode);
+    // Snippets mutations
+    addSnippet(item: SnippetItem): void {
+      snippets = [...snippets, item];
+      saveToStorage('cortex:claude-code', snippets);
     },
-    updateClaudeCode(id: string, updates: Partial<ClaudeCodeItem>): void {
-      const index = claudeCode.findIndex((x) => x.id === id);
+    updateSnippet(id: string, updates: Partial<SnippetItem>): void {
+      const index = snippets.findIndex((x) => x.id === id);
       if (index !== -1) {
-        claudeCode = claudeCode.map((x, i) =>
+        snippets = snippets.map((x, i) =>
           i === index ? { ...x, ...updates, updatedAt: new Date().toISOString() } : x
         );
-        saveToStorage('cortex:claude-code', claudeCode);
+        saveToStorage('cortex:claude-code', snippets);
       }
     },
-    deleteClaudeCode(id: string): void {
-      claudeCode = claudeCode.filter((x) => x.id !== id);
-      saveToStorage('cortex:claude-code', claudeCode);
+    deleteSnippet(id: string): void {
+      snippets = snippets.filter((x) => x.id !== id);
+      saveToStorage('cortex:claude-code', snippets);
     },
 
     // Supabase mutations

@@ -16,8 +16,18 @@
   );
 </script>
 
-<div class="app-shell" class:transitions-ready={mounted} class:sidebar-open={!appStore.sidebarCollapsed} style:--current-sidebar-width={sidebarWidth}>
+<div
+  class="app-shell"
+  class:transitions-ready={mounted}
+  class:sidebar-open={appStore.mobileSidebarOpen}
+  style:--current-sidebar-width={sidebarWidth}
+>
   <Sidebar />
+  <button
+    class="sidebar-scrim"
+    aria-label="Close navigation"
+    onclick={() => { appStore.mobileSidebarOpen = false; }}
+  ></button>
   <div class="main-area">
     <TopBar />
     <main class="content">
@@ -43,6 +53,9 @@
     height: 100vh;
     width: 100vw;
     overflow: hidden;
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.035), transparent 34%),
+      linear-gradient(180deg, var(--color-bg-primary), var(--color-bg-canvas));
   }
 
   .app-shell :global(.sidebar) {
@@ -57,6 +70,12 @@
     flex: 1;
     min-width: 0;
     min-height: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .sidebar-scrim {
+    display: none;
   }
 
   .content {
@@ -72,10 +91,28 @@
     .app-shell :global(.sidebar) {
       position: fixed;
       z-index: var(--z-modal);
-      transform: translateX(calc(-1 * var(--current-sidebar-width)));
+      width: var(--sidebar-width);
+      transform: translateX(calc(-1 * var(--sidebar-width)));
+      box-shadow: var(--shadow-xl);
     }
     .app-shell.sidebar-open :global(.sidebar) {
       transform: translateX(0);
+    }
+    .sidebar-scrim {
+      position: fixed;
+      inset: 0;
+      z-index: calc(var(--z-modal) - 1);
+      display: block;
+      pointer-events: none;
+      opacity: 0;
+      background: rgba(2, 6, 12, 0.58);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: opacity var(--transition-normal);
+    }
+    .app-shell.sidebar-open .sidebar-scrim {
+      pointer-events: auto;
+      opacity: 1;
     }
     .content {
       padding: var(--space-4);

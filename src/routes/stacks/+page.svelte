@@ -327,9 +327,15 @@
   }
 
   @media (max-width: 640px) {
+    .stacks-body {
+      flex-direction: column;
+    }
+
     .list-panel {
-      width: 180px;
-      min-width: 160px;
+      width: 100%;
+      max-height: 42%;
+      border-right: none;
+      border-bottom: 1px solid var(--color-border-subtle);
     }
   }
 </style>

@@ -27,7 +27,7 @@
   role="button"
   tabindex="0"
   {onclick}
-  onkeydown={(e) => e.key === 'Enter' && onclick()}
+  onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onclick(); } }}
 >
   <div class="stack-item-header">
     <span class="stack-title">{stack.title || 'Untitled Stack'}</span>

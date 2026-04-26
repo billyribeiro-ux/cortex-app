@@ -6,47 +6,48 @@
      Base unit: 8px | Type scale: modular | Color: Google Dark
      ═══════════════════════════════════════════════════════════ */
 
-  /* ── Color Palette — Dark Mode (Google Workspace) ── */
-  --color-bg-primary: #1e1f22;
-  --color-bg-secondary: rgba(41, 42, 45, 0.7);
-  --color-bg-tertiary: rgba(48, 49, 52, 0.7);
-  --color-bg-elevated: rgba(60, 64, 67, 0.85);
-  --color-bg-hover: rgba(255, 255, 255, 0.08);
-  --color-bg-active: rgba(255, 255, 255, 0.12);
-  --color-bg-wash: rgba(255, 255, 255, 0.04);
+  /* ── Color Palette — Cortex dark glass ── */
+  --color-bg-canvas: #080b10;
+  --color-bg-primary: #0c1118;
+  --color-bg-secondary: rgba(16, 22, 31, 0.74);
+  --color-bg-tertiary: rgba(22, 30, 42, 0.72);
+  --color-bg-elevated: rgba(31, 40, 54, 0.86);
+  --color-bg-hover: rgba(176, 201, 255, 0.10);
+  --color-bg-active: rgba(176, 201, 255, 0.15);
+  --color-bg-wash: rgba(255, 255, 255, 0.045);
 
   /* ── Glassmorphism ── */
-  --glass-blur: blur(16px);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.05);
+  --glass-blur: blur(22px) saturate(132%);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.075);
 
   /* ── Borders ── */
-  --color-border-subtle: rgba(255, 255, 255, 0.08);
-  --color-border-default: rgba(255, 255, 255, 0.12);
-  --color-border-strong: rgba(255, 255, 255, 0.2);
-  --color-border-focus: #8ab4f8;
+  --color-border-subtle: rgba(194, 211, 255, 0.085);
+  --color-border-default: rgba(204, 219, 255, 0.14);
+  --color-border-strong: rgba(218, 229, 255, 0.24);
+  --color-border-focus: #8fb8ff;
 
   /* ── Text (WCAG 2.2 AA/AAA compliant) ── */
-  --color-text-primary: #e8eaed;
-  --color-text-secondary: #9aa0a6;
-  --color-text-tertiary: #80868b;
-  --color-text-quaternary: #5f6368;
-  --color-text-inverse: #202124;
+  --color-text-primary: #eef4ff;
+  --color-text-secondary: #b7c3d7;
+  --color-text-tertiary: #8290a6;
+  --color-text-quaternary: #617086;
+  --color-text-inverse: #09111f;
 
   /* ── Accent (Google Blue 300) ── */
-  --color-accent-primary: #8ab4f8;
-  --color-accent-primary-hover: #aecbfa;
-  --color-accent-primary-muted: rgba(138, 180, 248, 0.12);
-  --color-accent-primary-wash: rgba(138, 180, 248, 0.04);
+  --color-accent-primary: #8fb8ff;
+  --color-accent-primary-hover: #b4ccff;
+  --color-accent-primary-muted: rgba(143, 184, 255, 0.14);
+  --color-accent-primary-wash: rgba(143, 184, 255, 0.055);
 
   /* ── Semantic Colors (Google MD3 Dark) ── */
-  --color-accent-secondary: #81c995;
-  --color-accent-secondary-muted: rgba(129, 201, 149, 0.12);
-  --color-accent-warning: #fdd663;
-  --color-accent-warning-muted: rgba(253, 214, 99, 0.12);
-  --color-accent-danger: #f28b82;
-  --color-accent-danger-muted: rgba(242, 139, 130, 0.12);
-  --color-accent-success: #81c995;
-  --color-accent-success-muted: rgba(129, 201, 149, 0.12);
+  --color-accent-secondary: #7ddac6;
+  --color-accent-secondary-muted: rgba(125, 218, 198, 0.13);
+  --color-accent-warning: #ffd166;
+  --color-accent-warning-muted: rgba(255, 209, 102, 0.13);
+  --color-accent-danger: #ff8d7a;
+  --color-accent-danger-muted: rgba(255, 141, 122, 0.13);
+  --color-accent-success: #8de3a6;
+  --color-accent-success-muted: rgba(141, 227, 166, 0.13);
 
   /* ═══ Typography ═══ */
   --font-sans: "Roboto", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -78,13 +79,13 @@
   --leading-3xl: 1.2;
 
   /* Letter spacing per scale (optical) */
-  --tracking-xs: 0.02em;
-  --tracking-sm: 0.01em;
+  --tracking-xs: 0;
+  --tracking-sm: 0;
   --tracking-base: 0;
-  --tracking-lg: -0.006em;
-  --tracking-xl: -0.014em;
-  --tracking-2xl: -0.02em;
-  --tracking-3xl: -0.025em;
+  --tracking-lg: 0;
+  --tracking-xl: 0;
+  --tracking-2xl: 0;
+  --tracking-3xl: 0;
 
   /* Font weights */
   --weight-normal: 400;
@@ -126,26 +127,26 @@
   --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 20px;
+  --radius-lg: 8px;
+  --radius-xl: 8px;
+  --radius-2xl: 8px;
   --radius-full: 9999px;
 
   /* ═══ Shadows (directional light from top-left, layered) ═══ */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.20),
-    0 0px 1px rgba(0, 0, 0, 0.14);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.24),
-    0 1px 2px rgba(0, 0, 0, 0.18);
-  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.28),
-    0 1px 3px rgba(0, 0, 0, 0.20);
-  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.36),
-    0 2px 6px rgba(0, 0, 0, 0.22);
-  --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.44),
-    0 4px 12px rgba(0, 0, 0, 0.28);
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.28),
+    0 0 1px rgba(199, 219, 255, 0.08);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.26),
+    0 1px 1px rgba(199, 219, 255, 0.05);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.30),
+    0 1px 1px rgba(199, 219, 255, 0.06);
+  --shadow-lg: 0 14px 38px rgba(0, 0, 0, 0.38),
+    0 1px 1px rgba(199, 219, 255, 0.08);
+  --shadow-xl: 0 24px 70px rgba(0, 0, 0, 0.48),
+    0 1px 1px rgba(199, 219, 255, 0.10);
 
   /* Glow for focus/accent */
-  --shadow-glow: 0 0 0 3px rgba(120, 108, 245, 0.25);
-  --shadow-glow-danger: 0 0 0 3px rgba(232, 97, 77, 0.25);
+  --shadow-glow: 0 0 0 3px rgba(143, 184, 255, 0.22);
+  --shadow-glow-danger: 0 0 0 3px rgba(255, 141, 122, 0.22);
 
   /* ═══ Motion (spring-inspired curves, purposeful) ═══ */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -216,7 +217,9 @@ html,
 body {
   height: 100%;
   overflow: hidden;
-  background-color: var(--color-bg-primary);
+  background:
+    linear-gradient(145deg, rgba(80, 111, 164, 0.10), transparent 32%),
+    linear-gradient(180deg, var(--color-bg-primary), var(--color-bg-canvas));
   color: var(--color-text-primary);
   font-family: var(--font-sans);
   font-size: var(--text-base);

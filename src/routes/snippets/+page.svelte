@@ -1,20 +1,20 @@
 <script lang="ts">
   import { appStore } from '$lib/stores/app.svelte.js';
-  import { claudeCodeStore } from '$lib/stores/claude-code.svelte.js';
-  import ClaudeCodeListItem from '$lib/components/claude-code/ClaudeCodeListItem.svelte';
-  import ClaudeCodeFilters from '$lib/components/claude-code/ClaudeCodeFilters.svelte';
-  import ClaudeCodeEditor from '$lib/components/claude-code/ClaudeCodeEditor.svelte';
+  import { snippetsStore } from '$lib/stores/snippets.svelte.js';
+  import SnippetListItem from '$lib/components/snippets/SnippetListItem.svelte';
+  import SnippetFilters from '$lib/components/snippets/SnippetFilters.svelte';
+  import SnippetEditor from '$lib/components/snippets/SnippetEditor.svelte';
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 
   let editorRef = $state<{ handleForceSave: () => void } | null>(null);
 
   $effect(() => {
-    claudeCodeStore.setSearchQuery(appStore.searchQuery);
+    snippetsStore.setSearchQuery(appStore.searchQuery);
   });
 
   function handleNew(): void {
-    claudeCodeStore.createClaudeCode();
+    snippetsStore.createSnippet();
   }
 
   function handleKeydown(e: KeyboardEvent): void {
@@ -31,37 +31,37 @@
       e.preventDefault();
       editorRef?.handleForceSave();
     } else if (e.key === 'Escape') {
-      claudeCodeStore.setActiveClaudeCode(null);
+      snippetsStore.setActiveSnippet(null);
     }
   }
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="claude-code-page">
-  <ClaudeCodeFilters />
+<div class="snippets-page">
+  <SnippetFilters />
 
-  <div class="claude-code-body">
+  <div class="snippets-body">
     <aside class="list-panel">
       <div class="list-header">
         <button class="new-btn" onclick={handleNew}>
           <Icon icon="ph:plus" width={16} height={16} />
-          New Claude Code
+          New Snippet
         </button>
       </div>
 
       <div class="list-scroll">
-        {#if appStore.claudeCode.length === 0}
+        {#if appStore.snippets.length === 0}
           <div class="empty-state" in:fly={{ y: 20, duration: 400, delay: 100 }}>
             <div class="empty-icon-wrap">
-              <Icon icon="simple-icons:anthropic" width={32} height={32} />
+              <Icon icon="ph:brackets-curly" width={32} height={32} />
             </div>
             <div class="empty-text">
               <h3>No items yet</h3>
               <p class="empty-sub">Create your first entry!</p>
             </div>
           </div>
-        {:else if claudeCodeStore.filteredClaudeCode.length === 0}
+        {:else if snippetsStore.filteredSnippet.length === 0}
           <div class="empty-state" in:fly={{ y: 20, duration: 400 }}>
             <div class="empty-icon-wrap">
               <Icon icon="ph:funnel" width={32} height={32} />
@@ -70,17 +70,17 @@
               <h3>No items found</h3>
               <p class="empty-sub">Try adjusting your filters.</p>
             </div>
-            <button class="clear-filters-btn" onclick={() => claudeCodeStore.clearFilters()}>
+            <button class="clear-filters-btn" onclick={() => snippetsStore.clearFilters()}>
               Clear filters
             </button>
           </div>
         {:else}
-          {#each claudeCodeStore.filteredClaudeCode as item (item.id)}
-            <ClaudeCodeListItem
+          {#each snippetsStore.filteredSnippet as item (item.id)}
+            <SnippetListItem
               {item}
-              isActive={claudeCodeStore.activeClaudeCodeId === item.id}
-              onclick={() => claudeCodeStore.setActiveClaudeCode(item.id)}
-              onToggleFavorite={() => claudeCodeStore.toggleFavorite(item.id)}
+              isActive={snippetsStore.activeSnippetId === item.id}
+              onclick={() => snippetsStore.setActiveSnippet(item.id)}
+              onToggleFavorite={() => snippetsStore.toggleFavorite(item.id)}
             />
           {/each}
         {/if}
@@ -88,12 +88,12 @@
     </aside>
 
     <div class="editor-panel">
-      {#if claudeCodeStore.activeClaudeCode}
-        <ClaudeCodeEditor bind:this={editorRef} item={claudeCodeStore.activeClaudeCode} />
+      {#if snippetsStore.activeSnippet}
+        <SnippetEditor bind:this={editorRef} item={snippetsStore.activeSnippet} />
       {:else}
         <div class="no-item-state" in:fly={{ y: 20, duration: 400, delay: 150 }}>
           <div class="empty-icon-wrap-large">
-            <Icon icon="simple-icons:anthropic" width={48} height={48} />
+            <Icon icon="ph:brackets-curly" width={48} height={48} />
           </div>
           <div class="empty-text">
             <h3>Select an item</h3>
@@ -101,7 +101,7 @@
           </div>
           <button class="new-btn-center" onclick={handleNew}>
             <Icon icon="ph:plus" width={16} height={16} />
-            New Claude Code
+            New Snippet
           </button>
         </div>
       {/if}
@@ -110,7 +110,7 @@
 </div>
 
 <style>
-  .claude-code-page {
+  .snippets-page {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -118,7 +118,7 @@
     margin: calc(-1 * var(--space-8));
   }
 
-  .claude-code-body {
+  .snippets-body {
     display: flex;
     flex: 1;
     overflow: hidden;
@@ -325,9 +325,15 @@
   }
 
   @media (max-width: 640px) {
+    .snippets-body {
+      flex-direction: column;
+    }
+
     .list-panel {
-      width: 180px;
-      min-width: 160px;
+      width: 100%;
+      max-height: 42%;
+      border-right: none;
+      border-bottom: 1px solid var(--color-border-subtle);
     }
   }
 </style>

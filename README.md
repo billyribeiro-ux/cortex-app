@@ -1,7 +1,12 @@
-# Tauri + SvelteKit + TypeScript
+# Cortex
 
-This template should help get you started developing with Tauri, SvelteKit and TypeScript in Vite.
+Cortex is a local-first workspace for notes, tasks, goals, prompts, snippets, and technical reference. It runs as a SvelteKit web app and as a Tauri desktop app.
 
-## Recommended IDE Setup
+## Development
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+- `pnpm dev` starts the web app on port 1420.
+- `pnpm check` runs Svelte and TypeScript diagnostics.
+- `pnpm build` creates the static web build used by Tauri.
+- `pnpm tauri:build` creates the desktop bundle.
+
+Existing data stays in browser/Tauri webview storage and can be exported from the sidebar.

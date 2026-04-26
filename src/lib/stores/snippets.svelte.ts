@@ -1,11 +1,11 @@
-import type { ClaudeCodeItem, ClaudeCodeFilter } from '$lib/types/index.js';
+import type { SnippetItem, SnippetFilter } from '$lib/types/index.js';
 import { appStore } from './app.svelte.js';
 
-function createClaudeCodeStore() {
-  let activeClaudeCodeId = $state<string | null>(null);
+function createSnippetStore() {
+  let activeSnippetId = $state<string | null>(null);
   let isEditing = $state<boolean>(false);
 
-  let filter = $state<ClaudeCodeFilter>({
+  let filter = $state<SnippetFilter>({
     searchQuery: '',
     tags: [],
     favoritesOnly: false,
@@ -13,12 +13,12 @@ function createClaudeCodeStore() {
     sortDirection: 'desc',
   });
 
-  const activeClaudeCode = $derived<ClaudeCodeItem | null>(
-    activeClaudeCodeId ? (appStore.claudeCode.find((x) => x.id === activeClaudeCodeId) ?? null) : null
+  const activeSnippet = $derived<SnippetItem | null>(
+    activeSnippetId ? (appStore.snippets.find((x) => x.id === activeSnippetId) ?? null) : null
   );
 
-  const filteredClaudeCode = $derived.by<ClaudeCodeItem[]>(() => {
-    let result = appStore.claudeCode;
+  const filteredSnippet = $derived.by<SnippetItem[]>(() => {
+    let result = appStore.snippets;
 
     if (filter.searchQuery.trim()) {
       const query = filter.searchQuery.toLowerCase();
@@ -56,7 +56,7 @@ function createClaudeCodeStore() {
 
   const allTags = $derived.by<string[]>(() => {
     const tagSet = new Set<string>();
-    for (const item of appStore.claudeCode) {
+    for (const item of appStore.snippets) {
       for (const tag of (item.tags ?? [])) {
         tagSet.add(tag);
       }
@@ -65,15 +65,15 @@ function createClaudeCodeStore() {
   });
 
   return {
-    get activeClaudeCodeId() { return activeClaudeCodeId; },
-    get activeClaudeCode() { return activeClaudeCode; },
+    get activeSnippetId() { return activeSnippetId; },
+    get activeSnippet() { return activeSnippet; },
     get isEditing() { return isEditing; },
     get filter() { return filter; },
-    get filteredClaudeCode() { return filteredClaudeCode; },
+    get filteredSnippet() { return filteredSnippet; },
     get allTags() { return allTags; },
 
-    setActiveClaudeCode(id: string | null): void {
-      activeClaudeCodeId = id;
+    setActiveSnippet(id: string | null): void {
+      activeSnippetId = id;
       isEditing = id !== null;
     },
 
@@ -94,7 +94,7 @@ function createClaudeCodeStore() {
       filter.favoritesOnly = value;
     },
 
-    setSortField(field: ClaudeCodeFilter['sortField']): void {
+    setSortField(field: SnippetFilter['sortField']): void {
       filter.sortField = field;
     },
 
@@ -114,48 +114,48 @@ function createClaudeCodeStore() {
       filter.tags = [];
     },
 
-    createClaudeCode(): string {
+    createSnippet(): string {
       const now = new Date().toISOString();
       const id = crypto.randomUUID();
-      const newItem: ClaudeCodeItem = {
+      const newItem: SnippetItem = {
         id,
-        title: 'Untitled Claude Code',
+        title: 'Untitled Snippet',
         content: '',
         tags: [],
         createdAt: now,
         updatedAt: now,
         isFavorite: false,
       };
-      appStore.addClaudeCode(newItem);
-      activeClaudeCodeId = id;
+      appStore.addSnippet(newItem);
+      activeSnippetId = id;
       isEditing = true;
       return id;
     },
 
     toggleFavorite(id: string): void {
-      const item = appStore.claudeCode.find((x) => x.id === id);
+      const item = appStore.snippets.find((x) => x.id === id);
       if (item) {
-        appStore.updateClaudeCode(id, { isFavorite: !item.isFavorite });
+        appStore.updateSnippet(id, { isFavorite: !item.isFavorite });
       }
     },
 
-    duplicateClaudeCode(id: string): string | null {
-      const source = appStore.claudeCode.find((x) => x.id === id);
+    duplicateSnippet(id: string): string | null {
+      const source = appStore.snippets.find((x) => x.id === id);
       if (!source) return null;
 
       const now = new Date().toISOString();
       const newId = crypto.randomUUID();
-      const duplicate: ClaudeCodeItem = {
+      const duplicate: SnippetItem = {
         ...structuredClone($state.snapshot(source)),
         id: newId,
         title: `${source.title} (copy)`,
         createdAt: now,
         updatedAt: now,
       };
-      appStore.addClaudeCode(duplicate);
+      appStore.addSnippet(duplicate);
       return newId;
     },
   };
 }
 
-export const claudeCodeStore = createClaudeCodeStore();
+export const snippetsStore = createSnippetStore();

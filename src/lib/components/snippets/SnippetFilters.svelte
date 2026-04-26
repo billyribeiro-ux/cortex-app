@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { claudeCodeStore } from '$lib/stores/claude-code.svelte.js';
+  import { snippetsStore } from '$lib/stores/snippets.svelte.js';
   import Icon from '@iconify/svelte';
 
   const sortLabels: Record<string, string> = {
@@ -15,37 +15,37 @@
       <Icon icon="ph:magnifying-glass" width={14} height={14} />
     </span>
     <input
-      id="claude-code-search"
-      name="claude-code-search"
+      id="snippets-search"
+      name="snippets-search"
       class="search-input selectable"
       type="text"
-      placeholder="Search Claude Code..."
-      value={claudeCodeStore.filter.searchQuery}
-      oninput={(e) => claudeCodeStore.setSearchQuery((e.currentTarget as HTMLInputElement).value)}
+      placeholder="Search snippets..."
+      value={snippetsStore.filter.searchQuery}
+      oninput={(e) => snippetsStore.setSearchQuery((e.currentTarget as HTMLInputElement).value)}
     />
-    {#if claudeCodeStore.filter.searchQuery}
-      <button class="clear-btn" onclick={() => claudeCodeStore.setSearchQuery('')} aria-label="Clear search">
+    {#if snippetsStore.filter.searchQuery}
+      <button class="clear-btn" onclick={() => snippetsStore.setSearchQuery('')} aria-label="Clear search">
         <Icon icon="ph:x" width={12} height={12} />
       </button>
     {/if}
   </div>
 
-  {#if claudeCodeStore.allTags.length > 0}
+  {#if snippetsStore.allTags.length > 0}
     <div class="tag-filters">
-      {#each claudeCodeStore.allTags as tag (tag)}
+      {#each snippetsStore.allTags as tag (tag)}
         <button
           class="tag-pill"
-          class:active={claudeCodeStore.filter.tags.includes(tag)}
-          onclick={() => claudeCodeStore.toggleTagFilter(tag)}
-          title={claudeCodeStore.filter.tags.includes(tag) ? `Remove filter: ${tag}` : `Filter by: ${tag}`}
+          class:active={snippetsStore.filter.tags.includes(tag)}
+          onclick={() => snippetsStore.toggleTagFilter(tag)}
+          title={snippetsStore.filter.tags.includes(tag) ? `Remove filter: ${tag}` : `Filter by: ${tag}`}
         >
           {tag}
         </button>
       {/each}
-      {#if claudeCodeStore.filter.tags.length > 0}
+      {#if snippetsStore.filter.tags.length > 0}
         <button
           class="tag-pill clear-tags"
-          onclick={() => claudeCodeStore.clearTagFilters()}
+          onclick={() => snippetsStore.clearTagFilters()}
           title="Clear tag filters"
         >
           Clear tags
@@ -56,21 +56,21 @@
 
   <button
     class="fav-toggle"
-    class:active={claudeCodeStore.filter.favoritesOnly}
-    onclick={() => claudeCodeStore.setFavoritesOnly(!claudeCodeStore.filter.favoritesOnly)}
+    class:active={snippetsStore.filter.favoritesOnly}
+    onclick={() => snippetsStore.setFavoritesOnly(!snippetsStore.filter.favoritesOnly)}
     aria-label="Show favorites only"
     title="Favorites only"
   >
-    <Icon icon={claudeCodeStore.filter.favoritesOnly ? 'ph:star-fill' : 'ph:star'} width={16} height={16} />
+    <Icon icon={snippetsStore.filter.favoritesOnly ? 'ph:star-fill' : 'ph:star'} width={16} height={16} />
   </button>
 
   <div class="sort-group">
     <select
-      id="claude-code-sort-field"
-      name="claude-code-sort-field"
+      id="snippets-sort-field"
+      name="snippets-sort-field"
       class="sort-select"
-      value={claudeCodeStore.filter.sortField}
-      onchange={(e) => claudeCodeStore.setSortField((e.currentTarget as HTMLSelectElement).value as 'updatedAt' | 'createdAt' | 'title')}
+      value={snippetsStore.filter.sortField}
+      onchange={(e) => snippetsStore.setSortField((e.currentTarget as HTMLSelectElement).value as 'updatedAt' | 'createdAt' | 'title')}
     >
       {#each Object.entries(sortLabels) as [value, label] (value)}
         <option {value}>{label}</option>
@@ -78,12 +78,12 @@
     </select>
     <button
       class="sort-dir-btn"
-      onclick={() => claudeCodeStore.toggleSortDirection()}
+      onclick={() => snippetsStore.toggleSortDirection()}
       aria-label="Toggle sort direction"
-      title={claudeCodeStore.filter.sortDirection === 'desc' ? 'Descending' : 'Ascending'}
+      title={snippetsStore.filter.sortDirection === 'desc' ? 'Descending' : 'Ascending'}
     >
       <Icon
-        icon={claudeCodeStore.filter.sortDirection === 'desc' ? 'ph:arrow-down' : 'ph:arrow-up'}
+        icon={snippetsStore.filter.sortDirection === 'desc' ? 'ph:arrow-down' : 'ph:arrow-up'}
         width={14}
         height={14}
       />

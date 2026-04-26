@@ -1,4 +1,4 @@
-import type { Note, NoteFilter, NoteCategory, ClaudeMessage } from '$lib/types/index.js';
+import type { Note, NoteFilter, NoteCategory } from '$lib/types/index.js';
 import { DEFAULT_CATEGORIES } from '$lib/types/index.js';
 import { appStore } from './app.svelte.js';
 import { loadFromStorage, saveToStorage } from '$lib/utils/local-storage.js';
@@ -6,11 +6,6 @@ import { loadFromStorage, saveToStorage } from '$lib/utils/local-storage.js';
 function createNotesStore() {
   let activeNoteId = $state<string | null>(null);
   let isEditing = $state<boolean>(false);
-  let showClaudePanel = $state<boolean>(false);
-  let claudeMessages = $state<ClaudeMessage[]>([]);
-  let claudeMessagesByNote = $state<Record<string, ClaudeMessage[]>>(
-    loadFromStorage('cortex:claude-messages', {})
-  );
 
   let categories = $state<NoteCategory[]>(
     loadFromStorage('cortex:note-categories', DEFAULT_CATEGORIES)
@@ -84,44 +79,14 @@ function createNotesStore() {
     get activeNoteId() { return activeNoteId; },
     get activeNote() { return activeNote; },
     get isEditing() { return isEditing; },
-    get showClaudePanel() { return showClaudePanel; },
-    get claudeMessages() { return claudeMessages; },
     get categories() { return categories; },
     get filter() { return filter; },
     get filteredNotes() { return filteredNotes; },
     get allTags() { return allTags; },
 
     setActiveNote(id: string | null): void {
-      // Save current note's messages before switching
-      if (activeNoteId && claudeMessages.length > 0) {
-        claudeMessagesByNote[activeNoteId] = [...claudeMessages];
-        saveToStorage('cortex:claude-messages', claudeMessagesByNote);
-      }
       activeNoteId = id;
       isEditing = id !== null;
-      // Restore messages for the target note
-      claudeMessages = id ? [...(claudeMessagesByNote[id] ?? [])] : [];
-      // Keep showClaudePanel as-is so the panel stays open when switching notes
-    },
-
-    toggleClaudePanel(): void {
-      showClaudePanel = !showClaudePanel;
-    },
-
-    addClaudeMessage(message: ClaudeMessage): void {
-      claudeMessages.push(message);
-      if (activeNoteId) {
-        claudeMessagesByNote[activeNoteId] = [...claudeMessages];
-        saveToStorage('cortex:claude-messages', claudeMessagesByNote);
-      }
-    },
-
-    clearClaudeMessages(): void {
-      claudeMessages = [];
-      if (activeNoteId) {
-        delete claudeMessagesByNote[activeNoteId];
-        saveToStorage('cortex:claude-messages', claudeMessagesByNote);
-      }
     },
 
     setSearchQuery(query: string): void {

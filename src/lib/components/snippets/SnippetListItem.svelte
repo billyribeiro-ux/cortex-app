@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { ClaudeCodeItem } from '$lib/types/index.js';
+  import type { SnippetItem } from '$lib/types/index.js';
   import { getRelativeTime, stripMarkdown } from '$lib/utils/time.js';
   import Icon from '@iconify/svelte';
 
   interface Props {
-    item: ClaudeCodeItem;
+    item: SnippetItem;
     isActive: boolean;
     onclick: () => void;
     onToggleFavorite: () => void;
@@ -27,10 +27,10 @@
   role="button"
   tabindex="0"
   {onclick}
-  onkeydown={(e) => e.key === 'Enter' && onclick()}
+  onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onclick(); } }}
 >
   <div class="item-header">
-    <span class="item-title">{item.title || 'Untitled Claude Code'}</span>
+    <span class="item-title">{item.title || 'Untitled Snippet'}</span>
     <button
       class="fav-btn"
       class:favorited={item.isFavorite}

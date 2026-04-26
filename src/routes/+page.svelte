@@ -10,7 +10,7 @@
   import { terminalStore } from '$lib/stores/terminal.svelte.js';
   import { vercelStore } from '$lib/stores/vercel.svelte.js';
   import { pnpmStore } from '$lib/stores/pnpm.svelte.js';
-  import { claudeCodeStore } from '$lib/stores/claude-code.svelte.js';
+  import { snippetsStore } from '$lib/stores/snippets.svelte.js';
   import { supabaseStore } from '$lib/stores/supabase.svelte.js';
   import { rustStore } from '$lib/stores/rust.svelte.js';
   import ProgressBar from '$lib/components/ui/ProgressBar.svelte';
@@ -26,7 +26,7 @@
     appStore.terminal.length === 0 &&
     appStore.vercel.length === 0 &&
     appStore.pnpm.length === 0 &&
-    appStore.claudeCode.length === 0 &&
+    appStore.snippets.length === 0 &&
     appStore.supabase.length === 0 &&
     appStore.rust.length === 0
   );
@@ -94,9 +94,9 @@
           <Icon icon="simple-icons:pnpm" width={20} height={20} />
           Add a PNPM Item
         </a>
-        <a href="/claude-code" class="onboarding-btn" onclick={() => { claudeCodeStore.createClaudeCode(); }}>
-          <Icon icon="simple-icons:anthropic" width={20} height={20} />
-          Add a Claude Code Item
+        <a href="/snippets" class="onboarding-btn" onclick={() => { snippetsStore.createSnippet(); }}>
+          <Icon icon="ph:brackets-curly" width={20} height={20} />
+          Add a Snippet
         </a>
         <a href="/supabase" class="onboarding-btn" onclick={() => { supabaseStore.createSupabase(); }}>
           <Icon icon="simple-icons:supabase" width={20} height={20} />
@@ -162,9 +162,9 @@
         <span class="stat-value">{appStore.pnpmCount}</span>
         <span class="stat-label">PNPM</span>
       </a>
-      <a href="/claude-code" class="stat-card">
-        <span class="stat-value">{appStore.claudeCodeCount}</span>
-        <span class="stat-label">Claude Code</span>
+      <a href="/snippets" class="stat-card">
+        <span class="stat-value">{appStore.snippetsCount}</span>
+        <span class="stat-label">Snippets</span>
       </a>
       <a href="/supabase" class="stat-card">
         <span class="stat-value">{appStore.supabaseCount}</span>

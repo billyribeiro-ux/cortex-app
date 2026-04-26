@@ -1,7 +1,7 @@
 {
   "name": "cortex",
   "version": "0.1.0",
-  "description": "",
+  "description": "A focused local-first workspace for notes, tasks, goals, and technical reference.",
   "type": "module",
   "scripts": {
     "predev": "lsof -ti:1420 2>/dev/null | xargs kill -9 2>/dev/null; true",
@@ -11,7 +11,8 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "tauri": "tauri",
-    "tauri:build": "CI=false tauri build"
+    "tauri:build": "CI=false tauri build",
+    "verify": "pnpm check && pnpm build"
   },
   "license": "MIT",
   "dependencies": {

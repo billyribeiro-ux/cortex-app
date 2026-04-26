@@ -1,15 +1,15 @@
 <script lang="ts">
   import { onDestroy } from 'svelte';
-  import type { ClaudeCodeItem } from '$lib/types/index.js';
+  import type { SnippetItem } from '$lib/types/index.js';
   import { appStore } from '$lib/stores/app.svelte.js';
-  import { claudeCodeStore } from '$lib/stores/claude-code.svelte.js';
+  import { snippetsStore } from '$lib/stores/snippets.svelte.js';
   import { renderMarkdown } from '$lib/utils/markdown.js';
   import { toastStore } from '$lib/stores/toast.svelte.js';
   import TagInput from '$lib/components/ui/TagInput.svelte';
   import Icon from '@iconify/svelte';
 
   interface Props {
-    item: ClaudeCodeItem;
+    item: SnippetItem;
   }
 
   let { item }: Props = $props();
@@ -34,47 +34,47 @@
   $effect(() => {
     if (saveTrigger <= lastProcessedSave) return;
     lastProcessedSave = saveTrigger;
-    const itemId = claudeCodeStore.activeClaudeCodeId;
+    const itemId = snippetsStore.activeSnippetId;
     if (!itemId) return;
     if (debounceTimer !== null) {
       clearTimeout(debounceTimer);
       debounceTimer = null;
     }
-    const updates: Partial<ClaudeCodeItem> = {};
+    const updates: Partial<SnippetItem> = {};
     if (textareaRef) updates.content = textareaRef.value;
     if (titleInputRef) updates.title = titleInputRef.value;
-    appStore.updateClaudeCode(itemId, Object.keys(updates).length > 0 ? updates : {});
+    appStore.updateSnippet(itemId, Object.keys(updates).length > 0 ? updates : {});
     savedFlash = true;
     setTimeout(() => { savedFlash = false; }, 1500);
   });
 
   function handleTitleInput(e: Event): void {
-    const itemId = claudeCodeStore.activeClaudeCodeId;
+    const itemId = snippetsStore.activeSnippetId;
     if (!itemId) return;
     const value = (e.currentTarget as HTMLInputElement).value;
-    appStore.updateClaudeCode(itemId, { title: value });
+    appStore.updateSnippet(itemId, { title: value });
   }
 
   function handleContentInput(e: Event): void {
-    const itemId = claudeCodeStore.activeClaudeCodeId;
+    const itemId = snippetsStore.activeSnippetId;
     if (!itemId) return;
     const value = (e.currentTarget as HTMLTextAreaElement).value;
     if (debounceTimer !== null) clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
-      appStore.updateClaudeCode(itemId, { content: value });
+      appStore.updateSnippet(itemId, { content: value });
     }, 300);
   }
 
   function handleTextareaKeydown(e: KeyboardEvent): void {
     if (e.key === 'Tab') {
       e.preventDefault();
-      const itemId = claudeCodeStore.activeClaudeCodeId;
+      const itemId = snippetsStore.activeSnippetId;
       if (!itemId) return;
       const ta = e.currentTarget as HTMLTextAreaElement;
       const start = ta.selectionStart;
       const end = ta.selectionEnd;
       const newValue = ta.value.slice(0, start) + '  ' + ta.value.slice(end);
-      appStore.updateClaudeCode(itemId, { content: newValue });
+      appStore.updateSnippet(itemId, { content: newValue });
       requestAnimationFrame(() => {
         ta.selectionStart = start + 2;
         ta.selectionEnd = start + 2;
@@ -83,38 +83,38 @@
   }
 
   function handleAddTag(tag: string): void {
-    const itemId = claudeCodeStore.activeClaudeCodeId;
+    const itemId = snippetsStore.activeSnippetId;
     if (!itemId) return;
-    const current = appStore.claudeCode.find((x) => x.id === itemId);
-    if (current) appStore.updateClaudeCode(itemId, { tags: [...(current.tags ?? []), tag] });
+    const current = appStore.snippets.find((x) => x.id === itemId);
+    if (current) appStore.updateSnippet(itemId, { tags: [...(current.tags ?? []), tag] });
   }
 
   function handleRemoveTag(tag: string): void {
-    const itemId = claudeCodeStore.activeClaudeCodeId;
+    const itemId = snippetsStore.activeSnippetId;
     if (!itemId) return;
-    const current = appStore.claudeCode.find((x) => x.id === itemId);
-    if (current) appStore.updateClaudeCode(itemId, { tags: (current.tags ?? []).filter((t) => t !== tag) });
+    const current = appStore.snippets.find((x) => x.id === itemId);
+    if (current) appStore.updateSnippet(itemId, { tags: (current.tags ?? []).filter((t) => t !== tag) });
   }
 
   function handleToggleFavorite(): void {
-    const itemId = claudeCodeStore.activeClaudeCodeId;
-    if (itemId) claudeCodeStore.toggleFavorite(itemId);
+    const itemId = snippetsStore.activeSnippetId;
+    if (itemId) snippetsStore.toggleFavorite(itemId);
   }
 
   function handleDuplicate(): void {
-    const itemId = claudeCodeStore.activeClaudeCodeId;
+    const itemId = snippetsStore.activeSnippetId;
     if (!itemId) return;
-    const newId = claudeCodeStore.duplicateClaudeCode(itemId);
-    if (newId) claudeCodeStore.setActiveClaudeCode(newId);
+    const newId = snippetsStore.duplicateSnippet(itemId);
+    if (newId) snippetsStore.setActiveSnippet(newId);
   }
 
   function handleDeleteClick(): void {
-    const itemId = claudeCodeStore.activeClaudeCodeId;
+    const itemId = snippetsStore.activeSnippetId;
     if (!itemId) return;
     if (deleteConfirm) {
-      appStore.deleteClaudeCode(itemId);
-      claudeCodeStore.setActiveClaudeCode(null);
-      toastStore.success('Claude Code deleted');
+      appStore.deleteSnippet(itemId);
+      snippetsStore.setActiveSnippet(null);
+      toastStore.success('Snippet deleted');
       deleteConfirm = false;
     } else {
       deleteConfirm = true;
@@ -135,11 +135,11 @@
     <div class="editor-meta">
       <input
         bind:this={titleInputRef}
-        id="claude-code-title-input"
-        name="claude-code-title"
+        id="snippets-title-input"
+        name="snippets-title"
         class="title-input selectable"
         type="text"
-        placeholder="Untitled Claude Code"
+        placeholder="Untitled Snippet"
         value={item.title}
         oninput={handleTitleInput}
       />
@@ -181,7 +181,7 @@
         <Icon icon={item.isFavorite ? 'ph:star-fill' : 'ph:star'} width={16} height={16} />
       </button>
 
-      <button class="action-btn" onclick={handleDuplicate} aria-label="Duplicate Claude Code" title="Duplicate">
+      <button class="action-btn" onclick={handleDuplicate} aria-label="Duplicate snippet" title="Duplicate">
         <Icon icon="ph:copy" width={16} height={16} />
       </button>
 
@@ -189,8 +189,8 @@
         class="action-btn"
         class:danger={deleteConfirm}
         onclick={handleDeleteClick}
-        aria-label={deleteConfirm ? 'Confirm delete' : 'Delete Claude Code'}
-        title={deleteConfirm ? 'Click again to confirm' : 'Delete Claude Code'}
+        aria-label={deleteConfirm ? 'Confirm delete' : 'Delete snippet'}
+        title={deleteConfirm ? 'Click again to confirm' : 'Delete snippet'}
       >
         {#if deleteConfirm}
           <Icon icon="ph:warning" width={16} height={16} />
@@ -205,11 +205,11 @@
     {#if viewMode === 'edit' || viewMode === 'split'}
       <textarea
         bind:this={textareaRef}
-        id="claude-code-content-input"
-        name="claude-code-content"
+        id="snippets-content-input"
+        name="snippets-content"
         class="markdown-textarea selectable"
         class:full={viewMode === 'edit'}
-        placeholder="Start writing your Claude Code..."
+        placeholder="Start writing your snippet..."
         value={item.content}
         oninput={handleContentInput}
         onkeydown={handleTextareaKeydown}

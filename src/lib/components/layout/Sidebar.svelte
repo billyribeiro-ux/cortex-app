@@ -27,7 +27,7 @@
     { label: 'Terminal', href: '/terminal', icon: 'ph:terminal-window' },
     { label: 'Vercel', href: '/vercel', icon: 'simple-icons:vercel' },
     { label: 'PNPM', href: '/pnpm', icon: 'simple-icons:pnpm' },
-    { label: 'Claude Code', href: '/claude-code', icon: 'simple-icons:anthropic' },
+    { label: 'Snippets', href: '/snippets', icon: 'ph:brackets-curly' },
     { label: 'Supabase', href: '/supabase', icon: 'simple-icons:supabase' },
     { label: 'Rust', href: '/rust', icon: 'simple-icons:rust' },
     { label: 'Dev', href: '/dev', icon: 'ph:code' },
@@ -44,7 +44,7 @@
     appStore.terminalCount,
     appStore.vercelCount,
     appStore.pnpmCount,
-    appStore.claudeCodeCount,
+    appStore.snippetsCount,
     appStore.supabaseCount,
     appStore.rustCount,
     appStore.devCount,
@@ -58,8 +58,20 @@
   let fileInputRef = $state<HTMLInputElement | null>(null);
 
   function toggleSidebar(): void {
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      appStore.mobileSidebarOpen = false;
+      return;
+    }
     appStore.sidebarCollapsed = !appStore.sidebarCollapsed;
   }
+
+  function handleNavClick(): void {
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      appStore.mobileSidebarOpen = false;
+    }
+  }
+
+  const isCollapsed = $derived(appStore.sidebarCollapsed && !appStore.mobileSidebarOpen);
 
   function handleExport(): void {
     exportData();
@@ -85,9 +97,9 @@
   }
 </script>
 
-<aside class="sidebar" class:collapsed={appStore.sidebarCollapsed}>
+<aside class="sidebar" class:collapsed={isCollapsed}>
   <div class="sidebar-header">
-    {#if !appStore.sidebarCollapsed}
+    {#if !isCollapsed}
       <span class="logo-text">Cortex</span>
     {:else}
       <span class="logo-icon">
@@ -102,14 +114,15 @@
         href={item.href}
         class="nav-item"
         class:active={isActive(item.href)}
-        title={appStore.sidebarCollapsed ? item.label : undefined}
+        title={isCollapsed ? item.label : undefined}
         aria-label={item.label}
         aria-current={isActive(item.href) ? 'page' : undefined}
+        onclick={handleNavClick}
       >
         <span class="nav-icon">
           <Icon icon={item.icon} width={20} height={20} />
         </span>
-        {#if !appStore.sidebarCollapsed}
+        {#if !isCollapsed}
           <span class="nav-label">{item.label}</span>
           {#if (counts[i] ?? 0) > 0}
             <Badge value={counts[i] ?? 0} />
@@ -120,7 +133,7 @@
   </nav>
 
   <div class="sidebar-footer">
-    {#if !appStore.sidebarCollapsed}
+    {#if !isCollapsed}
       <div class="data-actions">
         <button class="data-btn" onclick={handleExport} title="Export data">
           <Icon icon="ph:download" width={14} height={14} />
@@ -145,10 +158,10 @@
       class="collapse-btn" 
       onclick={toggleSidebar} 
       aria-label="Toggle sidebar"
-      aria-expanded={!appStore.sidebarCollapsed}
+      aria-expanded={!isCollapsed}
     >
       <Icon
-        icon={appStore.sidebarCollapsed ? 'ph:arrow-right' : 'ph:arrow-left'}
+        icon={isCollapsed ? 'ph:arrow-right' : 'ph:arrow-left'}
         width={18}
         height={18}
       />
@@ -161,14 +174,17 @@
     position: relative;
     height: 100vh;
     width: 100%;
-    background: var(--color-bg-secondary);
+    background:
+      linear-gradient(180deg, rgba(18, 26, 38, 0.82), rgba(11, 16, 24, 0.64)),
+      var(--color-bg-secondary);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    border-right: 1px solid var(--color-border-subtle);
+    border-right: var(--glass-border);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     z-index: var(--z-sidebar);
+    box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.025);
   }
 
   .sidebar-header {
@@ -220,10 +236,12 @@
       transform var(--transition-fast);
     white-space: nowrap;
     min-height: 44px;
+    border: 1px solid transparent;
   }
 
   .nav-item:hover {
     background: var(--color-bg-hover);
+    border-color: var(--color-border-subtle);
     color: var(--color-text-primary);
   }
 
@@ -232,8 +250,12 @@
   }
 
   .nav-item.active {
-    background: var(--color-accent-primary-muted);
+    background:
+      linear-gradient(135deg, rgba(143, 184, 255, 0.18), rgba(125, 218, 198, 0.08)),
+      var(--color-accent-primary-muted);
+    border-color: rgba(143, 184, 255, 0.20);
     color: var(--color-accent-primary);
+    box-shadow: var(--shadow-xs);
   }
 
   .nav-item.active::before {

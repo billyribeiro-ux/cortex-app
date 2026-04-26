@@ -75,6 +75,17 @@
     }
   }
 
+  @media (max-width: 560px) {
+    .search-wrap {
+      width: min(48vw, 220px);
+    }
+
+    .search-input {
+      height: 40px;
+      font-size: var(--text-sm);
+    }
+  }
+
   .search-icon {
     position: absolute;
     left: 12px;

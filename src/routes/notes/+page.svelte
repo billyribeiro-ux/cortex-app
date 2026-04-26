@@ -4,7 +4,6 @@
   import NoteListItem from '$lib/components/notes/NoteListItem.svelte';
   import NoteFilters from '$lib/components/notes/NoteFilters.svelte';
   import NoteEditor from '$lib/components/notes/NoteEditor.svelte';
-  import ClaudePanel from '$lib/components/notes/ClaudePanel.svelte';
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 
@@ -30,9 +29,6 @@
       e.preventDefault();
       const searchEl = document.querySelector<HTMLInputElement>('.filters-bar .search-input');
       searchEl?.focus();
-    } else if (isMod && e.key === 'k') {
-      e.preventDefault();
-      notesStore.toggleClaudePanel();
     } else if (isMod && e.key === 's') {
       e.preventDefault();
       editorRef?.handleForceSave();
@@ -114,11 +110,6 @@
         </div>
       {/if}
     </div>
-
-    <!-- Right: Claude Panel (conditional) -->
-    {#if notesStore.showClaudePanel}
-      <ClaudePanel />
-    {/if}
   </div>
 </div>
 
@@ -340,9 +331,19 @@
   }
 
   @media (max-width: 640px) {
+    .notes-body {
+      flex-direction: column;
+    }
+
     .note-list-panel {
-      width: 180px;
-      min-width: 160px;
+      width: 100%;
+      max-height: 42%;
+      border-right: none;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .editor-panel {
+      border-left: none;
     }
   }
 </style>

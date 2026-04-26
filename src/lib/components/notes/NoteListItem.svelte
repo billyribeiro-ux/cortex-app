@@ -32,7 +32,7 @@
   role="button"
   tabindex="0"
   {onclick}
-  onkeydown={(e) => e.key === 'Enter' && onclick()}
+  onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onclick(); } }}
 >
   <div class="note-item-header">
     <span class="note-title">{note.title || 'Untitled Note'}</span>

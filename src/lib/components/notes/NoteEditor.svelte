@@ -219,16 +219,6 @@
           <Icon icon="ph:trash" width={16} height={16} />
         {/if}
       </button>
-
-      <button
-        class="action-btn claude-btn"
-        class:active={notesStore.showClaudePanel}
-        onclick={() => notesStore.toggleClaudePanel()}
-        aria-label="Toggle Claude panel"
-        title="Ask Claude"
-      >
-        <Icon icon="ph:sparkle" width={16} height={16} />
-      </button>
     </div>
   </div>
 
@@ -457,12 +447,6 @@
     background: var(--color-bg-hover);
     color: var(--color-accent-primary);
   }
-
-  .action-btn.claude-btn.active {
-    color: var(--color-accent-primary);
-    background: var(--color-accent-primary-muted);
-  }
-
   .editor-body {
     display: flex;
     flex: 1;

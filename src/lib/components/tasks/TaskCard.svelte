@@ -30,7 +30,7 @@
   tabindex="0"
   aria-label="Task: {task.title}"
   {onclick}
-  onkeydown={(e) => e.key === 'Enter' && onclick()}
+  onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onclick(); } }}
 >
   <div class="card-top">
     <div class="priority-bar"></div>

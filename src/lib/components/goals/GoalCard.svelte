@@ -33,7 +33,7 @@
   tabindex="0"
   aria-label="Goal: {goal.title}"
   {onclick}
-  onkeydown={(e) => e.key === 'Enter' && onclick()}
+  onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onclick(); } }}
 >
   <div class="color-bar" style:background={goal.color}></div>
 
