@@ -16,7 +16,7 @@
   );
 </script>
 
-<div class="app-shell" class:transitions-ready={mounted} style:--current-sidebar-width={sidebarWidth}>
+<div class="app-shell" class:transitions-ready={mounted} class:sidebar-open={!appStore.sidebarCollapsed} style:--current-sidebar-width={sidebarWidth}>
   <Sidebar />
   <div class="main-area">
     <TopBar />
@@ -39,19 +39,22 @@
 
 <style>
   .app-shell {
-    display: grid;
-    grid-template-columns: var(--current-sidebar-width) 1fr;
+    display: flex;
     height: 100vh;
+    width: 100vw;
     overflow: hidden;
   }
 
-  .app-shell.transitions-ready {
-    transition: grid-template-columns var(--transition-slow);
+  .app-shell :global(.sidebar) {
+    width: var(--current-sidebar-width);
+    transition: width var(--transition-slow);
+    flex-shrink: 0;
   }
 
   .main-area {
     display: flex;
     flex-direction: column;
+    flex: 1;
     min-width: 0;
     min-height: 0;
   }
@@ -63,6 +66,20 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
+  }
+
+  @media (max-width: 768px) {
+    .app-shell :global(.sidebar) {
+      position: fixed;
+      z-index: var(--z-modal);
+      transform: translateX(calc(-1 * var(--current-sidebar-width)));
+    }
+    .app-shell.sidebar-open :global(.sidebar) {
+      transform: translateX(0);
+    }
+    .content {
+      padding: var(--space-4);
+    }
   }
 
   .error-state {

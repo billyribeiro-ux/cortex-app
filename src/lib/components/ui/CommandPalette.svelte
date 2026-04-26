@@ -17,6 +17,7 @@
     { label: 'Go to Goals', icon: 'ph:target', action: () => goto('/goals') },
     { label: 'Go to Prompts', icon: 'ph:chat-text', action: () => goto('/prompts') },
     { label: 'Go to Stacks', icon: 'ph:stack', action: () => goto('/stacks') },
+    { label: 'Go to Dev', icon: 'ph:code', action: () => goto('/dev') },
     { label: 'Toggle Sidebar', icon: 'ph:sidebar', action: () => { appStore.sidebarCollapsed = !appStore.sidebarCollapsed; } },
   ];
 

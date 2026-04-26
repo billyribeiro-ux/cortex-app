@@ -30,6 +30,7 @@
     { label: 'Claude Code', href: '/claude-code', icon: 'simple-icons:anthropic' },
     { label: 'Supabase', href: '/supabase', icon: 'simple-icons:supabase' },
     { label: 'Rust', href: '/rust', icon: 'simple-icons:rust' },
+    { label: 'Dev', href: '/dev', icon: 'ph:code' },
   ];
 
   const counts = $derived([
@@ -46,6 +47,7 @@
     appStore.claudeCodeCount,
     appStore.supabaseCount,
     appStore.rustCount,
+    appStore.devCount,
   ]);
 
   function isActive(href: string): boolean {
@@ -160,11 +162,13 @@
     height: 100vh;
     width: 100%;
     background: var(--color-bg-secondary);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border-right: 1px solid var(--color-border-subtle);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    z-index: 100;
+    z-index: var(--z-sidebar);
   }
 
   .sidebar-header {

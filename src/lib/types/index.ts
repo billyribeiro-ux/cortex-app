@@ -123,7 +123,8 @@ export type ActiveView =
   | 'pnpm'
   | 'claude-code'
   | 'supabase'
-  | 'rust';
+  | 'rust'
+  | 'dev';
 
 export interface AppState {
   activeView: ActiveView;
@@ -346,5 +347,25 @@ export interface RustFilter {
   tags: string[];
   favoritesOnly: boolean;
   sortField: RustSortField;
+  sortDirection: SortDirection;
+}
+
+export interface DevItem {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+  isFavorite: boolean;
+}
+
+export type DevSortField = 'updatedAt' | 'createdAt' | 'title';
+
+export interface DevFilter {
+  searchQuery: string;
+  tags: string[];
+  favoritesOnly: boolean;
+  sortField: DevSortField;
   sortDirection: SortDirection;
 }

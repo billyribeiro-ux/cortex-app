@@ -23,7 +23,16 @@
     value = '';
     inputEl?.focus();
   }
+
+  function handleKeydown(e: KeyboardEvent) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
+      e.preventDefault();
+      inputEl?.focus();
+    }
+  }
 </script>
+
+<svelte:window onkeydown={handleKeydown} />
 
 <div class="search-wrap" role="search">
   <span class="search-icon" aria-hidden="true">
@@ -56,6 +65,14 @@
     display: flex;
     align-items: center;
     width: 240px;
+    max-width: 100%;
+    transition: width var(--transition-normal);
+  }
+
+  @media (min-width: 768px) {
+    .search-wrap:focus-within {
+      width: 320px;
+    }
   }
 
   .search-icon {

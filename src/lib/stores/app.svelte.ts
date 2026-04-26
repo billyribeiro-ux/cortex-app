@@ -11,6 +11,7 @@ import type {
   ClaudeCodeItem,
   SupabaseItem,
   RustItem,
+  DevItem,
   AppState,
 } from '$lib/types/index.js';
 import { loadFromStorage, saveToStorage } from '$lib/utils/local-storage.js';
@@ -28,6 +29,7 @@ function createAppStore() {
   let claudeCode = $state<ClaudeCodeItem[]>(loadFromStorage('cortex:claude-code', []));
   let supabase = $state<SupabaseItem[]>(loadFromStorage('cortex:supabase', []));
   let rust = $state<RustItem[]>(loadFromStorage('cortex:rust', []));
+  let dev = $state<DevItem[]>(loadFromStorage('cortex:dev', []));
   let activeView = $state<AppState['activeView']>('dashboard');
   let sidebarCollapsed = $state<boolean>(loadFromStorage('cortex:sidebar-collapsed', false));
   let searchQuery = $state<string>('');
@@ -45,6 +47,7 @@ function createAppStore() {
   const claudeCodeCount = $derived(claudeCode.length);
   const supabaseCount = $derived(supabase.length);
   const rustCount = $derived(rust.length);
+  const devCount = $derived(dev.length);
 
   return {
     // State (getters for reading, since we can't export reassigned $state)
@@ -60,6 +63,7 @@ function createAppStore() {
     get claudeCode() { return claudeCode; },
     get supabase() { return supabase; },
     get rust() { return rust; },
+    get dev() { return dev; },
     get activeView() { return activeView; },
     get sidebarCollapsed() { return sidebarCollapsed; },
     get searchQuery() { return searchQuery; },
@@ -77,6 +81,7 @@ function createAppStore() {
     get claudeCodeCount() { return claudeCodeCount; },
     get supabaseCount() { return supabaseCount; },
     get rustCount() { return rustCount; },
+    get devCount() { return devCount; },
 
     // Setters
     set activeView(view: AppState['activeView']) { activeView = view; },
@@ -312,6 +317,25 @@ function createAppStore() {
     deleteRust(id: string): void {
       rust = rust.filter((x) => x.id !== id);
       saveToStorage('cortex:rust', rust);
+    },
+
+    // Dev mutations
+    addDev(item: DevItem): void {
+      dev = [...dev, item];
+      saveToStorage('cortex:dev', dev);
+    },
+    updateDev(id: string, updates: Partial<DevItem>): void {
+      const index = dev.findIndex((x) => x.id === id);
+      if (index !== -1) {
+        dev = dev.map((x, i) =>
+          i === index ? { ...x, ...updates, updatedAt: new Date().toISOString() } : x
+        );
+        saveToStorage('cortex:dev', dev);
+      }
+    },
+    deleteDev(id: string): void {
+      dev = dev.filter((x) => x.id !== id);
+      saveToStorage('cortex:dev', dev);
     }
   };
 }

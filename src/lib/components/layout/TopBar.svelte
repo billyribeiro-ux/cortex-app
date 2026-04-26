@@ -28,8 +28,11 @@
     justify-content: space-between;
     padding: 0 var(--space-8);
     background: var(--color-bg-secondary);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border-bottom: 1px solid var(--color-border-subtle);
     flex-shrink: 0;
+    z-index: var(--z-topbar);
   }
 
   .view-title {
@@ -44,5 +47,11 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
+  }
+
+  @media (max-width: 768px) {
+    .topbar {
+      padding: 0 var(--space-4);
+    }
   }
 </style>
